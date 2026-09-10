@@ -1,0 +1,4 @@
+interface:
+  display_name: "VOC Benchmark Builder"
+  short_description: "Research and baseline external customer feedback"
+  default_prompt: "Use $voc-benchmark-builder to research my company’s public customer feedback sources and build a confirmed VOC benchmark."
