@@ -15,7 +15,7 @@ This is Step 1 of a broader progression:
 
 Complete only Step 1 unless the user explicitly asks to continue.
 
-## Environment and connection boundary
+## Environment and default setup
 
 Use only capabilities needed for a public-source benchmark:
 
@@ -23,9 +23,11 @@ Use only capabilities needed for a public-source benchmark:
 - local or built-in file creation;
 - spreadsheet creation and export to a downloadable Excel `.xlsx` file.
 
-Create deliverables in the current working environment. Do not ask the user to connect Google Drive or authorize Google Sheets, and do not create files in the user's Drive during Step 1. Do not request Gmail, CRM, support, product, company-system, review-platform login, API, credential, or other account access unless the user explicitly changes the public-only scope and authorizes that expansion.
+By default, create deliverables in the current working environment and provide the workbook as a downloadable `.xlsx` file. Do not require the user to connect Google Drive, authorize Google Sheets, or configure another integration to complete Step 1.
 
-If `.xlsx` creation is unavailable, provide Markdown or CSV tables and explain the limitation. Do not treat a missing account connection as a blocker because no account connection is required for Step 1.
+If the user's AI environment already has a trusted, authorized connection, use it when the user asks or confirms that destination. Do not interrupt the benchmark to make the user establish a new connection. Gmail, CRM, support, product, company-system, review-platform login, API, credential, and other account access are optional extensions, not Step 1 prerequisites.
+
+If `.xlsx` creation is unavailable, provide Markdown or CSV tables and explain the limitation. Do not treat a missing account connection as a blocker.
 
 ## Human-facing interaction
 
@@ -147,7 +149,7 @@ Create a custom company benchmark package containing:
 11. Evidence and Attribution Log
 12. Assumptions and Open Questions
 
-If spreadsheet creation is available, create a tailored workbook using the exact core tab and field definitions in [benchmark-output.md](references/benchmark-output.md), save it as a downloadable `.xlsx` file in the current environment, and validate every required tab and column before delivery. Do not request Google Drive or Google Sheets access. Otherwise provide copy-ready Markdown or CSV tables. Do not create automation code during Step 1.
+If spreadsheet creation is available, create a tailored workbook using the exact core tab and field definitions in [benchmark-output.md](references/benchmark-output.md), save it as a downloadable `.xlsx` file by default, and validate every required tab and column before delivery. Use an existing authorized storage connection only when the user asks or confirms that destination; do not require connection setup. Otherwise provide copy-ready Markdown or CSV tables. Do not create automation code during Step 1.
 
 Create a written brief named `[company-slug]-voc-benchmark.md` plus the workbook when available. The final brief must state the platform-baseline date, review-level insight window, number of items analyzed by source and audience, and any geography or access limitations.
 
