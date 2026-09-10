@@ -44,6 +44,25 @@ The taxonomy should normally include:
 
 Present the draft taxonomy for user confirmation when material changes would alter the interpretation. After confirmation, apply the stable taxonomy consistently. Mark borderline records for human review rather than forcing precision.
 
+## Classification workflow
+
+Use this sequence so the analysis remains auditable:
+
+1. State the exact period, sources, audiences, geographies, and records available.
+2. Preserve observed source fields before adding any AI classification.
+3. Classify each record against the confirmed taxonomy and flag low-confidence cases.
+4. Calculate counts and proportions only from the classified records, always showing the numerator and denominator.
+5. Separate repeated signals from isolated or emerging observations.
+6. Translate the evidence into what to protect, improve, investigate, or watch.
+7. State what internal or additional external evidence would confirm or challenge each focus recommendation.
+
+Label the analytical layer clearly:
+
+- **Observed:** directly reported by a source or captured from a record.
+- **Calculated:** derived transparently from observed fields.
+- **AI-classified:** a theme, journey stage, signal type, or impact label assigned by the analysis.
+- **Recommended:** a directional management response derived from the evidence and its limitations.
+
 ## Quantify carefully
 
 Every frequency statement must identify its numerator, denominator, window, audience, and sources. Example:
@@ -60,8 +79,9 @@ Summarize four kinds of findings:
 2. **Protect:** important strengths that appear vulnerable to adjacent friction.
 3. **Fix first:** recent, repeated, high-impact problems supported by traceable evidence.
 4. **Investigate:** potentially material signals with insufficient, mixed, or low-confidence evidence.
+5. **Monitor:** isolated or emerging signals worth watching without implying that action is yet justified.
 
-State what is important to the customer in their language, which audience and journey stage is affected, and what evidence would be needed to validate the conclusion internally.
+State what is important to the customer in their language, which audience and journey stage is affected, why the finding matters, and what evidence would be needed to validate or challenge the conclusion internally.
 
 ## Signal-to-Focus Map
 
@@ -80,7 +100,9 @@ Create a directional focus table with one row per material theme:
 - Classification Confidence
 - Coverage Limitation
 - Focus Category (`Keep doing`, `Protect`, `Fix first`, `Investigate`, `Monitor`)
+- Evidence Pattern
 - Rationale
+- What Would Confirm or Challenge It
 - Internal Evidence Needed
 
 Do not create a hidden or arbitrary priority score. If the user wants a numeric weighting method, show the proposed factors and obtain approval before calculating it.
@@ -95,6 +117,8 @@ Create these charts when the underlying data supports them:
 4. **Signal-to-Focus view:** frequency and impact with recency and confidence visible through labels or an adjacent table.
 
 Keep complaint counts and discussions separate from star-rating comparisons. If data is too sparse for a chart, say so and use a table instead.
+
+The platform baseline can support a source-by-source rating and volume view even when review-level history is unavailable. Do not fabricate a time trend, theme distribution, or sentiment breakdown from platform totals alone. Every chart must show its date range, sample size or population basis, audience, and geography where relevant.
 
 ## Executive interpretation
 
