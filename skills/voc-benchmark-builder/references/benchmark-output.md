@@ -6,16 +6,22 @@ Use this reference after the user confirms the source register, geography, audie
 
 Create the following core tabs. Keep the exact tab names and required fields so later monitoring can build on the same workbook. Optional company-specific columns may be added after the required columns.
 
+Apply the workbook rules in [visual-style.md](visual-style.md). The workbook should help a person connect the evidence to meaning; it is not only a data export.
+
 ### `Executive_Dashboard`
 
 Lead with meaning rather than source counts. Show:
 
+- a concise “What this means” interpretation as the first view;
 - platform baseline date;
 - review-level insight window;
 - records analyzed by source, audience, geography, and coverage type;
-- “What customers value,” “Where customers struggle,” “What is emerging,” and “Where to focus” summaries;
+- separate “What looks good,” “Where friction appears,” “What may be emerging,” and “Where to focus next” summaries;
 - the required charts from `insight-analysis.md`;
+- a compact Signal-to-Focus view showing evidence pattern, confidence, and what would confirm or challenge each recommendation;
 - a visible coverage and representativeness warning.
+
+Use current platform measures immediately when they are useful, such as source-by-source rating and review volume. Do not create theme-frequency or time-series charts until review-level data supports them. Replace an unsupported chart with a clearly labeled evidence-gap table.
 
 ### `Company_Profile`
 
@@ -170,7 +176,9 @@ One row per material theme:
 - Classification Confidence
 - Coverage Limitation
 - Focus Category
+- Evidence Pattern
 - Rationale
+- What Would Confirm or Challenge It
 - Internal Evidence Needed
 
 ### `Coverage_Gaps`
@@ -226,6 +234,9 @@ Before exporting the workbook:
 5. Confirm that every geographic claim is supported by the corresponding source field.
 6. Confirm that platform totals and review-level sample counts are not confused.
 7. Confirm that discussion and complaint measures are not blended into rating calculations.
+8. Confirm that observed facts, AI classifications, calculated measures, and recommendations are visibly distinguishable.
+9. Confirm that the workbook follows `visual-style.md`, including fonts, wrapping, alignment, chart colors, and status labels.
+10. Confirm that no chart implies unavailable history, theme frequency, or market representativeness.
 
 ## Written benchmark package
 
