@@ -15,6 +15,18 @@ This is Step 1 of a broader progression:
 
 Complete only Step 1 unless the user explicitly asks to continue.
 
+## Environment and connection boundary
+
+Use only capabilities needed for a public-source benchmark:
+
+- current web search and the ability to open public source URLs;
+- local or built-in file creation;
+- spreadsheet creation and export to a downloadable Excel `.xlsx` file.
+
+Create deliverables in the current working environment. Do not ask the user to connect Google Drive or authorize Google Sheets, and do not create files in the user's Drive during Step 1. Do not request Gmail, CRM, support, product, company-system, review-platform login, API, credential, or other account access unless the user explicitly changes the public-only scope and authorizes that expansion.
+
+If `.xlsx` creation is unavailable, provide Markdown or CSV tables and explain the limitation. Do not treat a missing account connection as a blocker because no account connection is required for Step 1.
+
 ## Human-facing interaction
 
 Make the process feel like a guided conversation, not a technical audit or intake form.
@@ -135,7 +147,7 @@ Create a custom company benchmark package containing:
 11. Evidence and Attribution Log
 12. Assumptions and Open Questions
 
-If spreadsheet creation is available, create a tailored workbook using the exact core tab and field definitions in [benchmark-output.md](references/benchmark-output.md). Validate every required tab and column before delivery. Otherwise provide copy-ready Markdown or CSV tables. Do not create automation code during Step 1.
+If spreadsheet creation is available, create a tailored workbook using the exact core tab and field definitions in [benchmark-output.md](references/benchmark-output.md), save it as a downloadable `.xlsx` file in the current environment, and validate every required tab and column before delivery. Do not request Google Drive or Google Sheets access. Otherwise provide copy-ready Markdown or CSV tables. Do not create automation code during Step 1.
 
 Create a written brief named `[company-slug]-voc-benchmark.md` plus the workbook when available. The final brief must state the platform-baseline date, review-level insight window, number of items analyzed by source and audience, and any geography or access limitations.
 
