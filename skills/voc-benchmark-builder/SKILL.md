@@ -130,7 +130,7 @@ Use [insight-analysis.md](references/insight-analysis.md) to:
 - create the required dashboard visuals;
 - produce a directional Signal-to-Focus Map with evidence and confidence.
 
-AI classifications are analytical labels, not source facts. Mark classification confidence and keep a short excerpt plus direct source URL so a person can trace each material conclusion. Do not infer prevalence beyond the collected sample.
+AI classifications are analytical labels, not source facts. Keep observed measures, AI classifications, and recommended actions visibly distinct. Mark classification confidence and keep a short excerpt plus direct source URL so a person can trace each material conclusion. For each recommended focus area, state what additional evidence would confirm or challenge it. Do not infer prevalence beyond the collected sample.
 
 ## Required output
 
@@ -149,7 +149,7 @@ Create a custom company benchmark package containing:
 11. Evidence and Attribution Log
 12. Assumptions and Open Questions
 
-If spreadsheet creation is available, create a tailored workbook using the exact core tab and field definitions in [benchmark-output.md](references/benchmark-output.md), save it as a downloadable `.xlsx` file by default, and validate every required tab and column before delivery. Use an existing authorized storage connection only when the user asks or confirms that destination; do not require connection setup. Otherwise provide copy-ready Markdown or CSV tables. Do not create automation code during Step 1.
+If spreadsheet creation is available, create a tailored workbook using the exact core tab and field definitions in [benchmark-output.md](references/benchmark-output.md), apply [visual-style.md](references/visual-style.md), save it as a downloadable `.xlsx` file by default, and validate every required tab, column, chart, and visual rule before delivery. Use an existing authorized storage connection only when the user asks or confirms that destination; do not require connection setup. Otherwise provide copy-ready Markdown or CSV tables. Do not create automation code during Step 1.
 
 Create a written brief named `[company-slug]-voc-benchmark.md` plus the workbook when available. The final brief must state the platform-baseline date, review-level insight window, number of items analyzed by source and audience, and any geography or access limitations.
 
