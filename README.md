@@ -22,6 +22,30 @@ The assistant researches the company, proposes and verifies public feedback sour
 
 The skill keeps company identity, audience fit, geography, and analytic role separate. It does not label unfiltered global metrics as country-specific, combine discussion activity with ratings, bypass platform restrictions, or generate monitoring automation during Step 1.
 
+## Recommended model level
+
+For the complete Step 1 benchmark, use a model capable of sustained web research, source validation, structured data extraction, and spreadsheet creation. The current recommended quality baselines are:
+
+| AI environment | Recommended baseline |
+| --- | --- |
+| OpenAI | GPT-5.6 Sol |
+| Claude | Claude Sonnet 5 |
+| Kimi | Kimi K3 |
+
+These are starting recommendations for dependable output, not hard minimums or guarantees. Less expensive models may be suitable for batch classification after the company profile, sources, sample, and taxonomy have been confirmed. Audit low-confidence records and a sample of all classifications with the baseline model or a person. Model names, capabilities, and pricing change; see [Model evaluation and background testing](docs/model-evaluation.md) for the current testing method.
+
+## Required capabilities and connection boundary
+
+Before starting, allow the AI environment to:
+
+- search the current public web and open source URLs;
+- create downloadable files;
+- create and export an Excel `.xlsx` workbook with formulas and charts.
+
+Step 1 is intentionally **public-source and file-based**. The assistant should create the workbook in its working environment and provide it as a downloadable `.xlsx` file. It should **not** ask the user to connect Google Drive or authorize Google Sheets, and it should not create the workbook in the user's Drive.
+
+Google Drive, Google Sheets, Gmail, CRM, support, product, company-system, review-platform login, API, and credential access are not required for Step 1. If `.xlsx` creation is unavailable, the assistant should provide Markdown or CSV tables and clearly explain the limitation. Account connections belong in a later implementation only when the user explicitly chooses and authorizes them.
+
 ## Use the skill
 
 Download or clone this repository and provide the complete `skills/voc-benchmark-builder/` folder to an AI environment that supports skills or project instructions.
@@ -46,7 +70,7 @@ Example starting prompt:
 - Week 2 Monitoring-Readiness Specification
 - Evidence, Attribution, Assumptions, and Open Questions
 
-When spreadsheet creation is available, the skill requires a tailored workbook with validated tabs, fields, formulas, charts, and traceable evidence.
+When spreadsheet creation is available, the skill requires a tailored, downloadable `.xlsx` workbook with validated tabs, fields, formulas, charts, and traceable evidence.
 
 ## Test models and measure cost
 
