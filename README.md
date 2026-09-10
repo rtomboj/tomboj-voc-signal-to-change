@@ -70,7 +70,7 @@ Example starting prompt:
 - Week 2 Monitoring-Readiness Specification
 - Evidence, Attribution, Assumptions, and Open Questions
 
-When spreadsheet creation is available, the skill requires a tailored, downloadable `.xlsx` workbook with validated tabs, fields, formulas, charts, and traceable evidence.
+When spreadsheet creation is available, the skill requires a tailored, downloadable `.xlsx` workbook with validated tabs, fields, formulas, charts, and traceable evidence. Workbook outputs follow a shared [visual standard](skills/voc-benchmark-builder/references/visual-style.md): Calibri, Tomboj charcoal and teal, labeled status colors, wrapped text, and vertically centered cell content.
 
 ## Test models and measure cost
 
@@ -91,7 +91,8 @@ skills/
         ├── benchmark-output.md
         ├── company-profile.md
         ├── insight-analysis.md
-        └── source-discovery.md
+        ├── source-discovery.md
+        └── visual-style.md
 ```
 
 ## Attribution and provenance
