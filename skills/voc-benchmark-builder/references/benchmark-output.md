@@ -1,14 +1,25 @@
 # Company-specific benchmark output
 
-Use this reference after the user confirms the source register and scope.
+Use this reference after the user confirms the source register, geography, audiences, insight window, and sampling approach.
 
-## Workbook design
+## Workbook contract
 
-Tailor labels and optional columns to the company, but preserve these six core tabs.
+Create the following core tabs. Keep the exact tab names and required fields so later monitoring can build on the same workbook. Optional company-specific columns may be added after the required columns.
+
+### `Executive_Dashboard`
+
+Lead with meaning rather than source counts. Show:
+
+- platform baseline date;
+- review-level insight window;
+- records analyzed by source, audience, geography, and coverage type;
+- “What customers value,” “Where customers struggle,” “What is emerging,” and “Where to focus” summaries;
+- the required charts from `insight-analysis.md`;
+- a visible coverage and representativeness warning.
 
 ### `Company_Profile`
 
-One row per company, brand, product, or market entity needed to interpret the benchmark.
+One row per company, brand, product, or market entity:
 
 - Entity ID
 - Company
@@ -29,20 +40,25 @@ One row per company, brand, product, or market entity needed to interpret the be
 
 ### `Source_Register`
 
-One row per potential feedback profile or channel.
+One row per potential feedback profile or channel:
 
 - Source ID
 - Source
 - Profile URL
-- Source Type (`Rated Review`, `Location Review`, `App Review`, `Marketplace`, `Discussion`, `Complaint`, `Other`)
+- Source Type
 - Company/Brand/Product
-- Country/Market
+- Requested Country/Market
+- Source Aggregate Geography
+- Geography Filterable
 - Location
 - Audience
-- Verification Status
+- Identity Status
 - Verification Evidence
 - Identity Confidence
-- Recommendation
+- Audience Fit
+- Benchmark Role
+- Accessible History
+- Sample Method
 - Inclusion Status
 - Week 2 Collection Method
 - Access or Permission Notes
@@ -50,12 +66,13 @@ One row per potential feedback profile or channel.
 
 ### `Baseline_Snapshot`
 
-One row per source/profile/location captured on a specific date. Preserve raw fields.
+One row per source/profile/location captured on a specific date:
 
 - Snapshot Date
 - Source ID
 - Company/Brand/Product
-- Country/Market
+- Country/Market Claimed
+- Source Aggregate Geography
 - Location
 - Rating Value
 - Rating Scale
@@ -70,11 +87,59 @@ One row per source/profile/location captured on a specific date. Preserve raw fi
 - Evidence URL
 - Notes
 
-Do not invent period counts when a platform does not expose them. If normalizing a rating for cross-source display, retain the raw value and scale and label the normalized value as calculated.
+Preserve raw fields. Do not invent period counts. If a source aggregate is global or unknown, do not label it as country-specific.
+
+### `Review_Data`
+
+One row per accessible review or discussion record:
+
+- Record ID
+- Source ID
+- Stable Source Record ID
+- Source Type
+- Direct URL
+- Capture Date
+- Record Date
+- Company/Brand/Product
+- Requested Country/Market
+- Source-Reported Geography
+- Geography Confidence
+- Location
+- Rating Value
+- Rating Scale
+- Audience
+- Audience Fit
+- Short Evidence Excerpt
+- Company Response Visible
+- Collection Coverage (`Full accessible period`, `Platform aggregate only`, `Sample`)
+- Journey Stage
+- Primary Theme
+- Secondary Theme
+- Signal Type
+- Operational Impact
+- Classification Confidence
+- Human Review Needed
+- Notes
+
+### `Theme_Taxonomy`
+
+One row per company-specific theme:
+
+- Theme ID
+- Theme
+- Parent Theme
+- Definition
+- Include When
+- Exclude When
+- Relevant Journey Stages
+- Relevant Audiences
+- Example Terms
+- User Confirmed
+- Last Updated
 
 ### `Discussion_Snapshot`
 
-Keep unrated conversation separate.
+Keep unrated conversation separate:
 
 - Snapshot Date
 - Source ID
@@ -84,20 +149,58 @@ Keep unrated conversation separate.
 - Most Recent Relevant Date
 - Representative Thread URLs
 - Participant Identity Caveat
+- Geography Caveat
 - Evidence Status
 - Notes
+
+### `Signal_to_Focus`
+
+One row per material theme:
+
+- Theme
+- Audience
+- Journey Stage
+- Positive Count
+- Negative Count
+- Mixed/Request Count
+- Total Classified Records
+- Most Recent Signal
+- Impact
+- Cross-Source Support
+- Classification Confidence
+- Coverage Limitation
+- Focus Category
+- Rationale
+- Internal Evidence Needed
 
 ### `Coverage_Gaps`
 
 - Channel or Audience
 - Expected/Relevant
 - Covered
+- Geography Covered
+- Period Covered
 - Gap Description
 - Impact on Interpretation
 - Recommended Next Step
 - Step (`Benchmark`, `Monitor`, or `Closed Loop`)
 
-Include missing internal VOC channels here. Public review coverage must not be presented as complete enterprise VOC.
+Include missing internal VOC channels. Public review coverage must not be presented as complete enterprise VOC.
+
+### `Week2_Readiness`
+
+- Source ID
+- Source
+- Access Method
+- Authentication/Ownership Requirement
+- Proposed Schedule
+- Stable Identifier/Deduplication Key
+- First-Run Baseline Rule
+- Accessible Fields
+- Known Limitations
+- Automation Permission Status
+- Failure Signal
+- Readiness Status
 
 ### `Evidence_Log`
 
@@ -106,52 +209,38 @@ Include missing internal VOC channels here. Public review coverage must not be p
 - Source Name
 - Direct URL
 - Accessed Date
-- Evidence Type (`Official`, `Platform Profile`, `Directory`, `Discussion`, `User-provided`)
-- Observed/Calculated/Inferred
+- Evidence Type
+- Observed/Calculated/Inferred/User-provided
+- Geography Supported
+- Audience Supported
 - Notes
 
-## Baseline dashboard
+## Validation before delivery
 
-Create a simple, non-deceptive dashboard only from comparable fields. Recommended elements:
+Before exporting the workbook:
 
-- benchmark capture date;
-- source coverage by Core/Secondary/Watchlist;
-- raw rating and review count by rated source;
-- review recency by source;
-- market/location coverage;
-- company-response visibility where available;
-- discussion activity shown separately;
-- known external and internal coverage gaps.
-
-Avoid a single blended “VOC score” unless the user defines and approves a weighting method. Ratings across sources may represent different audiences, scales, time periods, and selection effects.
+1. Verify that every required tab exists with the exact name.
+2. Verify that every required column exists.
+3. Check formulas for errors and charts for broken or empty ranges.
+4. Confirm that dashboard statements trace to `Review_Data` or `Evidence_Log`.
+5. Confirm that every geographic claim is supported by the corresponding source field.
+6. Confirm that platform totals and review-level sample counts are not confused.
+7. Confirm that discussion and complaint measures are not blended into rating calculations.
 
 ## Written benchmark package
 
 Use this order:
 
-1. **Confirmed company profile** — what is being benchmarked.
-2. **Scope and capture date** — included brands, products, markets, locations, and source classes.
-3. **Validated source map** — Core, Secondary, Watchlist, and Excluded sources with reasons.
-4. **Baseline snapshot** — source-by-source observed measures.
-5. **What the benchmark suggests** — careful observations, not causal conclusions.
-6. **Coverage and representativeness limits** — what public sources do and do not reveal.
-7. **Internal VOC inventory** — unassessed channels required for a fuller view.
-8. **Week 2 monitoring-readiness specification** — collection method, frequency, identifier, baseline key, permissions, failure risk, and expected output for each included source.
-9. **Assumptions and open questions.**
-10. **Evidence and attribution log.**
-
-## Week 2 readiness fields
-
-For every included source, record:
-
-- access method: official API, platform notification email, export, manual capture, or unknown;
-- authentication or ownership requirement;
-- proposed schedule;
-- stable record identifier or deduplication candidate;
-- first-run baseline rule;
-- accessible data fields;
-- likely limitations;
-- whether automation is permitted or still requires terms review;
-- failure signal so “no new feedback” is not confused with “source was not checked.”
+1. **What this means** — strengths, friction, emerging signals, focus, and uncertainty.
+2. **Confirmed company profile.**
+3. **Scope, platform date, insight window, sample sizes, and geography.**
+4. **Validated source map.**
+5. **Platform baseline snapshot.**
+6. **Review-level findings and starter taxonomy.**
+7. **Signal-to-Focus Map.**
+8. **Coverage and representativeness limits.**
+9. **Internal VOC inventory.**
+10. **Week 2 monitoring-readiness specification.**
+11. **Assumptions, open questions, evidence, and attribution.**
 
 Do not generate the monitoring script in Step 1.
