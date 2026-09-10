@@ -34,7 +34,7 @@ For the complete Step 1 benchmark, use a model capable of sustained web research
 
 These are starting recommendations for dependable output, not hard minimums or guarantees. Less expensive models may be suitable for batch classification after the company profile, sources, sample, and taxonomy have been confirmed. Audit low-confidence records and a sample of all classifications with the baseline model or a person. Model names, capabilities, and pricing change; see [Model evaluation and background testing](docs/model-evaluation.md) for the current testing method.
 
-## Required capabilities and connection boundary
+## Required capabilities and default setup
 
 Before starting, allow the AI environment to:
 
@@ -42,9 +42,9 @@ Before starting, allow the AI environment to:
 - create downloadable files;
 - create and export an Excel `.xlsx` workbook with formulas and charts.
 
-Step 1 is intentionally **public-source and file-based**. The assistant should create the workbook in its working environment and provide it as a downloadable `.xlsx` file. It should **not** ask the user to connect Google Drive or authorize Google Sheets, and it should not create the workbook in the user's Drive.
+The standard Step 1 path is **public-source and file-based**. The assistant creates the workbook in its working environment and provides it as a downloadable `.xlsx` file. Readers do not need to connect Google Drive, authorize Google Sheets, or configure another integration to complete this exercise.
 
-Google Drive, Google Sheets, Gmail, CRM, support, product, company-system, review-platform login, API, and credential access are not required for Step 1. If `.xlsx` creation is unavailable, the assistant should provide Markdown or CSV tables and clearly explain the limitation. Account connections belong in a later implementation only when the user explicitly chooses and authorizes them.
+If the reader already has trusted, authorized connections in their AI environment, they may use those capabilities or choose an existing storage destination. The skill should not stop the benchmark to make them configure a new connection. Google Drive, Google Sheets, Gmail, CRM, support, product, company-system, review-platform login, API, and credential access are not prerequisites for Step 1. If `.xlsx` creation is unavailable, the assistant should provide Markdown or CSV tables and clearly explain the limitation.
 
 ## Use the skill
 
