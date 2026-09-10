@@ -18,6 +18,9 @@ The current VOC Benchmark Builder was written as original instructional work. No
 | [OpenAI Skills](https://github.com/openai/skills) | Public examples of skill packaging and structure | General format reference only |
 | [Anthropic Skills](https://github.com/anthropics/skills) | Public examples of portable agent skills | General format reference only |
 | [SPDX License List Data](https://github.com/spdx/license-list-data) | Standard license texts | MIT and CC BY 4.0 legal texts used for the repository license files |
+| [OpenAI API documentation](https://developers.openai.com/api/docs/) | Background execution, Batch API, model selection, usage, and pricing guidance | Consulted for `docs/model-evaluation.md`; no code or prose copied |
+| [Claude Platform documentation](https://platform.claude.com/docs/) | Current models, batch processing, usage, caching, and pricing guidance | Consulted for `docs/model-evaluation.md`; no code or prose copied |
+| [Kimi API Platform documentation](https://platform.kimi.ai/docs/overview) | Current models, Batch API, usage fields, tools, and pricing guidance | Consulted for `docs/model-evaluation.md`; no code or prose copied |
 
 The Step 1 skill also maintains a [skill-level attribution record](skills/voc-benchmark-builder/ATTRIBUTIONS.md).
 
