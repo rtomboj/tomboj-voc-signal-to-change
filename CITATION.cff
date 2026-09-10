@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use or adapt this project, please cite it using the metadata below."
+title: "Tomboj VOC Signal-to-Change"
+type: software
+authors:
+  - family-names: "Wilde"
+    given-names: "Rachel"
+repository-code: "https://github.com/rtomboj/tomboj-voc-signal-to-change"
+abstract: "An AI-guided system for benchmarking public customer feedback, automating monitoring, and closing the Voice of Customer loop."
+keywords:
+  - "voice of customer"
+  - "customer success"
+  - "automation"
+  - "AI skills"
