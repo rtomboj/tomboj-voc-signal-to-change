@@ -40,11 +40,13 @@ Use multiple signals where possible: linked official domain, matching company or
 
 Assign an **Identity Status**:
 
-- **Verified:** strong direct match.
+- **Verified:** a direct, stable platform profile or listing URL is available and strong identity signals match the company, product, domain, publisher, or app.
 - **Probable:** several matching signals but no definitive link.
 - **Needs confirmation:** plausible ambiguity could materially affect the benchmark.
 - **Not found:** the expected source class was checked but no verifiable candidate profile was located.
 - **Rejected:** wrong entity, market, product, location, or audience.
+
+A search-results page, search snippet, or general platform homepage is discovery evidence, not a verified profile. If no direct stable profile URL can be opened, use `Probable`, `Needs confirmation`, or `Not found` as appropriate. Do not assign `Verified` solely because the company appears in search results.
 
 Only Verified and user-confirmed Probable profiles may enter the baseline.
 
