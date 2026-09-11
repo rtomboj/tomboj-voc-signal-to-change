@@ -68,7 +68,9 @@ Keep evidence classes visually distinct:
 - show official operational evidence as corroboration in a separate table, marker, or panel;
 - never let vendor-selected positive stories visually or numerically offset independent negative feedback.
 
-Use horizontal bar charts for theme or category labels that are too long to read comfortably on a vertical axis. Every chart must identify its evidence class, date range, denominator or population basis, audience, and geography where relevant.
+Include a compact evidence-class coverage table on the dashboard. Show the number of records collected for independent reviews, vendor-selected customer stories, official operational evidence, public discussions, complaints, and other evidence. Use `0` or `Not available` when applicable rather than silently omitting a class.
+
+Use a horizontal bar chart whenever any displayed theme or category label exceeds 24 characters. Do not abbreviate a meaningful label to avoid this rule. Every chart must identify its evidence class, date range, denominator or population basis, audience, and geography where relevant.
 
 ## Visual quality assurance
 
@@ -82,3 +84,5 @@ Before delivery:
 6. Confirm formulas show no errors and dashboard statements trace to evidence.
 7. Confirm independent feedback, vendor-selected outcomes, and corroborating operational evidence are not blended in one sentiment chart.
 8. Confirm long labels are readable and wide sheets preserve identifying columns while scrolling.
+9. Confirm the dashboard shows record counts by evidence class, including collected classes that do not appear in sentiment charts.
+10. Confirm charts with a theme or category label longer than 24 characters use horizontal bars.
