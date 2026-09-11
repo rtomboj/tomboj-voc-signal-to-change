@@ -75,11 +75,13 @@ After the company profile is confirmed, read [source-discovery.md](references/so
 
 Let the confirmed company profile determine the search. Search general and industry-specific review platforms, app stores, marketplaces, public discussions, complaint sources, directories, and relevant physical-location profiles.
 
+Apply the **source-completeness gate** in `source-discovery.md` before asking the user to confirm scope. Create an expected-source checklist for the confirmed business model, record a disposition for every source class checked, and recheck or ask the user before excluding a high-relevance likely profile.
+
 For every candidate, verify that it belongs to the correct company, brand, product, market, location, or app. Never invent a profile because the source seems likely. If identity remains ambiguous, label it **Needs confirmation** and ask the user.
 
 For each source, record three separate decisions:
 
-1. **Identity status:** Verified, Probable, Needs confirmation, or Rejected.
+1. **Identity status:** Verified, Probable, Needs confirmation, Not found, or Rejected.
 2. **Audience fit:** Primary, Mixed, Secondary, or Unknown.
 3. **Benchmark role:** Quantitative baseline, Contextual signal, Watchlist, or Excluded.
 
@@ -124,13 +126,16 @@ Do not bypass authentication, pagination controls, CAPTCHAs, robots controls, pa
 Use [insight-analysis.md](references/insight-analysis.md) to:
 
 - draft a company-specific theme and journey-stage taxonomy;
-- classify the accessible feedback while preserving audience and source distinctions;
+- classify the accessible feedback while preserving audience, source, and evidence-class distinctions;
 - quantify themes using explicit numerators and denominators;
+- corroborate material signals with relevant public operational evidence when available;
 - identify positive strengths, friction, emerging signals, and unanswered questions;
 - create the required dashboard visuals;
 - produce a directional Signal-to-Focus Map with evidence and confidence.
 
-AI classifications are analytical labels, not source facts. Keep observed measures, AI classifications, and recommended actions visibly distinct. Mark classification confidence and keep a short excerpt plus direct source URL so a person can trace each material conclusion. For each recommended focus area, state what additional evidence would confirm or challenge it. Do not infer prevalence beyond the collected sample.
+AI classifications are analytical labels, not source facts. Keep observed measures, AI classifications, and recommended actions visibly distinct. Keep **classification confidence**, **evidence strength**, and **prevalence confidence** separate. Preserve a short excerpt plus direct source URL so a person can trace each material conclusion. For each recommended focus area, state what additional evidence would confirm or challenge it. Do not infer prevalence beyond the collected sample.
+
+Never use vendor-selected customer stories to numerically offset independent negative feedback. Analyze them separately as reported outcomes or examples of what good can look like; use official operational evidence as corroboration, not as customer sentiment.
 
 ## Required output
 
