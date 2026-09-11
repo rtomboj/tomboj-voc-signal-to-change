@@ -16,7 +16,7 @@ Lead with meaning rather than source counts. Show:
 - platform baseline date;
 - review-level insight window;
 - records analyzed by source, audience, geography, and coverage type;
-- evidence-class coverage, with independent feedback, vendor-selected outcomes, public discussion, complaints, and official corroboration shown separately;
+- a compact evidence-class coverage table showing record counts for independent reviews, vendor-selected customer stories, official operational evidence, public discussions, complaints, and other collected evidence; show zero or `Not available` rather than omitting a class;
 - separate “What looks good,” “Where friction appears,” “What may be emerging,” and “Where to focus next” summaries;
 - the required charts from `insight-analysis.md`;
 - a compact Signal-to-Focus view showing evidence pattern, confidence, and what would confirm or challenge each recommendation;
@@ -177,7 +177,7 @@ One row per material theme:
 - Most Recent Signal
 - Impact
 - Evidence Class(es)
-- Cross-Source Support
+- Independent Cross-Source Support
 - Corroboration Status
 - Classification Confidence
 - Evidence Strength
@@ -249,6 +249,10 @@ Before exporting the workbook:
 12. Confirm that vendor-selected customer stories are not combined with independent feedback in sentiment totals or charts.
 13. Confirm that material signals were checked for public corroborating evidence when available, without treating corroboration as proof of prevalence or impact.
 14. Confirm that classification confidence, evidence strength, and prevalence confidence are separately defined and populated.
+15. Confirm that every `Verified` source has a direct, stable platform profile or listing URL; a search-results page, snippet, or platform homepage is not sufficient.
+16. Confirm that `Independent Cross-Source Support` counts only comparable independent customer feedback sources, not vendor-selected stories or official operational evidence.
+17. Confirm that the dashboard includes the evidence-class coverage table and does not omit collected vendor-selected or operational records.
+18. Confirm that any theme or category chart with a displayed label longer than 24 characters uses horizontal bars.
 
 ## Written benchmark package
 
