@@ -16,10 +16,13 @@ Lead with meaning rather than source counts. Show:
 - platform baseline date;
 - review-level insight window;
 - records analyzed by source, audience, geography, and coverage type;
+- evidence-class coverage, with independent feedback, vendor-selected outcomes, public discussion, complaints, and official corroboration shown separately;
 - separate “What looks good,” “Where friction appears,” “What may be emerging,” and “Where to focus next” summaries;
 - the required charts from `insight-analysis.md`;
 - a compact Signal-to-Focus view showing evidence pattern, confidence, and what would confirm or challenge each recommendation;
 - a visible coverage and representativeness warning.
+
+Do not place vendor-selected customer stories and independent feedback into one sentiment total or chart. Vendor stories may illustrate reported outcomes or what good can look like, but they must not visually or numerically offset independent negative feedback.
 
 Use current platform measures immediately when they are useful, such as source-by-source rating and review volume. Do not create theme-frequency or time-series charts until review-level data supports them. Replace an unsupported chart with a clearly labeled evidence-gap table.
 
@@ -103,6 +106,7 @@ One row per accessible review or discussion record:
 - Source ID
 - Stable Source Record ID
 - Source Type
+- Evidence Class
 - Direct URL
 - Capture Date
 - Record Date
@@ -172,8 +176,12 @@ One row per material theme:
 - Total Classified Records
 - Most Recent Signal
 - Impact
+- Evidence Class(es)
 - Cross-Source Support
+- Corroboration Status
 - Classification Confidence
+- Evidence Strength
+- Prevalence Confidence
 - Coverage Limitation
 - Focus Category
 - Evidence Pattern
@@ -237,6 +245,10 @@ Before exporting the workbook:
 8. Confirm that observed facts, AI classifications, calculated measures, and recommendations are visibly distinguishable.
 9. Confirm that the workbook follows `visual-style.md`, including fonts, wrapping, alignment, chart colors, and status labels.
 10. Confirm that no chart implies unavailable history, theme frequency, or market representativeness.
+11. Confirm that every expected source class has a documented disposition and that source additions or removals from any prior benchmark are explained.
+12. Confirm that vendor-selected customer stories are not combined with independent feedback in sentiment totals or charts.
+13. Confirm that material signals were checked for public corroborating evidence when available, without treating corroboration as proof of prevalence or impact.
+14. Confirm that classification confidence, evidence strength, and prevalence confidence are separately defined and populated.
 
 ## Written benchmark package
 
