@@ -25,6 +25,7 @@ Required analytical fields:
 - rating value and scale when applicable;
 - audience: buyer, merchant, consumer, employee, partner, or unknown;
 - audience-fit class: Primary, Mixed, Secondary, or Unknown;
+- evidence class: Independent review, Vendor-selected customer story, Official operational evidence, Public discussion, Complaint, or Other;
 - short evidence excerpt;
 - company response visible;
 - collection status: full accessible period, platform aggregate only, or sample.
@@ -51,10 +52,11 @@ Use this sequence so the analysis remains auditable:
 1. State the exact period, sources, audiences, geographies, and records available.
 2. Preserve observed source fields before adding any AI classification.
 3. Classify each record against the confirmed taxonomy and flag low-confidence cases.
-4. Calculate counts and proportions only from the classified records, always showing the numerator and denominator.
-5. Separate repeated signals from isolated or emerging observations.
-6. Translate the evidence into what to protect, improve, investigate, or watch.
-7. State what internal or additional external evidence would confirm or challenge each focus recommendation.
+4. Corroborate material signals with public operational evidence when it is available.
+5. Calculate counts and proportions only from comparable classified records, always showing the numerator and denominator.
+6. Separate repeated signals from isolated or emerging observations.
+7. Translate the evidence into what to protect, improve, investigate, or watch.
+8. State what internal or additional external evidence would confirm or challenge each focus recommendation.
 
 Label the analytical layer clearly:
 
@@ -62,6 +64,37 @@ Label the analytical layer clearly:
 - **Calculated:** derived transparently from observed fields.
 - **AI-classified:** a theme, journey stage, signal type, or impact label assigned by the analysis.
 - **Recommended:** a directional management response derived from the evidence and its limitations.
+
+## Separate evidence classes
+
+Evidence classes answer different questions and must not be treated as interchangeable:
+
+- **Independent reviews and complaints** show unsolicited or independently hosted customer-reported experience.
+- **Vendor-selected customer stories** show reported outcomes and examples of what good can look like, but are selected by the company.
+- **Official operational evidence** such as release notes, version history, status notices, documentation, or support advisories can corroborate that an issue or change existed.
+- **Public discussions** provide language and hypotheses when participant identity and representativeness are uncertain.
+
+Analyze and visualize these classes separately. Never combine vendor-selected positive stories with independent positive and negative records in one sentiment total or chart. A customer story cannot numerically offset an independent complaint or review. Official operational evidence supports corroboration; it is not customer sentiment.
+
+## Corroborate material signals
+
+For every material `Protect`, `Investigate first`, or `Fix first` signal, search for relevant public operational evidence when available. Check release notes, app version history, changelogs, status or incident pages, support advisories, documentation, policy updates, and additional independent feedback.
+
+Record the operational source as its own evidence record and assign a **Corroboration Status**:
+
+- **Corroborated:** separate evidence supports that the issue, change, or outcome existed.
+- **Partially corroborated:** evidence supports only part of the signal.
+- **Unconfirmed:** no separate evidence was located.
+- **Contradicted:** reliable evidence materially conflicts with the signal.
+- **Not applicable:** corroboration is not meaningful for this finding.
+
+Corroboration may support that an issue existed or that a company reported a fix. It does not by itself establish how common the experience was, whether the fix fully worked, or the business impact.
+
+Keep three confidence concepts distinct:
+
+- **Classification Confidence:** confidence that a record received the correct theme, journey, signal, and impact labels.
+- **Evidence Strength:** strength and independence of the evidence supporting the conclusion, rated Strong, Moderate, or Limited.
+- **Prevalence Confidence:** confidence that the observed frequency generalizes beyond the collected sample, rated High, Medium, Low, or Not assessable.
 
 ## Quantify carefully
 
@@ -77,9 +110,11 @@ Summarize four kinds of findings:
 
 1. **Keep doing:** recurring strengths customers explicitly value.
 2. **Protect:** important strengths that appear vulnerable to adjacent friction.
-3. **Fix first:** recent, repeated, high-impact problems supported by traceable evidence.
-4. **Investigate:** potentially material signals with insufficient, mixed, or low-confidence evidence.
+3. **Investigate first:** potentially high-impact signals that merit prompt validation but have limited, mixed, or low-prevalence evidence.
+4. **Fix first:** recent, repeated, high-impact problems supported by sufficiently strong and preferably corroborated evidence.
 5. **Monitor:** isolated or emerging signals worth watching without implying that action is yet justified.
+
+Use only these exact focus categories: `Keep doing`, `Protect`, `Investigate first`, `Fix first`, and `Monitor`. Do not create hybrid labels.
 
 State what is important to the customer in their language, which audience and journey stage is affected, why the finding matters, and what evidence would be needed to validate or challenge the conclusion internally.
 
@@ -96,10 +131,14 @@ Create a directional focus table with one row per material theme:
 - Total Classified Records
 - Most Recent Signal
 - Impact
+- Evidence Class(es)
 - Cross-Source Support
+- Corroboration Status
 - Classification Confidence
+- Evidence Strength
+- Prevalence Confidence
 - Coverage Limitation
-- Focus Category (`Keep doing`, `Protect`, `Fix first`, `Investigate`, `Monitor`)
+- Focus Category (`Keep doing`, `Protect`, `Investigate first`, `Fix first`, `Monitor`)
 - Evidence Pattern
 - Rationale
 - What Would Confirm or Challenge It
@@ -113,10 +152,12 @@ Create these charts when the underlying data supports them:
 
 1. **Source landscape:** raw rating, volume, audience, geography, and coverage shown without averaging unlike sources.
 2. **Feedback over time:** monthly accessible record volume and rating/signal distribution within the insight window.
-3. **Theme view:** positive, negative, mixed, and request counts for the most material themes.
+3. **Theme view:** positive, negative, mixed, and request counts for the most material themes, separated by evidence class.
 4. **Signal-to-Focus view:** frequency and impact with recency and confidence visible through labels or an adjacent table.
 
 Keep complaint counts and discussions separate from star-rating comparisons. If data is too sparse for a chart, say so and use a table instead.
+
+Use separate charts or clearly separated panels for independent feedback, vendor-selected outcomes, and official corroboration. For long theme labels, use a horizontal bar chart rather than a crowded vertical column chart.
 
 The platform baseline can support a source-by-source rating and volume view even when review-level history is unavailable. Do not fabricate a time trend, theme distribution, or sentiment breakdown from platform totals alone. Every chart must show its date range, sample size or population basis, audience, and geography where relevant.
 
