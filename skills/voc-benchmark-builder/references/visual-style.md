@@ -43,7 +43,10 @@ Palette source: [SchemeColor — Soft Green, Orange & Red](https://www.schemecol
 - Left-align narrative text, excerpts, evidence, rationales, URLs, and open questions.
 - Right-align numeric measures when that improves comparison.
 - Increase row height and column width enough to prevent clipped text.
-- Freeze the header row on long data tabs and enable filters where useful.
+- Freeze the title and header rows on long data tabs and enable filters where useful.
+- On `Review_Data`, freeze the top four rows and the first four identifying columns so source and record identity remain visible while scrolling.
+- On `Signal_to_Focus`, freeze the top four rows and the first three identifying columns.
+- On other wide tables, freeze the identifying columns needed to retain context, not only the header row.
 
 ## Dashboard and charts
 
@@ -58,6 +61,15 @@ Arrange the executive view in this order:
 
 Use native editable spreadsheet charts linked to workbook data. Use Tomboj teal for general metric series and the status palette only where it encodes a labeled meaning. Do not average unlike rating scales or combine ratings, complaint counts, and discussion volume into a composite score. If the data does not support a chart, use a labeled table and explain what is missing.
 
+Keep evidence classes visually distinct:
+
+- chart independent reviews and complaints separately from vendor-selected customer stories;
+- label vendor-selected evidence as `Reported customer outcomes`, not independent sentiment;
+- show official operational evidence as corroboration in a separate table, marker, or panel;
+- never let vendor-selected positive stories visually or numerically offset independent negative feedback.
+
+Use horizontal bar charts for theme or category labels that are too long to read comfortably on a vertical axis. Every chart must identify its evidence class, date range, denominator or population basis, audience, and geography where relevant.
+
 ## Visual quality assurance
 
 Before delivery:
@@ -68,3 +80,5 @@ Before delivery:
 4. Confirm charts are editable, labeled, and connected to non-empty data ranges.
 5. Confirm status colors have labels and a legend where needed.
 6. Confirm formulas show no errors and dashboard statements trace to evidence.
+7. Confirm independent feedback, vendor-selected outcomes, and corroborating operational evidence are not blended in one sentiment chart.
+8. Confirm long labels are readable and wide sheets preserve identifying columns while scrolling.
