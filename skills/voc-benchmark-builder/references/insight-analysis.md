@@ -132,7 +132,7 @@ Create a directional focus table with one row per material theme:
 - Most Recent Signal
 - Impact
 - Evidence Class(es)
-- Cross-Source Support
+- Independent Cross-Source Support
 - Corroboration Status
 - Classification Confidence
 - Evidence Strength
@@ -146,6 +146,8 @@ Create a directional focus table with one row per material theme:
 
 Do not create a hidden or arbitrary priority score. If the user wants a numeric weighting method, show the proposed factors and obtain approval before calculating it.
 
+`Independent Cross-Source Support` may be `Yes` only when comparable independent customer feedback supports the theme on more than one source. Vendor-selected customer stories and official operational evidence do not satisfy this field; record them under `Evidence Class(es)` and `Corroboration Status` instead.
+
 ## Required visuals
 
 Create these charts when the underlying data supports them:
@@ -157,7 +159,9 @@ Create these charts when the underlying data supports them:
 
 Keep complaint counts and discussions separate from star-rating comparisons. If data is too sparse for a chart, say so and use a table instead.
 
-Use separate charts or clearly separated panels for independent feedback, vendor-selected outcomes, and official corroboration. For long theme labels, use a horizontal bar chart rather than a crowded vertical column chart.
+Use separate charts or clearly separated panels for independent feedback, vendor-selected outcomes, and official corroboration. Include a compact evidence-class coverage table even when a class is excluded from sentiment analysis. The table must show the record count for each evidence class collected and make excluded or unavailable classes explicit.
+
+Use a horizontal bar chart when any displayed theme or category label exceeds 24 characters. Do not shorten a meaningful label merely to retain a vertical column chart.
 
 The platform baseline can support a source-by-source rating and volume view even when review-level history is unavailable. Do not fabricate a time trend, theme distribution, or sentiment breakdown from platform totals alone. Every chart must show its date range, sample size or population basis, audience, and geography where relevant.
 
