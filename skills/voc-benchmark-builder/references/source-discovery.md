@@ -8,6 +8,32 @@ Create search terms from the confirmed name, aliases, brands, products, location
 
 Use the company profile to discover category-specific sources rather than relying on a universal list. Employee reviews are not customer VOC unless the user explicitly includes employee voice as a separate audience.
 
+## Source-completeness gate
+
+Before presenting the proposed source scope, create an expected-source checklist based on the confirmed company model. Every expected source class must have a documented disposition: `Verified`, `Probable`, `Needs confirmation`, `Not found`, or `Rejected`.
+
+Use these as minimum source classes to check when relevant, not as a universal inclusion list:
+
+| Company model | Minimum source classes to check |
+| --- | --- |
+| B2B software | G2, Capterra/GetApp/Software Advice, Trustpilot, TrustRadius, applicable app stores, public communities, and industry directories |
+| Local or multi-location | Google Business Profile, Yelp, Facebook, Trustpilot, relevant booking or marketplace profiles, and industry directories |
+| Mobile product | Apple App Store, Google Play, product-review platforms, public communities, and support/status channels |
+| Consumer service or marketplace | Google, Trustpilot, BBB or relevant complaint sources, marketplace profiles, app stores, and public communities |
+
+For each class, record the query or candidate URL checked, the result, the identity evidence, and the reason for its disposition. Use at least these discovery patterns where applicable:
+
+- company, brand, product, and domain plus `reviews`;
+- the source name plus the company, product, domain, or app publisher;
+- company aliases, former names, parent brands, and legal or app-developer names;
+- direct inspection of an obvious candidate platform profile rather than relying only on a search snippet.
+
+If a high-relevance source appears likely but cannot be verified on the first pass, recheck it using the domain, aliases, publisher, and source-specific search before marking it `Not found`. If ambiguity remains and exclusion would materially change the benchmark, ask the user.
+
+When rerunning a benchmark, compare the new checklist with the previous `Source_Register`. Explain every source added, removed, or given a different status. Do not silently change the source universe.
+
+The gate passes only when every expected source class has a recorded disposition. `Not found` means the documented search did not locate a verifiable profile; it does not prove that no profile exists.
+
 ## Validate profile identity
 
 Use multiple signals where possible: linked official domain, matching company or product name, publisher, address, service area, market, language, category, logo, description, and current subject matter.
@@ -17,6 +43,7 @@ Assign an **Identity Status**:
 - **Verified:** strong direct match.
 - **Probable:** several matching signals but no definitive link.
 - **Needs confirmation:** plausible ambiguity could materially affect the benchmark.
+- **Not found:** the expected source class was checked but no verifiable candidate profile was located.
 - **Rejected:** wrong entity, market, product, location, or audience.
 
 Only Verified and user-confirmed Probable profiles may enter the baseline.
