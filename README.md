@@ -6,7 +6,7 @@ An AI-guided system for finding where customers are speaking, establishing a def
 
 | Step | Question | Outcome | Status |
 | --- | --- | --- | --- |
-| 1. Establish the benchmark | Where are customers speaking, and what does the current position look like? | Confirmed company profile, validated source register, dated benchmark, coverage gaps, and monitoring-readiness specification | Available |
+| 1. Establish the benchmark | Where are customers speaking, what do they appear to value, and where should attention go? | Confirmed profile and source map, dated platform baseline, review-level insight window, starter taxonomy, visual dashboard, Signal-to-Focus Map, coverage gaps, and monitoring specification | Available |
 | 2. Automate monitoring | How will we detect new feedback and changes? | Scheduled collection, deduplication, logging, alerts, and source health checks | Planned |
 | 3. Close the loop | What happens after feedback arrives? | Ownership, response and resolution SLAs, escalation, learning, and systemic change | Planned |
 
@@ -18,16 +18,33 @@ It begins with one question:
 
 > What is the company website you want to benchmark?
 
-The assistant then:
+The assistant researches the company, proposes and verifies public feedback sources, recommends a review-level insight window, and asks the user to confirm the scope. It then preserves current platform measures, classifies accessible recent feedback with a traceable company-specific taxonomy, creates visual analysis, and shows what customers appear to value, where they struggle, what may be emerging, and where attention should go first.
 
-1. Researches the company, brands, products, buyers, users, delivery model, locations, countries, and markets.
-2. Presents a draft company profile for confirmation.
-3. Searches for relevant public feedback across review platforms, app stores, marketplaces, Reddit, forums, complaint sources, and industry-specific directories.
-4. Separates verified profiles, plausible candidates, rejected matches, and sources checked but not found.
-5. Asks the user to confirm the benchmark scope.
-6. Produces a company-specific benchmark and a source-by-source specification for Step 2.
+The skill keeps company identity, audience fit, geography, and analytic role separate. It does not label unfiltered global metrics as country-specific, combine discussion activity with ratings, bypass platform restrictions, or generate monitoring automation during Step 1.
 
-The skill does not treat public reviews as the whole Voice of Customer, combine discussion activity with star ratings, bypass platform restrictions, or generate monitoring automation during Step 1.
+## Recommended model level
+
+For the complete Step 1 benchmark, use a model capable of sustained web research, source validation, structured data extraction, and spreadsheet creation. The current recommended quality baselines are:
+
+| AI environment | Recommended baseline |
+| --- | --- |
+| OpenAI | GPT-5.6 Sol |
+| Claude | Claude Sonnet 5 |
+| Kimi | Kimi K3 |
+
+These are starting recommendations for dependable output, not hard minimums or guarantees. Less expensive models may be suitable for batch classification after the company profile, sources, sample, and taxonomy have been confirmed. Audit low-confidence records and a sample of all classifications with the baseline model or a person. Model names, capabilities, and pricing change; see [Model evaluation and background testing](docs/model-evaluation.md) for the current testing method.
+
+## Required capabilities and default setup
+
+Before starting, allow the AI environment to:
+
+- search the current public web and open source URLs;
+- create downloadable files;
+- create and export an Excel `.xlsx` workbook with formulas and charts.
+
+The standard Step 1 path is **public-source and file-based**. The assistant creates the workbook in its working environment and provides it as a downloadable `.xlsx` file. Readers do not need to connect Google Drive, authorize Google Sheets, or configure another integration to complete this exercise.
+
+If the reader already has trusted, authorized connections in their AI environment, they may use those capabilities or choose an existing storage destination. The skill should not stop the benchmark to make them configure a new connection. Google Drive, Google Sheets, Gmail, CRM, support, product, company-system, review-platform login, API, and credential access are not prerequisites for Step 1. If `.xlsx` creation is unavailable, the assistant should provide Markdown or CSV tables and clearly explain the limitation.
 
 ## Use the skill
 
@@ -35,7 +52,7 @@ Download or clone this repository and provide the complete `skills/voc-benchmark
 
 - If the environment supports named skills, invoke `$voc-benchmark-builder`.
 - Otherwise, ask the assistant to follow `SKILL.md` and make the files in `references/` available when requested.
-- Enable current web research. The skill is designed to stop rather than fabricate a researched benchmark when live search is unavailable.
+- Enable current web research. The skill stops rather than fabricating a researched benchmark when live search is unavailable.
 
 Example starting prompt:
 
@@ -43,51 +60,60 @@ Example starting prompt:
 
 ## Step 1 outputs
 
-The company-specific package contains:
-
-- Confirmed Company Profile
-- Source Register
-- Baseline Snapshot
+- Executive “What this means” summary
+- Confirmed Company Profile and Source Register
+- Platform Baseline and Review-Level Insight Dataset
+- Starter Theme Taxonomy
+- Visual Insight Dashboard
+- Signal-to-Focus Map
 - External VOC Coverage and Gaps
-- Benchmark Observations
 - Week 2 Monitoring-Readiness Specification
-- Evidence and Attribution Log
-- Assumptions and Open Questions
+- Evidence, Attribution, Assumptions, and Open Questions
 
-When spreadsheet creation is available, the skill also specifies a tailored benchmark workbook and dashboard.
+When spreadsheet creation is available, the skill requires a tailored, downloadable `.xlsx` workbook with validated tabs, fields, formulas, charts, and traceable evidence. Workbook outputs follow a shared [visual standard](skills/voc-benchmark-builder/references/visual-style.md): Calibri, Tomboj charcoal and teal, labeled status colors, wrapped text, and vertically centered cell content.
+
+Before delivery, the assistant runs the dependency-free [workbook validator](skills/voc-benchmark-builder/scripts/validate_workbook.py). The validator does not edit or upload the workbook. It fails when required tabs, fields, dashboard sections, evidence-class labels, freeze panes, core styling, or chart rules are missing, and it supplies a short manual-review checklist for judgments that cannot be verified reliably from workbook XML.
+
+## Test models and measure cost
+
+Use [Model evaluation and background testing](docs/model-evaluation.md) to compare OpenAI, Claude, and Kimi using the same inputs. The guide separates interactive research from batch classification and records tokens, cost, elapsed time, source quality, schema compliance, and human corrections.
 
 ## Repository structure
 
 ```text
+docs/
+└── model-evaluation.md
 skills/
 └── voc-benchmark-builder/
     ├── SKILL.md
     ├── ATTRIBUTIONS.md
     ├── agents/
     │   └── openai.yaml
+    ├── scripts/
+    │   └── validate_workbook.py
     └── references/
         ├── benchmark-output.md
         ├── company-profile.md
-        └── source-discovery.md
+        ├── insight-analysis.md
+        ├── source-discovery.md
+        └── visual-style.md
 ```
 
 ## Attribution and provenance
 
-The project is original instructional work informed by existing Voice of Customer methods, public skill conventions, and prior-art repositories. See [ATTRIBUTIONS.md](ATTRIBUTIONS.md) for the repository-level provenance policy and the skill's [detailed attribution record](skills/voc-benchmark-builder/ATTRIBUTIONS.md).
+The project is original instructional work informed by existing Voice of Customer methods, public skill conventions, and prior-art repositories. See [ATTRIBUTIONS.md](ATTRIBUTIONS.md) for repository-level provenance and the skill's [detailed attribution record](skills/voc-benchmark-builder/ATTRIBUTIONS.md).
 
 ## Licensing
-
-This repository uses two licenses:
 
 | Material | License |
 | --- | --- |
 | Original written methodology, skill instructions, templates, examples, and documentation | [Creative Commons Attribution 4.0 International](LICENSE-CONTENT.md) |
 | Source code, scripts, formulas, and executable utilities | [MIT License](LICENSE-CODE.md) |
 
-Third-party materials retain their original licenses and notices. Tomboj names, logos, and other brand identifiers are not granted for reuse by these licenses unless explicitly stated.
+Third-party materials retain their original licenses and notices. Tomboj names, logos, and other brand identifiers are not granted for reuse unless explicitly stated.
 
 ## Author
 
 Created by **Rachel Wilde / Tomboj**.
 
-If you use or adapt this work, please preserve the requested attribution and indicate material changes. Citation metadata is available in [CITATION.cff](CITATION.cff).
+If you use or adapt this work, preserve the requested attribution and indicate material changes. Citation metadata is available in [CITATION.cff](CITATION.cff).
