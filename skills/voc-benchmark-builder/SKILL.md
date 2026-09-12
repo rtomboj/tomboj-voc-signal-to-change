@@ -154,7 +154,11 @@ Create a custom company benchmark package containing:
 11. Evidence and Attribution Log
 12. Assumptions and Open Questions
 
-If spreadsheet creation is available, create a tailored workbook using the exact core tab and field definitions in [benchmark-output.md](references/benchmark-output.md), apply [visual-style.md](references/visual-style.md), save it as a downloadable `.xlsx` file by default, and validate every required tab, column, chart, and visual rule before delivery. Use an existing authorized storage connection only when the user asks or confirms that destination; do not require connection setup. Otherwise provide copy-ready Markdown or CSV tables. Do not create automation code during Step 1.
+If spreadsheet creation is available, create a tailored workbook using the exact core tab and field definitions in [benchmark-output.md](references/benchmark-output.md), apply [visual-style.md](references/visual-style.md), and save it as a downloadable `.xlsx` file by default. Write the required headers exactly and in the documented order before populating data; do not rename, remove, combine, transpose, substitute, or reorder them. Optional fields may appear only after the required fields.
+
+Before delivery, run `python scripts/validate_workbook.py <workbook.xlsx>` from the skill folder. A nonzero exit status means the workbook is not complete: correct the reported errors and rerun the validator until it passes. Then complete the validator's short manual-review checklist. Do not claim that the workbook is validated or complete when automated errors remain. If Python execution is unavailable, perform every check in the validation section of `benchmark-output.md` manually and disclose that the bundled validator could not run.
+
+Use an existing authorized storage connection only when the user asks or confirms that destination; do not require connection setup. Otherwise provide copy-ready Markdown or CSV tables. Do not create automation code during Step 1.
 
 Create a written brief named `[company-slug]-voc-benchmark.md` plus the workbook when available. The final brief must state the platform-baseline date, review-level insight window, number of items analyzed by source and audience, and any geography or access limitations.
 

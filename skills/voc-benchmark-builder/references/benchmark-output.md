@@ -4,7 +4,7 @@ Use this reference after the user confirms the source register, geography, audie
 
 ## Workbook contract
 
-Create the following core tabs. Keep the exact tab names and required fields so later monitoring can build on the same workbook. Optional company-specific columns may be added after the required columns.
+Create the following core tabs. Keep the exact tab names and required fields so later monitoring can build on the same workbook. Write each required header exactly and in the listed order. Do not rename, remove, combine, transpose, substitute, or reorder required fields. Optional company-specific columns may be added only after the required columns.
 
 Apply the workbook rules in [visual-style.md](visual-style.md). The workbook should help a person connect the evidence to meaning; it is not only a data export.
 
@@ -233,7 +233,17 @@ Include missing internal VOC channels. Public review coverage must not be presen
 
 ## Validation before delivery
 
-Before exporting the workbook:
+After exporting the workbook, run the bundled deterministic validator from the skill folder:
+
+```bash
+python scripts/validate_workbook.py path/to/company-voc-benchmark.xlsx
+```
+
+The script uses only the Python standard library and does not modify the workbook. It checks the exact tab and header contract, required dashboard section and evidence-class labels, cached formula errors, required freeze panes, Calibri/wrapping/vertical alignment for populated cells, native chart ranges, and horizontal orientation for charts with long category labels. A nonzero exit status is a release failure: correct the workbook and rerun the validator until it passes.
+
+The validator also prints a manual-review list for semantic and visual checks that cannot be proven reliably from workbook XML. Complete that review before delivery. If Python execution is unavailable, perform every check below manually and state that automated validation was unavailable.
+
+Release checklist:
 
 1. Verify that every required tab exists with the exact name.
 2. Verify that every required column exists.

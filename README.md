@@ -72,6 +72,8 @@ Example starting prompt:
 
 When spreadsheet creation is available, the skill requires a tailored, downloadable `.xlsx` workbook with validated tabs, fields, formulas, charts, and traceable evidence. Workbook outputs follow a shared [visual standard](skills/voc-benchmark-builder/references/visual-style.md): Calibri, Tomboj charcoal and teal, labeled status colors, wrapped text, and vertically centered cell content.
 
+Before delivery, the assistant runs the dependency-free [workbook validator](skills/voc-benchmark-builder/scripts/validate_workbook.py). The validator does not edit or upload the workbook. It fails when required tabs, fields, dashboard sections, evidence-class labels, freeze panes, core styling, or chart rules are missing, and it supplies a short manual-review checklist for judgments that cannot be verified reliably from workbook XML.
+
 ## Test models and measure cost
 
 Use [Model evaluation and background testing](docs/model-evaluation.md) to compare OpenAI, Claude, and Kimi using the same inputs. The guide separates interactive research from batch classification and records tokens, cost, elapsed time, source quality, schema compliance, and human corrections.
@@ -87,6 +89,8 @@ skills/
     ├── ATTRIBUTIONS.md
     ├── agents/
     │   └── openai.yaml
+    ├── scripts/
+    │   └── validate_workbook.py
     └── references/
         ├── benchmark-output.md
         ├── company-profile.md
