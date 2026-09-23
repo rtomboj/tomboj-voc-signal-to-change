@@ -80,6 +80,8 @@ The [VOC Monitoring Automation](skills/voc-monitoring-automation/SKILL.md) is th
 
 The skill is in draft review. It does not provide universal website scraping code: each public source needs a permitted collection method, such as an approved API/feed, export, notification, or manual review.
 
+For the Workspace service map, frontier-model connection patterns, and refreshed Apps Script repository references, see the [Apps Script and Google Workspace field guide](skills/voc-monitoring-automation/references/apps-script-workspace-capabilities.md). The repo also includes a [Drive intake Apps Script example](skills/voc-monitoring-automation/examples/drive-intake/README.md), which makes a Google Sheets copy of a Part 1 Excel workbook without creating the source-specific monitor.
+
 ## Test models and measure cost
 
 Use [Model evaluation and background testing](docs/model-evaluation.md) to compare OpenAI, Claude, and Kimi using the same inputs. The guide separates interactive research from batch classification and records tokens, cost, elapsed time, source quality, schema compliance, and human corrections.
@@ -108,14 +110,20 @@ skills/
     ├── ATTRIBUTIONS.md
     ├── agents/
     │   └── openai.yaml
+    ├── examples/
+    │   └── drive-intake/
+    │       ├── DriveIntake.gs
+    │       ├── README.md
+    │       └── appsscript.json
     └── references/
         ├── apps-script-delivery.md
+        ├── apps-script-workspace-capabilities.md
         └── monitoring-design.md
 ```
 
 ## Attribution and provenance
 
-The project is original instructional work informed by existing Voice of Customer methods, public skill conventions, and prior-art repositories. See [ATTRIBUTIONS.md](ATTRIBUTIONS.md) for repository-level provenance and the skill's [detailed attribution record](skills/voc-benchmark-builder/ATTRIBUTIONS.md).
+The project is original instructional work informed by existing Voice of Customer methods, public skill conventions, and prior-art repositories. See [ATTRIBUTIONS.md](ATTRIBUTIONS.md) for repository-level provenance and the [Benchmark Builder](skills/voc-benchmark-builder/ATTRIBUTIONS.md) and [Monitoring Automation](skills/voc-monitoring-automation/ATTRIBUTIONS.md) attribution records.
 
 ## Licensing
 
