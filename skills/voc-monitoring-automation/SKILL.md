@@ -24,7 +24,7 @@ If not, point the user to the [VOC Benchmark Builder](https://github.com/rtomboj
 If they have both files:
 
 1. Ask them to place them in a Google Drive folder named VOC_Automation.
-2. Have them save the Excel workbook as a Google Sheets file. Keep the original Excel workbook and Markdown report as the benchmark record.
+2. Keep both Part 1 files as the originals in that folder. Create a Google Sheets copy of the Excel workbook. By default, point the user to the [Drive intake helper](examples/drive-intake/README.md), which converts .xlsx/.xls files in VOC_Automation and outputs the Sheet ID and URL. It must be run and authorized in the user's Apps Script project. If they prefer not to grant its Drive access, use Drive's manual “Open with Google Sheets” and “Save as Google Sheets” flow. Never overwrite the original Excel file.
 3. Ask for the Drive URLs of the Markdown file and Google Sheet. Parse the file IDs from the links when needed.
 4. Check whether an authorized Google Drive or Sheets connection can read the files. Ask before making changes to the user's Sheet. If access is unavailable or not authorized, ask the user to upload both files for assessment. Generate setup code and manual instructions when the Sheet itself cannot be edited directly.
 
