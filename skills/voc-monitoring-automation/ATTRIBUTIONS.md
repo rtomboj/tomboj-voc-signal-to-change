@@ -11,6 +11,12 @@ This skill is original instructional work by Rachel Wilde / Tomboj. It uses the 
 | [Google Apps Script external services](https://developers.google.com/apps-script/guides/services/external) | Calling approved external APIs | Platform behavior reference only |
 | [Google Apps Script authorization](https://developers.google.com/apps-script/guides/services/authorization) | User authorization and scopes | Platform behavior reference only |
 | [Google Apps Script quotas](https://developers.google.com/apps-script/guides/services/quotas) | Service limits | Platform behavior reference only; check current limits before use |
+| [Google Apps Script Advanced Drive service](https://developers.google.com/apps-script/advanced/drive) | Drive API v3 support in Apps Script | Consulted for the Drive intake example; no code copied |
+| [Google Drive upload and conversion guide](https://developers.google.com/workspace/drive/api/guides/manage-uploads) | Converting uploaded Excel/CSV content to Workspace file types | Platform behavior reference only |
+| [Google Drive search and custom-property guides](https://developers.google.com/workspace/drive/api/guides/search-files) | Query syntax for idempotent conversion lookup | Platform behavior reference only |
+| [Google Workspace MCP configuration](https://developers.google.com/workspace/guides/configure-mcp-servers) | OAuth-based Workspace tools for connected AI clients | Consulted for the field guide; no code copied |
+| [OpenAI API authentication](https://platform.openai.com/docs/api-reference/authentication), [Anthropic API authentication](https://docs.anthropic.com/en/api/getting-started), and [Gemini API keys](https://ai.google.dev/gemini-api/docs/api-key) | Provider-specific API credential requirements | Consulted for LLM integration guidance; no keys, code, or prose copied |
+| Apps Script and Workspace repositories listed in [apps-script-workspace-capabilities.md](references/apps-script-workspace-capabilities.md) | Practical examples, libraries, sample projects, and Workspace/MCP tools | Descriptions and latest observed commit dates recorded in the guide; linked for discovery only, no code or prose copied; license assessment is required before reuse |
 
 The [Google Business Profile Reviews Monitor](https://github.com/abhi-ai-marketing/google-business-profile-reviews-monitor-workflow) was noted as prior art but not used as a code source because no license was identified during prior review. No third-party code or prose has been copied or adapted.
 
