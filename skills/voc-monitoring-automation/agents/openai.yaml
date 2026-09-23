@@ -1,0 +1,4 @@
+interface:
+  display_name: "VOC Monitoring Automation"
+  short_description: "Build a tested public VOC monitor in Google Sheets"
+  default_prompt: "Use $voc-monitoring-automation to turn my Part 1 VOC benchmark files into a tested Google Sheets monitoring workflow."
