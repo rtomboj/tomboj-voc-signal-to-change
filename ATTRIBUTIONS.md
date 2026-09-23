@@ -6,7 +6,7 @@ This file records the provenance of material in the Tomboj VOC Signal-to-Change 
 
 Unless otherwise identified, the repository's original methodology, skill instructions, schemas, examples, and future source code were created by Rachel Wilde / Tomboj.
 
-The current VOC Benchmark Builder was written as original instructional work. No third-party code or prose was copied into the skill.
+The VOC Benchmark Builder and its VOC Monitoring Automation companion are original instructional work. No third-party code or prose was copied into either skill.
 
 ## Prior art consulted
 
@@ -20,9 +20,9 @@ The current VOC Benchmark Builder was written as original instructional work. No
 | [SPDX License List Data](https://github.com/spdx/license-list-data) | Standard license texts | MIT and CC BY 4.0 legal texts used for the repository license files |
 | [OpenAI API documentation](https://developers.openai.com/api/docs/) | Background execution, Batch API, model selection, usage, and pricing guidance | Consulted for `docs/model-evaluation.md`; no code or prose copied |
 | [Claude Platform documentation](https://platform.claude.com/docs/) | Current models, batch processing, usage, caching, and pricing guidance | Consulted for `docs/model-evaluation.md`; no code or prose copied |
-| [Kimi API Platform documentation](https://platform.kimi.ai/docs/overview) | Current models, Batch API, usage fields, tools, and pricing guidance | Consulted for `docs/model-evaluation.md`; no code or prose copied |
+| [Kimi API Platform documentation](https://platform.kimi.ai/docs/overview) | Current models, Batch API, usage fields, tools, and pricing guidance | Consulted for `docs/model-evaluation.md`; no code or prose copied |\n| [Google Apps Script documentation](https://developers.google.com/apps-script/) | Bound scripts, triggers, external services, authorization, and quotas | Consulted for the VOC Monitoring Automation companion; no code or prose copied |
 
-The Step 1 skill also maintains a [skill-level attribution record](skills/voc-benchmark-builder/ATTRIBUTIONS.md).
+The Step 1 and Step 2 skills each maintain a [skill-level attribution record](skills/voc-benchmark-builder/ATTRIBUTIONS.md) and [Step 2 attribution record](skills/voc-monitoring-automation/ATTRIBUTIONS.md).
 
 ## Required attribution for this project
 
