@@ -61,6 +61,8 @@ Ask the user which analysis to automate:
 2. **Rules and formulas:** calculate source-specific rating or volume movement and propose categories using the existing taxonomy or approved keyword rules.
 3. **Optional AI classification:** classify and summarize new records with confidence labels. Estimate token use for the expected volume. Process new records only by default; do not resummarize the entire history on every run.
 
+If the user chooses AI classification or summaries, confirm the provider, connection path, data handling, and per-run budget before generating model calls. Keep AI optional and do not expose or use an API key without authorization.
+
 Keep source ratings separate. Do not combine unlike platforms into a company score. Use any operational-impact or trend category to direct investigation, not to evaluate or punish a person.
 
 ## Prepare the Google Sheet
@@ -87,7 +89,7 @@ On first run, treat existing Step 1 records and current source state as a baseli
 
 ## Generate and test the monitoring code
 
-Read [apps-script-delivery.md](references/apps-script-delivery.md). Generate complete, source-specific Apps Script project files from the confirmed workbook schema and permitted collection methods. Do not return pseudocode where runnable code is expected.
+Read [apps-script-delivery.md](references/apps-script-delivery.md) and [apps-script-workspace-capabilities.md](references/apps-script-workspace-capabilities.md) before selecting Google APIs, OAuth scopes, or an optional LLM connection. Generate complete, source-specific Apps Script project files from the confirmed workbook schema and permitted collection methods. Do not return pseudocode where runnable code is expected.
 
 Deliver all required .gs files and setup instructions. Generate an .html file only if the user chooses a custom Apps Script sidebar or web interface; a native Sheets dashboard does not require HTML.
 
