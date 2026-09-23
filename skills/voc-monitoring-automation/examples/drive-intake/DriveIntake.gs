@@ -17,7 +17,6 @@ var VOC_INTAKE = {
   FOLDER_PROPERTY: 'VOC_AUTOMATION_FOLDER_ID',
   SHEET_MIME_TYPE: 'application/vnd.google-apps.spreadsheet',
   SOURCE_ID_PROPERTY: 'vocSourceFileId',
-  VERSION_PROPERTY: 'vocIntakeVersion',
   VERSION: '1'
 };
 
