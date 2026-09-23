@@ -4,6 +4,8 @@ Use this reference after the user confirms a source plan and permits a Google Sh
 
 Before choosing services, scopes, or an optional model connection, consult [apps-script-workspace-capabilities.md](apps-script-workspace-capabilities.md). Prefer a built-in service for straightforward operations, use an Advanced Google service when its API adds a required capability, and use UrlFetchApp for an external model API or unsupported endpoint. Treat Google OAuth authorization and provider API keys as separate credentials.
 
+The [Drive intake example](../examples/drive-intake/README.md) handles only the initial Excel-to-Sheets copy. It does not collect reviews or replace the source-specific monitoring files generated later in this workflow.
+
 ## Choose the script design
 
 Prefer a container-bound Apps Script opened from the user's Google Sheet. It can address its parent spreadsheet without a copied ID. If using a standalone script or one script that writes to a different workbook, ask for the target Sheet URL and use its ID privately in the user's generated code. Do not place a user's Sheet URL, ID, credentials, or review data in the public repository.
