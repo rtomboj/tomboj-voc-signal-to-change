@@ -65,10 +65,10 @@ These are different integration patterns. A Google OAuth grant does not provide 
 
 A typical path is: create an API credential in the provider's developer platform, keep it in an approved private configuration store, then have the script call the provider endpoint with UrlFetchApp. Apps Script requires the external-request authorization scope when using UrlFetchApp.
 
-- **OpenAI:** Use an OpenAI API key and the current OpenAI API authentication and request documentation.
-- **Claude:** Use an Anthropic API key or a supported workload-identity path; use the current Claude API authentication and Messages API documentation.
-- **Gemini:** Use the current Gemini API authentication instructions. Google's key model and restrictions changed in 2026; check the current key type and access requirements instead of copying an older unrestricted-key example.
-- **Other providers, including Kimi:** Use that provider's current API endpoint, authentication, supported models, rate limits, and billing terms. OpenAI-compatible request formats do not guarantee identical features or response behavior.
+- **OpenAI:** Use an OpenAI API key and the current [API authentication and request documentation](https://platform.openai.com/docs/api-reference/authentication).
+- **Claude:** Use an Anthropic API key or a supported workload-identity path; follow the current [Claude API authentication and Messages API documentation](https://docs.anthropic.com/en/api/getting-started).
+- **Gemini:** Use the current [Gemini API authentication instructions](https://ai.google.dev/gemini-api/docs/api-key). Google's key model and restrictions changed in 2026; check the current key type and access requirements instead of copying an older unrestricted-key example.
+- **Other providers, including Kimi:** Use that provider's current API endpoint, authentication, supported models, rate limits, and billing terms; [Kimi API documentation](https://platform.kimi.ai/docs/overview) is one example. OpenAI-compatible request formats do not guarantee identical features or response behavior.
 
 #### Practical setup for an Apps Script model call
 
