@@ -38,6 +38,10 @@ Chat appeared twice in the request; it is covered once here.
 7. Test with a copy, sample rows, and a test recipient. Review the result before enabling scheduled or outbound actions.
 8. Check current Apps Script and API quotas. Time-driven triggers are scheduled checks; their runtime and daily limits still apply.
 
+### Drive intake example included with this VOC project
+
+The [Drive intake helper](../examples/drive-intake/README.md) makes a Google Sheets copy of each .xlsx or .xls workbook in a configured Drive folder and reports its ID and URL. It is run manually and is safe to rerun within the same Apps Script project. It does not monitor review sources, add VOC tabs, create triggers, or send alerts. It is only an onboarding helper; monitoring code still depends on the sources, permissions, cadence, and workbook schema the user confirms.
+
 Official starting points:
 
 - [Apps Script overview](https://developers.google.com/apps-script/overview)
@@ -63,8 +67,18 @@ A typical path is: create an API credential in the provider's developer platform
 
 - **OpenAI:** Use an OpenAI API key and the current OpenAI API authentication and request documentation.
 - **Claude:** Use an Anthropic API key or a supported workload-identity path; use the current Claude API authentication and Messages API documentation.
-- **Gemini:** Use the current Gemini API key/authentication instructions. Google's API-key model is transitioning in September 2026; do not copy an older key example without checking the key type and current restrictions.
+- **Gemini:** Use the current Gemini API authentication instructions. Google's key model and restrictions changed in 2026; check the current key type and access requirements instead of copying an older unrestricted-key example.
 - **Other providers, including Kimi:** Use that provider's current API endpoint, authentication, supported models, rate limits, and billing terms. OpenAI-compatible request formats do not guarantee identical features or response behavior.
+
+#### Practical setup for an Apps Script model call
+
+1. Create or select the provider's developer project, enable the model API, and check its billing and usage limits.
+2. Create a dedicated credential for this workflow. Use a provider-supported workload identity when available; otherwise use an API key with only the access the provider offers.
+3. In Apps Script **Project Settings → Script Properties**, enter a name such as `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or `GEMINI_API_KEY` and paste the key there. The script reads it server-side with `PropertiesService.getScriptProperties().getProperty(...)` and sends it with `UrlFetchApp.fetch(...)`.
+4. Implement the exact authentication header, API version, endpoint, and request body required by that provider's current API documentation. Do not assume the same header or payload works for all models.
+5. Test on synthetic or approved sample feedback, confirm the response schema and error handling, and estimate cost per run before adding a trigger.
+
+Do not paste live keys into the conversation, source code, Sheet cells, HTML, logs, or this public repository. A user-authorized Google OAuth connection to Workspace is a different option and does not use a provider API key.
 
 Apps Script Script Properties are shared project configuration and can be managed in Project Settings. They are suitable only when the script project and its editors are trusted; any trusted editor who can change the code can write code that reads or transmits a key. Use Google Cloud Secret Manager or a server-side gateway for higher-assurance shared or production deployments. Never place a live key in a public repository, Sheet cell, prompt, client-side HTML, or execution log. Rotate a key if it was exposed.
 
