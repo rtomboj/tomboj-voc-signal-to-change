@@ -1,101 +1,110 @@
 # Apps Script delivery and test sequence
 
-Use this reference after the user confirms a source plan and permits a Google Sheets setup.
+Use this reference after the source plan is confirmed and before generating a Google Sheets setup.
 
-Before choosing services, scopes, or an optional model connection, consult [apps-script-workspace-capabilities.md](apps-script-workspace-capabilities.md). Prefer a built-in service for straightforward operations, use an Advanced Google service when its API adds a required capability, and use UrlFetchApp for an external model API or unsupported endpoint. Treat Google OAuth authorization and provider API keys as separate credentials.
+Before selecting services, OAuth scopes, or an optional model API, consult [apps-script-workspace-capabilities.md](apps-script-workspace-capabilities.md). Prefer built-in services for straightforward operations, an Advanced Google service when its API adds a needed capability, and `UrlFetchApp` for an external endpoint. Google authorization and provider API keys are separate credentials.
 
-The [Drive intake example](../examples/drive-intake/README.md) handles only the initial Excel-to-Sheets copy. It does not collect reviews or replace the source-specific monitoring files generated later in this workflow.
+The [Drive intake example](../examples/drive-intake/README.md) handles only the initial Excel-to-Sheets copy. It does not collect reviews or replace the source-specific monitor.
 
 ## Choose the script design
 
-Prefer a container-bound Apps Script opened from the user's Google Sheet. It can address its parent spreadsheet without a copied ID. If using a standalone script or one script that writes to a different workbook, ask for the target Sheet URL and use its ID privately in the user's generated code. Do not place a user's Sheet URL, ID, credentials, or review data in the public repository.
+Prefer a container-bound Apps Script opened from the user's working Google Sheet. It can address the parent spreadsheet without storing a copied Sheet ID. For a standalone script or a different workbook, use the ID privately in the user's generated code. Never publish customer-specific Sheet URLs, IDs, review text, or generated code in this repository.
 
-Use official source APIs, feeds, exports, notifications, or manual input. A generic HTTP request service does not grant permission to collect from a website or guarantee that the source is stable. Do not bypass authentication, CAPTCHAs, paywalls, or platform restrictions. Document one source adapter per automated source. Leave unsupported sources as manual, deferred, or watchlist.
+Use official source APIs, feeds, exports, notifications, or manual capture. A generic HTTP request does not create permission to collect from a website or make its layout stable. Use one source adapter per approved automated source. Leave unsupported sources manual, on a watchlist, deferred, or excluded.
 
-## Prepare the spreadsheet
+## Prepare the workbook safely
 
-If connected and the user authorizes edits, add missing tabs and headers to the designated Google Sheets working copy. Preserve Part 1 data and formulas. Make setup operations idempotent so rerunning them does not duplicate tabs, clear records, or overwrite user content.
+Create a dated backup of the converted Google Sheet before setup. The .xlsx and Markdown Part 1 outputs remain the frozen benchmark. Check important formulas, validation, charts, and formatting because Excel conversion may change them.
 
-If not connected, provide:
+If editing is authorized, add missing tabs and headers only. Setup must be idempotent: rerunning it cannot clear existing rows, duplicate tabs, alter Part 1 headers, or overwrite the benchmark dashboard.
 
-- the generated setup function for missing tabs and headers;
-- a manual tab-and-header table as a fallback;
-- instructions for making a backup copy before running it.
+If no authorized Sheets connection is available, provide:
+- an idempotent setup function;
+- a manual tab/header checklist;
+- instructions to use a backup or test copy first.
 
-Do not create or activate time-driven triggers during workbook preparation.
+Do not create a time-driven trigger while preparing the workbook.
 
 ## Generate the code package
 
-Return complete, user-specific files, not fragments that require the user to invent missing logic. Split files when that improves readability. A typical project may include:
+Deliver complete user-specific files, not fragments. A small pilot may use one or two files; a larger project may separate:
 
-- Config.gs for selected sources, cadence, fields, and alert rules;
-- SourceAdapters.gs for permitted retrieval and source-specific parsing;
-- ReviewStore.gs for schema mapping, stable IDs, deduplication, inserts, and updates;
-- Classification.gs for selected deterministic or optional AI classification;
-- Alerts.gs for test and production email or configured chat notices;
-- TriggerSetup.gs for an idempotent setup function to create the chosen trigger;
-- TestRunner.gs for fixtures and checks;
-- DashboardBuilder.gs only after the monitoring test gate passes;
-- Dashboard.html only if the user chooses a custom Apps Script sidebar or web interface.
+- `Config.gs`: confirmed source plan, cadence, fields, and alert choices;
+- `SourceAdapters.gs`: approved retrieval/parsing per source;
+- `ReviewStore.gs`: schema mapping, ID origin, deduplication, append/update;
+- `Classification.gs`: confirmed deterministic rules or optional AI;
+- `Alerts.gs`: test and operational email/Chat notices;
+- `ManualCapture.gs`: manual capture, due checks, and reminders;
+- `TriggerSetup.gs`: explicit trigger creation/removal;
+- `TestRunner.gs`: fixtures and a `runAllTests()` entry point;
+- `MonitorDashboard.gs`: only after the monitoring test gate passes;
+- `Dashboard.html`: only if the user selects a custom interface.
 
-The file names may be simpler for a one-source pilot. Include a manifest or README listing each file, the function to run, requested permissions, configuration values, and expected result.
+Include a README or manifest listing files, function names, scopes, configuration values, and expected outputs. Do not place secrets in code or Sheet cells.
 
-Do not include secrets in generated code or sheet cells. Put source credentials only in an approved private configuration location and explain who can access them. Use a test recipient and test mode before sending alerts to operational recipients.
+### Optional frontier model connection
 
-## Authorization and triggers
+Deterministic collection, deduplication, measures, and notification do not need an LLM key. AI is optional and has a recurring token/API cost if scheduled. Default to no recurring AI; allow setup-time assistance or a user-requested one-off summary.
 
-Installable Apps Script triggers can run on a time-driven schedule and use the authorization of the account that created them. Explain that the person who will own the ongoing monitor must run the setup operation and approve the requested Google permissions. Do not create a trigger silently or promise that another user's trigger will run under the document owner's identity.
+If the user opts in, state what text/data will leave Google, the provider, expected per-run volume and cost, retention/data-use assumptions, and the budget/disable path. Keep the provider key out of source control, cells, logs, and alerts. Apps Script `UserProperties` are per user; `ScriptProperties` are available to users of the script and should not be presented as a private secret store. For shared/team credentials, a controlled service such as Google Cloud Secret Manager is an option but adds Cloud project, IAM, and API setup. Use the [Properties Service](https://developers.google.com/apps-script/guides/properties) and appropriate provider documentation to select storage. The scheduled trigger runs as its creator, so user-scoped credentials must belong to the trigger owner.
 
-Provide a setup function that:
+## Test before scheduling
 
-- checks whether the matching trigger already exists;
-- creates only one trigger for the confirmed cadence;
-- reports the trigger owner and next-run expectation;
-- can remove or reset that trigger without changing source data.
+Provide a `TEST_MODE` and `runAllTests()` using fixture records and an isolated test copy/tab, with results written to `Test_Results`. Test runs must not change production rows or alert real recipients. Until the user runs tests in their Google account and returns results, report live Google authorization, collection, trigger execution, email, and Chat delivery as **not run**.
 
-Use the Google Apps Script trigger documentation and service quotas as current implementation references:
+Use fixtures first. Use a permitted live-source check only after the route and access are confirmed. Test each source separately. Required cases:
 
-- https://developers.google.com/apps-script/guides/triggers/installable
-- https://developers.google.com/apps-script/guides/services/external
-- https://developers.google.com/apps-script/guides/services/quotas
-- https://developers.google.com/apps-script/guides/services/authorization
+1. Part 1 rows and records at/before baseline date do not trigger historical alerts.
+2. Synthetic/unknown IDs are captured in a fresh baseline before monitoring begins.
+3. One new ID appends once; the same ID is skipped on recheck.
+4. Source ID plus ID Origin distinguish records; canonical syndicated copies count once.
+5. Edited records follow the agreed update/change-log rule.
+6. Positive and negative individual signals remain separate from trend counts.
+7. An individual high-impact signal can prompt review without being labeled representative or a trend.
+8. Evidence class and audience filters/counts remain distinct.
+9. Wrong-entity/out-of-scope data is held for review or excluded.
+10. Manual capture enters the same pipeline; overdue manual checks are visible.
+11. Failed, partial, and stale checks are visible, preserve the last success, and never look like no feedback.
+12. Test notifications route only to test recipients and expose minimal necessary text.
+13. Simultaneous executions cannot write duplicate rows (use a script-level lock).
+14. Repeated trigger setup by the same user does not duplicate that user's trigger.
+15. A missing/ambiguous trigger owner is handled as setup-needed, not reported as a healthy schedule.
+16. Quota/time-limit errors are logged and do not erase the last successful state.
 
-Have the user run one manual check before enabling a schedule. If the project needs an external API credential, explain the required source-specific authorization and do not store the credential in a public code file.
+Report each case as passed, failed, partially tested, blocked, or not run. The assistant cannot run a user's live Google Apps Script environment; wait for their test output before claiming the gate passed or writing the dashboard builder.
 
-## Test the monitor before building a dashboard
+## Authorization and trigger setup
 
-Use fixtures first, then a permitted live-source check where practical. Test each source separately. Do not send tests to live recipients.
+Show a clear click path: open the converted Sheet → **Extensions → Apps Script** → add the provided files → save → run the documented initialization on the backup/test copy → review and approve the requested scopes → run manual tests.
 
-Required cases:
+Explain which account will run the continuing monitor. Installable time-driven triggers execute using the authorization of the account that created them. Have that maintainer run trigger setup after tests pass. Keep the maintainer role and account recorded in the monitor notes/config so ownership can be transferred deliberately.
 
-1. Existing Part 1 rows remain unchanged and are not re-alerted on the baseline run.
-2. A new stable ID creates exactly one Review_Data row.
-3. A repeated ID is skipped as a duplicate.
-4. An edited existing record follows the approved update and change-log behavior.
-5. Positive, negative, mixed, and uncertain content keep the source evidence and receive only the selected analysis.
-6. One serious individual signal can alert for investigation without incrementing an unsupported trend claim.
-7. Wrong-entity and out-of-scope records do not enter the in-scope analysis.
-8. A source failure writes Failed or Partial to Monitor_Run_Log and preserves the last successful state.
-9. An empty result is labeled No New Records only after a successful source check.
-10. Alert routing in test mode reaches only the test recipient.
-11. Running trigger setup twice leaves one matching trigger.
-12. The run respects the confirmed cadence and source limits.
+Make trigger setup explicit and reversible. It should check for duplicates visible to the current user, create a single trigger for the confirmed cadence, and provide a remove/reset function that does not touch source data. Apps Script only returns project triggers associated with the current user; setup cannot inspect or remove a trigger created by another collaborator. Do not report another account's trigger owner or promise to detect cross-account duplicates. Before changing maintainership, have each current maintainer inspect their own triggers and remove their own obsolete one. Time-driven triggers run within a time window, not necessarily at an exact minute.
 
-Report passed, failed, partially tested, or blocked for every case. Give exact manual steps for tests that must run under the user's Google account. Pause for results before writing dashboard code.
+Use a script lock around collection and write operations. If another run holds the lock, skip or defer cleanly and log the result; never run two overlapping writes.
 
-## Dashboard build and validation
+Add self-health to the monitor data and dashboard: last successful check, next due/overdue status, last error, and last alert attempt. Use formulas/conditional formatting or a separate monitoring view so failure is visible even if a trigger stops. Provide a periodic human check as a backup. Do not claim the script can alert after the script itself is unable to execute.
 
-After the user returns successful monitoring test results, build a native Executive_Dashboard tab by default. Add an HTML interface only if selected. The dashboard should read from the validated workbook rather than duplicate or reinterpret raw source data.
+Use least-privilege OAuth scopes. Use `@OnlyCurrentDoc` only when the design truly needs only the bound file and the annotation is compatible with every requested service. Explain that the Drive intake example uses a broader Drive scope because it searches/converts Drive files. Quotas and account limits can change; check Google's [quota page](https://developers.google.com/apps-script/guides/services/quotas) for the selected account and APIs before rollout. Do not promise a cadence a source or quota cannot sustain.
 
-Check that:
+## Build and validate the dashboard
 
-- record counts reconcile to Review_Data by source and period;
-- source-specific ratings retain their own scales and audiences;
-- new, changed, and duplicate records are distinguishable;
-- positive and negative signals are both visible;
-- individual signals and possible trends have different labels;
-- source failures and stale checks cannot appear as zero customer feedback;
-- coverage gaps and classification confidence remain visible;
-- no score ranks employees or teams.
+Only after the user returns successful monitoring test results, generate a separate `Monitor_Dashboard` builder. Preserve Part 1's `Executive_Dashboard`. Use a native Sheet by default; add HTML only if chosen.
 
-Keep Apps Script quotas and source limits in the setup notes. Recheck Google's quota documentation before publication because service limits can change.
+Validate that:
+- totals reconcile with monitoring data by source and time window;
+- rating scales, audiences, and evidence classes are not combined;
+- positive and negative movement are visible;
+- individual signals, possible patterns, and reviewed sustained changes have separate labels;
+- failure, overdue, and stale status cannot appear as zero feedback;
+- evidence window, denominator, volume floor, and coverage gaps are clear;
+- no measure ranks individuals or claims causality without evidence.
+
+## Official implementation references
+
+- [Installable triggers](https://developers.google.com/apps-script/guides/triggers/installable)
+- [Apps Script Script service](https://developers.google.com/apps-script/reference/script/script-app)
+- [LockService](https://developers.google.com/apps-script/reference/lock/lock-service)
+- [Properties Service](https://developers.google.com/apps-script/guides/properties)
+- [OAuth authorization](https://developers.google.com/apps-script/guides/services/authorization)
+- [Apps Script quotas](https://developers.google.com/apps-script/guides/services/quotas)
