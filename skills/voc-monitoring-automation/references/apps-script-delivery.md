@@ -10,7 +10,7 @@ The optional [Drive intake example](../examples/drive-intake/README.md) handles 
 
 Prefer a container-bound Apps Script opened from the user's working Google Sheet. It can address the parent spreadsheet without storing a copied Sheet ID. For a standalone script or a different workbook, use the ID privately in the user's generated code. Never publish customer-specific Sheet URLs, IDs, review text, or generated code in this repository.
 
-Use official source APIs, feeds, exports, notifications, or manual capture. A generic HTTP request does not create permission to collect from a website or make its layout stable. Use one source adapter per approved automated source. Leave unsupported sources manual, on a watchlist, deferred, or excluded.
+Start with an Apps Script site checker for each selected public review source. When a direct public-page check is permitted and returns the review entries, use `UrlFetchApp` and a source-specific extractor. Use an official API/feed/export/notification when available or more reliable. A generic HTTP request neither establishes permission nor guarantees the browser's content appears in the response. Each adapter must validate HTTP status, expected page/content shape, source identity, extracted fields, and a bounded lookback or pagination rule. A blocked request, page redesign, missing review list, or parse failure is a failed/partial check, not zero feedback. Leave unsupported sources manual, on a watchlist, deferred, or excluded.
 
 ## Prepare the workbook safely
 
@@ -30,7 +30,7 @@ Do not create a time-driven trigger while preparing the workbook.
 Deliver complete user-specific files, not fragments. A small pilot may use one or two files; a larger project may separate:
 
 - `Config.gs`: confirmed source plan, cadence, fields, and alert choices;
-- `SourceAdapters.gs`: approved retrieval/parsing per source;
+- `SourceAdapters.gs`: approved site requests and source-specific review extraction, or API/feed retrieval where selected;
 - `ReviewStore.gs`: schema mapping, ID origin, deduplication, append/update;
 - `Classification.gs`: confirmed deterministic rules or optional AI;
 - `Alerts.gs`: test and operational email/Chat notices;
@@ -71,6 +71,7 @@ Use fixtures first. Use a permitted live-source check only after the route and a
 15. A missing/ambiguous trigger owner is handled as setup-needed, not reported as a healthy schedule.
 16. Quota/time-limit errors are logged and do not erase the last successful state.
 17. Internal Record IDs stay unique across multiple prefix families; unresolved themes remain in a review status rather than creating taxonomy values.
+18. A page response missing its expected review list, blocked request, or changed extraction rule is reported as failure/partial, never a successful zero-new-record check.
 
 Report each case as passed, failed, partially tested, blocked, or not run. The assistant cannot run a user's live Google Apps Script environment; wait for their test output before claiming the gate passed or writing the dashboard builder.
 
