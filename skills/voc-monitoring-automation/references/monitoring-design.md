@@ -101,7 +101,7 @@ Use `Monitor_Run_Log` for one source-check attempt per row:
 
 Append to the existing Part 1 `Review_Data` table when its schema can represent the records. Otherwise create a monitor-specific data tab and document the mapping; do not silently change Part 1 headers.
 
-Where available, retain source ID, platform record ID, ID Origin, canonical URL, original URL, record date, capture date, source-reported geography, audience, evidence class, rating, scale, excerpt, language, source notes, and classification fields. Do not fill unknown values with guesses. Keep platform-specific rating scales separate.
+Where available, retain source ID, platform record ID, ID Origin, canonical URL, original URL, raw record-date text, parsed record date, capture date, source-reported geography, audience, evidence class, raw rating text, parsed rating and scale, excerpt, language, source notes, and classification fields. Keep raw and parsed values separate; parse only when unambiguous and flag ambiguous dates or non-numeric rating labels for review. Do not fill unknown values with guesses. Keep platform-specific rating scales separate.
 
 An optional `Review_Change_Log` can preserve changes to an existing review or aggregate measure. Store detected time, source ID, stable record ID, field name, old/new values, change type, and alert decision. Avoid duplicating full review text if a short changed field is enough.
 
@@ -111,7 +111,7 @@ A Part 1 ID may be a true platform ID, a canonical URL, a content fingerprint, o
 
 Use a deduplication key built from Source ID + ID Origin + record ID. Do not use URL alone as the identity key. If a source has no reliable ID, keep it manual or capture a dated current-state baseline, then monitor additions after that date. A change in a synthetic placeholder must not create a new customer alert.
 
-For syndicated copies, select one canonical source for counting after a human confirms the relationship. Preserve secondary URLs as provenance, but count the record once and do not route the same event as two independent reports. Never assume two similar excerpts are the same review without evidence.
+For syndicated copies, select one canonical source for counting after a human confirms the relationship. Preserve secondary URLs as provenance, but count the record once and do not route the same event as two independent reports. Never assume two similar excerpts are the same review without evidence. If Baseline_Snapshot has no Source ID or uses ambiguous platform labels, create a human-reviewed source map from Source_Register before comparing values; do not assign IDs from a matching URL alone.
 
 On first run, choose explicitly between:
 1. **Part 1 baseline:** treat Part 1 rows and the stated benchmark date as historical; only items newer than the confirmed date can be new.
@@ -160,7 +160,7 @@ Separate the following:
 - **Source health:** failed, stale, blocked, or overdue checks are operational alerts, separate from customer feedback.
 - **Digest:** group routine signals; reserve immediate notices for explicitly approved high-impact items.
 
-Offer a transparent starter rule as a decision aid, not a universal standard. Example for confirmation: “At least 3 independent records with the same reviewed theme, source, and audience inside a rolling 90-day window creates a *possible pattern*; it becomes *sustained* only if it appears in two consecutive review windows.” The user may choose different counts/windows or keep trend alerts off. If volume is below the agreed floor, show counts and records without percentage changes or trend labels.
+Offer a transparent starter rule as a decision aid, not a universal standard. Example for confirmation: “At least 3 independent records with the same reviewed theme, source, and audience inside a rolling 90-day window creates a *possible pattern*; it becomes *sustained* only if it appears in two consecutive review windows.” The user may choose different counts/windows or keep trend alerts off. If no rule is confirmed, leave possible-pattern and sustained-trend alerts disabled and show counts only. If volume is below the agreed floor, show counts and records without percentage changes or trend labels.
 
 Do not equate silence with resolution. A theme with no new records should be described as “no new reports in this window.” Say “improved” only when comparable measures support that conclusion, and “fixed” only after a specific resolution has been checked.
 
