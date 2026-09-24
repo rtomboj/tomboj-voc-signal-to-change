@@ -19,7 +19,7 @@ Ask first:
 
 > Do you have both Part 1 files for the company you want to monitor: the Markdown benchmark and the Excel workbook?
 
-If not, point the user to the [VOC Benchmark Builder](https://github.com/rtomboj/tomboj-voc-signal-to-change/tree/main/skills/voc-benchmark-builder/SKILL.md). Give them this starting instruction: “Use the VOC Benchmark Builder to establish an external customer-feedback benchmark for my company.” Ask them to return when they have both outputs. Do not start monitoring from an incomplete benchmark.
+If not, point the user to the [VOC Benchmark Builder](https://github.com/rtomboj/tomboj-voc-signal-to-change/blob/main/skills/voc-benchmark-builder/SKILL.md). Give them this starting instruction: “Use the VOC Benchmark Builder to establish an external customer-feedback benchmark for my company.” Ask them to return when they have both outputs. Do not start monitoring from an incomplete benchmark.
 
 If they have both files:
 
@@ -32,96 +32,104 @@ Do not publish customer-specific sheet links, IDs, review text, credentials, or 
 
 ## Assess the workbook before designing automation
 
-Read the Markdown benchmark and inspect the workbook tabs, headers, formulas, current records, taxonomy, source map, and monitoring-readiness notes. Confirm that the two files refer to the same company and benchmark.
+Read the Markdown benchmark and inspect the workbook tabs, headers, formulas, records, taxonomy, source map, and readiness notes. Confirm that both files refer to the same company and benchmark.
 
-Do not assume that every Part 1 workbook has the same additions or status meanings. Preserve existing data and headers. Map equivalent fields when names differ; do not rename or reorder existing columns. Identify missing or ambiguous fields and show the user a short schema map before generating code.
+Use the Part 1 workbook validator when available, then report what it found. Treat the workbook contract as a reference, not proof that an individual file conforms. In the reviewed examples, Harri is a legacy workbook that fails the current contract, Nory is closer but still has validator errors, and Toast is missing monitoring-critical tabs. These examples show why every workbook must be inspected before code is generated.
 
-Prefer existing Step 1 tabs when present, including Review_Data, Source_Register, Baseline_Snapshot, Theme_Taxonomy, Signal_to_Focus, and Executive_Dashboard. In the Harri example, Review_Data already has record IDs, source IDs, review dates, audience, ratings, excerpts, themes, signal type, operational impact, classification confidence, and a human-review field. Its Week2_Readiness tab inventories internal data readiness; it does not authorize public-site automation. Use the Source_Register to select public sources and add a source-monitoring configuration for this phase.
+Preserve existing data, formulas, tab names, and headers. Map field aliases by header name; do not rename or reorder existing columns. Look for headers in the first 20 rows, since some example tabs have title and notes rows above the table. Show the user a short schema map with matches, aliases, missing fields, and unresolved values before creating code.
 
-Read [monitoring-design.md](references/monitoring-design.md) before defining workbook fields, classifications, scores, or alert rules.
+Use `Week2_Readiness` as the source plan only when it contains a row per source and the source decisions and fields are clear. If it is an internal readiness checklist or otherwise not source-shaped, build a separate `Monitoring_Config` from `Source_Register`, preserving the Part 1 workbook. Never infer permission to automate from inclusion, public visibility, or a readiness label.
+
+Read [monitoring-design.md](references/monitoring-design.md) before defining monitoring fields, measures, categories, or alert rules.
 
 ## Confirm what to monitor
 
-Review every row in Source_Register with the user. For each source, confirm:
+Prefill a compact source table from Part 1: source, audience/evidence class, inclusion or treatment, known route, Part 1 access/readiness note, and the question that remains. Ask the user to confirm exceptions and unresolved entries rather than repeating eight questions for every source.
 
-- whether to include, defer, monitor manually, or exclude it;
-- whether the identity and audience are appropriate;
-- the permitted collection method and available fields;
-- the review cadence: daily, weekly, biweekly, or manual;
-- the stable record identifier and deduplication method;
-- first-run baseline behavior;
-- source failure handling;
-- alert conditions and recipients.
+Confirm these global choices once, then ask only source-specific exceptions:
 
-Do not treat a source as automatable simply because it is publicly visible. Use a permitted API, feed, export, notification, or manual review. Do not bypass sign-in, CAPTCHAs, paywalls, rate limits, or platform restrictions. If a source has no permitted automated method, offer manual capture or a watchlist status.
+- **Account and response path:** does the user own or manage each profile? For each source, choose owned-profile access, public viewing only, or no response route. Part 2 may surface an item for investigation or handoff; customer response and resolution belong to Part 3.
+- **Collection route:** approved API/feed/export/notification, manual check, watchlist, deferred, or excluded. Capture permission evidence, the date checked, and who confirmed it. A publicly visible page is not automatically permitted for automated collection.
+- **Cadence:** one global default (daily, weekly, biweekly, or manual), with explicit source exceptions. Confirm timezone and a digest recipient if email/chat alerts are selected.
+- **First-run behavior:** use Part 1 rows as history and start new monitoring from an agreed date, or capture the current page as the start point.
+- **Analysis and alerts:** collection only, deterministic measures/rules, and/or optional AI. Confirm separately whether a single serious item warrants an investigation notice and what evidence is required for possible-trend alerts.
 
-Ask the user which analysis to automate:
+Offer manual capture with a reminder when no permitted and reliable automated route is confirmed. Do not imply that a website can be monitored just because it is reachable in a browser. Do not bypass sign-in, CAPTCHAs, paywalls, rate limits, or platform restrictions.
 
-1. **Collection only:** detect and record new or changed source data.
-2. **Rules and formulas:** calculate source-specific rating or volume movement and propose categories using the existing taxonomy or approved keyword rules.
-3. **Optional AI classification:** classify and summarize new records with confidence labels. Estimate token use for the expected volume. Process new records only by default; do not resummarize the entire history on every run.
+The default should be deterministic collection, source health, and a quiet digest. A single record may merit a private investigation prompt under a user-approved rule, but it must remain an individual signal. Do not call one record a trend.
 
-If the user chooses AI classification or summaries, confirm the provider, connection path, data handling, and per-run budget before generating model calls. Keep AI optional and do not expose or use an API key without authorization.
+Automate measures such as record counts, source-specific rating movement, last-check age, new/changed records, and source errors when the inputs support them. Do not average unlike rating scales, audiences, or source populations. Say “measure” or “change measure”; never frame a measure as an employee score or ranking.
 
-Keep source ratings separate. Do not combine unlike platforms into a company score. Use any operational-impact or trend category to direct investigation, not to evaluate or punish a person.
+AI may help during setup or run an on-demand summary. Recurring AI classification or summaries are opt-in only. Before generating recurring model calls, name the provider, where review text is sent, the key/secret storage approach, expected token use/cost, and a per-run budget; get the user's explicit choice.
 
 ## Prepare the Google Sheet
 
-After the user confirms the source plan and permits changes, make a working copy or edit only the designated Google Sheets copy. Preserve the original Part 1 files.
+After the user confirms the source plan and permits changes, create a dated backup of the Part 1 workbook and work in its Google Sheets conversion. Keep the .xlsx and Markdown benchmark unchanged. Excel conversion can alter formatting, charts, validation, or formulas, so treat the converted Sheet as a working copy and compare important sections after conversion.
 
-Add only missing tabs and fields. The standard setup is:
+Add only missing tabs and fields. Prefer existing compatible Step 1 tabs. For an incompatible legacy workbook, map into its existing schema and create a clearly documented monitor-specific config; do not force the Part 1 workbook into the current validator contract.
 
-- **Monitoring_Config:** one row per selected public source with collection method, cadence, permission status, stable ID field, first-run rule, fields collected, alert rule, and owner.
-- **Monitor_Run_Log:** timestamp, source, run status, records fetched, new records, updated records, duplicates skipped, alerts sent, and error summary.
-- **Review_Data:** continue the existing Step 1 record table. Append new records and map them into its existing schema.
-- **Review_Change_Log:** add only when the source can revise an existing review and the user wants field-level change history.
-- **Baseline_Snapshot, Theme_Taxonomy, Signal_to_Focus, and Executive_Dashboard:** preserve and reuse existing tabs. Do not build or refresh the dashboard until collection and monitoring tests pass.
+A standard setup can include:
 
-If direct Sheet editing is unavailable, generate an idempotent setup function that creates missing tabs and headers without overwriting existing rows, plus a manual setup table. Clearly tell the user which setup path they must run.
+- **Monitoring_Config:** one row per source if `Week2_Readiness` is not a clear row-per-source source of truth. Include method, permission status/evidence, cadence, ID approach, baseline rule, fields, alert choice, and process-owner role.
+- **Manual_Capture:** source, observed date, review date, canonical URL/ID, audience/evidence class, rating/scale, excerpt, capture person/role, theme suggestion, and human-review status. A Google Form is optional.
+- **Monitor_Run_Log:** timestamp, source, success/partial/failure status, fetched/new/updated/duplicate counts, and concise error.
+- **Review_Data:** append to the existing table where compatible; otherwise create a mapped monitor data tab and document the field map.
+- **Monitor_Dashboard:** separate monitoring view. Preserve the Part 1 `Executive_Dashboard`, which may use fixed ranges or represent a historical benchmark.
+- **Review_Change_Log:** optional; use when the source edits prior reviews and the user wants field-level history.
 
-Define collection, monitoring, and classification separately:
+Use `Week2_Readiness` as config only if it is already a clear row-per-source plan. Otherwise derive the monitoring plan from `Source_Register` once and show the mapping; avoid two conflicting editable source lists.
 
-- **Collection** checks the selected source and retrieves accessible aggregate measures or review records.
-- **Monitoring** compares that result with the saved baseline and prior run, identifies new or changed items, prevents duplicates, updates the record store, and records source health.
-- **Classification and scoring** interpret the stored records using the confirmed taxonomy or optional AI. They are analysis applied to the records, not collection itself.
+Define the jobs separately:
 
-On first run, treat existing Step 1 records and current source state as a baseline. Do not alert on historical items unless the user asks to backfill them. A failed or blocked source check is an error state, never a zero-feedback result.
+- **Collection** checks a chosen source using its confirmed route, or records a human-captured observation.
+- **Monitoring** compares successful observations with the agreed baseline and prior run, deduplicates, appends new records, records permitted edits, and logs source health.
+- **Classification** applies confirmed labels or measures to the stored records. Suggestions remain marked as suggestions until approved.
+
+Record evidence class and audience separately, so customer reviews, vendor-selected stories, press, and other context do not get mixed into one count. Count syndicated copies once using an agreed canonical source while retaining other URLs as provenance. Add permission evidence URL, confirmation date, and confirmer role to the source plan.
+
+For identifiers, add an **ID Origin** field where it is missing: platform ID, canonical URL, fingerprint, synthetic, or unknown. Join on Source ID plus record ID and origin; never deduplicate on URL alone when URLs are unstable. For synthetic/unknown IDs, compare the source's current visible state, establish a fresh dated baseline, and begin alerts from that point. Do not replay historical Part 1 rows as new alerts.
+
+If direct Sheet editing is unavailable, deliver an idempotent setup function and a manual tab/header checklist. The function must create missing structures without clearing existing rows.
 
 ## Generate and test the monitoring code
 
-Read [apps-script-delivery.md](references/apps-script-delivery.md) and [apps-script-workspace-capabilities.md](references/apps-script-workspace-capabilities.md) before selecting Google APIs, OAuth scopes, or an optional LLM connection. Generate complete, source-specific Apps Script project files from the confirmed workbook schema and permitted collection methods. Do not return pseudocode where runnable code is expected.
+Read [apps-script-delivery.md](references/apps-script-delivery.md) and [apps-script-workspace-capabilities.md](references/apps-script-workspace-capabilities.md) before selecting Google APIs, OAuth scopes, or an optional LLM connection. Generate complete source-specific Apps Script files from the confirmed schema and permitted collection methods. Do not return pseudocode where runnable code is expected.
 
-Deliver all required .gs files and setup instructions. Generate an .html file only if the user chooses a custom Apps Script sidebar or web interface; a native Sheets dashboard does not require HTML.
+Deliver all required .gs files and setup instructions. Generate an .html file only if the user chooses a custom sidebar or web interface; a native Sheet dashboard does not require HTML.
 
-Keep the source-checking, record mapping, deduplication, classification, alerts, and trigger setup readable and independently testable. Do not hardcode secrets into code, cells, or public files. Do not put the user's Spreadsheet ID or generated code in this repository. A bound script opened from the Google Sheet can target its parent spreadsheet; use a copied Sheet ID only when the selected design requires a standalone script or another target.
+Keep collection adapters, record mapping, deduplication, measures, notifications, and trigger setup independently testable. Do not hardcode secrets, Sheet IDs, customer-specific URLs, or review data in public files. In a bound script, use the parent Sheet where possible.
 
-Include a setup operation for the user to create the scheduled trigger, but leave it inactive until manual tests pass. Explain the requested Google authorization scopes. The user must run the setup operation and approve the permissions from the account that will own and maintain the trigger.
+Ship a `TEST_MODE` and `runAllTests()` that uses fixtures and a separate test copy or test tabs; tests must not send alerts to operational recipients or append fixtures to production data. Until the user runs it in their Google account and shares results, report live Workspace tests as **not run**. Do not say a Google authorization, trigger, live fetch, email, or Chat delivery passed unless the user has supplied the result.
 
-Run tests before building the dashboard. Test at least:
+Give the user a clear click path: open the converted Google Sheet → **Extensions → Apps Script** → add the provided files → save → run the documented setup function on the backup/test copy → review and approve the requested scopes → run the manual checks. Explain account-owner/admin restrictions where relevant. Only after the manual tests pass should they run the separate trigger-setup function. The trigger runs under the account that created it; that person should be the maintainer.
 
-- first-run baseline does not send historical alerts;
-- a new record is appended once;
-- the same stable ID is skipped on the next check;
-- an edited record follows the agreed update and change-log policy;
-- positive and negative signals follow their respective rules;
-- one serious signal can prompt investigation without being labeled a trend;
-- wrong-entity or out-of-scope records are excluded or flagged for human review;
-- source failure is logged and never presented as “no new feedback”;
-- test alerts go only to test recipients;
-- duplicate trigger setup does not create duplicate schedules.
+Test at least:
+- baseline-date and Part 1 suppression, including a synthetic-ID source;
+- new ID appended once, duplicate skipped, edited record handled by the agreed policy;
+- source ID and ID Origin disambiguation; syndicated copies counted once;
+- positive and negative single-item signals, possible-pattern rules, low-volume display, and audience/evidence-class separation;
+- wrong-entity and out-of-scope records flagged or excluded;
+- manual capture and overdue reminders;
+- failed source, stale source, and partial run are visible and are never shown as “no feedback”;
+- test notifications go only to test recipients;
+- concurrent runs cannot write the same records twice;
+- repeated trigger setup by the same maintainer does not create duplicates;
+- quota/time-limit handling leaves a clear resumable or failed state.
 
-Report each test as passed, failed, partially tested, or blocked. Give the user the code files, installation and authorization steps, and the test results. Pause for the user to run the tests in Google Workspace and return the results.
+Report each test as passed, failed, partially tested, blocked, or not run. Pause for user-run test results before generating the dashboard builder.
 
 ## Build and test the dashboard after collection passes
 
-After the user confirms the monitoring tests passed, generate or run the dashboard builder. Default to a native Executive_Dashboard sheet. Ask before adding a custom HTML interface.
+After the user confirms the monitoring tests passed, generate or run the separate `Monitor_Dashboard` builder. Keep the Part 1 dashboard unchanged. Default to a native Google Sheet tab; ask before adding HTML.
 
-Show source health and last successful check, new and changed feedback, positive and negative signals, theme changes, the evidence window and coverage, and items that need human review. Keep incident signals distinct from recurring patterns. Keep classification confidence, evidence strength, prevalence confidence, and operational impact separate. Do not create a hidden composite score or an employee ranking.
+Show last successful check and source health, new/changed records, positive and negative signals, themes and their evidence window, source and audience coverage, possible incidents/patterns, and items needing human review. Keep an individual incident separate from a recurring pattern. Keep evidence class, audience, evidence strength, frequency, confidence, and operational impact separate. A process owner is a role responsible for follow-up, not the person being evaluated.
 
-Test that dashboard totals reconcile to Review_Data, filters preserve source and audience distinctions, failed checks remain visible, and one individual review is not displayed as a trend. Do not claim an unsupported prevalence or causal conclusion.
+Below the agreed minimum volume, show counts and records without percentages or “trend” labels. Use an explicitly confirmed threshold for possible patterns. A quiet theme should read “no new reports in this window,” not “fixed,” unless a later resolution check supports that conclusion.
+
+Test that dashboard counts reconcile to the monitoring data, filters preserve source/audience/evidence distinctions, failed checks stay visible, and one individual review is never drawn as a trend. Do not infer prevalence or causality beyond the evidence.
 
 ## Finish
 
-Provide the updated Google Sheet link if the user authorized direct editing, or setup code and precise manual instructions otherwise. Include the generated Apps Script files, test instructions and results, chosen source methods and cadences, alert rules, known limits, and dashboard validation status.
+Provide the updated Sheet link only if the user authorized direct editing, or provide exact manual steps otherwise. Include generated Apps Script files, scope explanation, chosen source routes and cadences, confirmed alert rules, limits, test status, and dashboard validation status. State any user-run tests as not run until results are returned.
 
-Do not add internal company data sources in this version. Offer them as a later phase only after the public-source monitor is working.
+Keep internal company sources out of this public-source version. Offer them as a later phase once the public-source workflow is working.
