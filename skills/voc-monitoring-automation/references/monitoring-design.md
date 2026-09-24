@@ -21,7 +21,7 @@ Preserve the original .xlsx and Markdown files. Create a dated backup before edi
 
 Map aliases by header name. Do not rename or reorder existing tabs or columns. Some tabs have title/note rows before their headers, so inspect the first 20 rows rather than assuming row 1 is the header. Show the user a brief schema map: tab/header found, mapped meaning, missing field, and action.
 
-The reviewed examples demonstrate three cases: Harri is a legacy workbook with contract mismatches; Nory is closer to the contract but still has validation errors; Toast is missing monitoring-critical data tabs. Do not state that any of them is ready without checking its present contents.
+Part 1 workbooks vary. Three common cases are a legacy workbook that predates the current contract and fails most header checks; a newer workbook that is close to the contract but still has validator errors; and a workbook missing monitoring-critical data tabs. Do not state that any workbook is ready without checking its present contents.
 
 Use `Week2_Readiness` as the monitoring source plan only if it has a clear row per external source, its own source decisions, and collection/access fields. If it is an internal data readiness checklist or does not identify external sources, map `Source_Register` into a new `Monitoring_Config`. Keep one editable source-of-truth table; do not create two conflicting source lists.
 
@@ -77,7 +77,7 @@ Do not enable automatic collection while source identity, access, route, or reco
 If a source has no safe automated route, offer a `Manual_Capture` tab or an optional Google Form, plus a recurring reminder. Suggested fields:
 
 - observed/captured date and source;
-- source ID, canonical record URL, platform ID if visible, and ID Origin;
+- source ID, canonical record URL, platform ID if visible, and ID Origin (record both identifiers when visible, so a later automated capture matches this row);
 - review date, audience and evidence class;
 - rating and scale as reported (do not infer a rating);
 - short excerpt and capture person/role;
@@ -99,7 +99,7 @@ Use `Monitor_Run_Log` for one source-check attempt per row:
 
 ### Review data and change history
 
-Append to the existing Part 1 `Review_Data` table when its schema can represent the records. Otherwise create a monitor-specific data tab and document the mapping; do not silently change Part 1 headers.
+Append to the existing Part 1 `Review_Data` table when its schema can represent the records. Preserve each established internal Record ID prefix family (which may vary by source or evidence class), advance within that family, and check uniqueness across the entire table. Where no safe family exists, generate and document a unique internal ID. Never reuse an ID. Set Collection Coverage to `Sample` unless approved otherwise; add new fields such as ID Origin or raw date text as trailing columns. Otherwise create a monitor-specific data tab and document the mapping; do not silently change Part 1 headers.
 
 Where available, retain source ID, platform record ID, ID Origin, canonical URL, original URL, raw record-date text, parsed record date, capture date, source-reported geography, audience, evidence class, raw rating text, parsed rating and scale, excerpt, language, source notes, and classification fields. Keep raw and parsed values separate; parse only when unambiguous and flag ambiguous dates or non-numeric rating labels for review. Do not fill unknown values with guesses. Keep platform-specific rating scales separate.
 
@@ -109,7 +109,7 @@ An optional `Review_Change_Log` can preserve changes to an existing review or ag
 
 A Part 1 ID may be a true platform ID, a canonical URL, a content fingerprint, or a synthetic placeholder. Add an explicit `ID Origin` field when it is absent. Treat unknown and synthetic IDs as unreliable until reconciled.
 
-Use a deduplication key built from Source ID + ID Origin + record ID. Do not use URL alone as the identity key. If a source has no reliable ID, keep it manual or capture a dated current-state baseline, then monitor additions after that date. A change in a synthetic placeholder must not create a new customer alert.
+Match records within a source, not by ID Origin. A verified platform record ID or a stable canonical URL specific to that individual review can identify a duplicate; store both when available. A profile URL shared by many reviews and an unstable URL cannot identify a review. If a manual row has only a URL and the later automated row has only a platform ID, there is no shared identifier: hold the possible match for human reconciliation, then attach the verified alias to the existing row. Ambiguous matches are never automatically merged or alerted as a new review. Treat syndicated copies under an approved canonical-source policy while retaining provenance URLs. If a source has no reliable ID, keep it manual or capture a dated current-state baseline, then monitor additions after that date. A change in a synthetic placeholder must not create a new customer alert.
 
 For syndicated copies, select one canonical source for counting after a human confirms the relationship. Preserve secondary URLs as provenance, but count the record once and do not route the same event as two independent reports. Never assume two similar excerpts are the same review without evidence. If Baseline_Snapshot has no Source ID or uses ambiguous platform labels, create a human-reviewed source map from Source_Register before comparing values; do not assign IDs from a matching URL alone.
 
@@ -130,6 +130,8 @@ Automate transparent measures when inputs support them:
 - last successful check, overdue status, failure, and retry state;
 - counts by audience, evidence class, theme, and positive/negative signal;
 - volume and coverage alongside the underlying time window and denominator.
+
+For records that fit no confirmed theme, leave Primary Theme unresolved and set the human-review status to `Unclassified – taxonomy review`; do not force a nearest theme or create a taxonomy value without approval.
 
 Keep raw values and calculated values separate. Keep source ratings separate: do not average different platforms, scales, audiences, or collection routes into one company score. Prefer “measure,” “signal,” and “possible change” to language that sounds like a grade. Never rank individual employees.
 
@@ -160,7 +162,13 @@ Separate the following:
 - **Source health:** failed, stale, blocked, or overdue checks are operational alerts, separate from customer feedback.
 - **Digest:** group routine signals; reserve immediate notices for explicitly approved high-impact items.
 
-Offer a transparent starter rule as a decision aid, not a universal standard. Example for confirmation: “At least 3 independent records with the same reviewed theme, source, and audience inside a rolling 90-day window creates a *possible pattern*; it becomes *sustained* only if it appears in two consecutive review windows.” The user may choose different counts/windows or keep trend alerts off. If no rule is confirmed, leave possible-pattern and sustained-trend alerts disabled and show counts only. If volume is below the agreed floor, show counts and records without percentage changes or trend labels.
+Only independent customer feedback—and complaints, if the user opts in—can trigger customer-signal notices, patterns, or positive-movement notices. Vendor-selected stories, official release notes or product pages, and public discussion are logged as context or corroboration and never alert as customer feedback.
+
+Offer transparent starter rules as decision aids, not universal standards.
+
+**Individual signal, example for confirmation:** “Send a private investigation notice for one new independent negative review from a recognized customer when it describes a specific service failure requiring contact or handoff; also send one for credible privacy, safety, legal, or complete-access incidents. Route other negative feedback to a digest.” Confirm how the customer relationship can be verified from available public information; do not guess identity from a name. A label such as `Blocker` alone is insufficient. The notice requests human triage and, where appropriate, a Part 3 closed-loop response; it never declares a trend, cause, or employee fault. Confirm recipients, sensitivity, and a rate limit with the user.
+
+**Possible pattern, example for confirmation:** “At least 3 independent records with the same reviewed theme, source, and audience inside a rolling 90-day window creates a *possible pattern*; it becomes *sustained* only if it appears in two consecutive review windows.” The user may choose different counts/windows or keep trend alerts off. If no rule is confirmed, leave possible-pattern and sustained-trend alerts disabled and show counts only. If volume is below the agreed floor, show counts and records without percentage changes or trend labels.
 
 Do not equate silence with resolution. A theme with no new records should be described as “no new reports in this window.” Say “improved” only when comparable measures support that conclusion, and “fixed” only after a specific resolution has been checked.
 
