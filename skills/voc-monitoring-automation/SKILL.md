@@ -52,7 +52,7 @@ Confirm these global choices once, then ask only source-specific exceptions:
 - **Collection route:** approved API/feed/export/notification, manual check, watchlist, deferred, or excluded. Capture permission evidence, the date checked, and who confirmed it. A publicly visible page is not automatically permitted for automated collection.
 - **Cadence:** one global default (daily, weekly, biweekly, or manual), with explicit source exceptions. Confirm timezone and a digest recipient if email/chat alerts are selected.
 - **First-run behavior:** use Part 1 rows as history and start new monitoring from an agreed date, or capture the current page as the start point.
-- **Analysis and alerts:** collection only, deterministic measures/rules, and/or optional AI. Confirm separately whether a single serious item warrants an investigation notice and what evidence is required for possible-trend alerts.
+- **Analysis and alerts:** collection only, deterministic measures/rules, and/or optional AI. Confirm separately whether a single serious item warrants an investigation notice and what evidence is required for possible-trend alerts. If no possible-pattern rule is confirmed, keep trend alerts off and show counts only.
 
 Offer manual capture with a reminder when no permitted and reliable automated route is confirmed. Do not imply that a website can be monitored just because it is reachable in a browser. Do not bypass sign-in, CAPTCHAs, paywalls, rate limits, or platform restrictions.
 
@@ -104,7 +104,7 @@ Ship a `TEST_MODE` and `runAllTests()` that uses fixtures and a separate test co
 Give the user a clear click path: open the converted Google Sheet → **Extensions → Apps Script** → add the provided files → save → run the documented setup function on the backup/test copy → review and approve the requested scopes → run the manual checks. Explain account-owner/admin restrictions where relevant. Only after the manual tests pass should they run the separate trigger-setup function. The trigger runs under the account that created it; that person should be the maintainer.
 
 Test at least:
-- baseline-date and Part 1 suppression, including a synthetic-ID source;
+- baseline-date and Part 1 suppression, including text/ambiguous dates and synthetic-ID sources;
 - new ID appended once, duplicate skipped, edited record handled by the agreed policy;
 - source ID and ID Origin disambiguation; syndicated copies counted once;
 - positive and negative single-item signals, possible-pattern rules, low-volume display, and audience/evidence-class separation;
