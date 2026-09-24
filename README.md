@@ -80,7 +80,7 @@ The [VOC Monitoring Automation](skills/voc-monitoring-automation/SKILL.md) is th
 
 The skill is in draft review. It does not provide universal website scraping code: each public source needs a permitted collection method, such as an approved API/feed, export, notification, or manual review.
 
-For the Workspace service map, frontier-model connection patterns, and refreshed Apps Script repository references, see the [Apps Script and Google Workspace field guide](skills/voc-monitoring-automation/references/apps-script-workspace-capabilities.md). The repo also includes a [Drive intake Apps Script example](skills/voc-monitoring-automation/examples/drive-intake/README.md), which makes a Google Sheets copy of a Part 1 Excel workbook without creating the source-specific monitor.
+For the Workspace service map, frontier-model connection patterns, and refreshed Apps Script repository references, see the optional [Apps Script and Google Workspace field guide](docs/apps-script-workspace-field-guide.md). The skill itself uses a short [VOC Workspace services reference](skills/voc-monitoring-automation/references/apps-script-workspace-capabilities.md). The repo also includes an optional [Drive intake Apps Script example](skills/voc-monitoring-automation/examples/drive-intake/README.md) for converting several Part 1 Excel workbooks at once; for a single workbook, Drive's manual “Save as Google Sheets” flow is the default.
 
 ## Test models and measure cost
 
@@ -90,6 +90,7 @@ Use [Model evaluation and background testing](docs/model-evaluation.md) to compa
 
 ```text
 docs/
+├── apps-script-workspace-field-guide.md
 └── model-evaluation.md
 skills/
 ├── voc-benchmark-builder/
@@ -139,3 +140,4 @@ Third-party materials retain their original licenses and notices. Tomboj names, 
 Created by **Rachel Wilde / Tomboj**.
 
 If you use or adapt this work, preserve the requested attribution and indicate material changes. Citation metadata is available in [CITATION.cff](CITATION.cff).
+
