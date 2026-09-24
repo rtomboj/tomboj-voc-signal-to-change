@@ -1,119 +1,182 @@
 # Monitoring design
 
-Use this reference after inspecting the Part 1 files and before adding workbook structure or writing collection code.
+Use this reference after inspecting both Part 1 files and before changing the workbook or generating collection code.
 
-## The three jobs
+## The jobs are different
 
-| Job | Question | What the system does |
+| Job | What it answers | What it does |
 | --- | --- | --- |
-| Collection | What can we retrieve from this source now? | Uses the permitted method to retrieve accessible aggregate measures or review records and preserves source identity and capture time. |
-| Monitoring | What changed since the baseline or last successful check? | Compares stable IDs and measures, detects new or changed records, deduplicates, updates records, and logs source health and run results. |
-| Classification | What might this record or group of records mean? | Applies the agreed taxonomy, score or optional AI interpretation, then marks uncertainty and human-review needs. |
+| Collection | What did this source report at this check? | Reads a permitted API, feed, export, notification, or manual capture; records the source and capture time. |
+| Monitoring | What changed since the agreed baseline or prior successful check? | Compares IDs and measures, deduplicates, appends new records, handles allowed edits, and records source health. |
+| Classification | What might these records mean? | Applies confirmed categories or measures, marks uncertainty, and routes items for human review. |
+| Follow-up | What should an organization do with the signal? | Investigates, responds, resolves, and learns. This is Part 3, and a signal alone does not prove fault. |
 
-These jobs can run in one scheduled Apps Script execution, but their inputs and results must remain distinguishable. A source retrieval failure is a failed check, not an empty result. Do not erase the last successful state after an error.
+A single Apps Script run can perform multiple jobs, but each job's inputs and outputs must remain visible. A retrieval failure is a failed check, not an empty result. Keep the last successful state after an error.
 
-## Inspect and map Part 1 schemas
+## Inspect the Part 1 workbook
 
-Use the Step 1 workbook contract as the reference, then inspect the actual workbook. Preserve existing tab names, data, formulas, and headers. Map aliases into the existing columns rather than creating duplicate fields.
+Use the current Part 1 contract and validator as references, then inspect the actual workbook. A passing validator is useful but does not decide which sources are appropriate to monitor; a failing validator means map or repair the working copy deliberately.
 
-For example, the Harri workbook uses Stable ID where the Step 1 contract uses Stable Source Record ID, and Short Excerpt where the contract uses Short Evidence Excerpt. A mapper can connect these fields without changing the source workbook. Harri's Review_Data also already has Primary Theme, Secondary Theme, Signal Type, Operational Impact, Classification Confidence, and Human Review Needed.
+Preserve the original .xlsx and Markdown files. Create a dated backup before editing the converted Google Sheet. Excel-to-Sheets conversion can change formatting, charts, formulas, or validation; check important workbook areas after conversion.
 
-The source register describes identity, audience, baseline status, inclusion, and possible collection route. It does not necessarily confirm that an automated route is permitted. Confirm the source method and permission with the user.
+Map aliases by header name. Do not rename or reorder existing tabs or columns. Some tabs have title/note rows before their headers, so inspect the first 20 rows rather than assuming row 1 is the header. Show the user a brief schema map: tab/header found, mapped meaning, missing field, and action.
+
+The reviewed examples demonstrate three cases: Harri is a legacy workbook with contract mismatches; Nory is closer to the contract but still has validation errors; Toast is missing monitoring-critical data tabs. Do not state that any of them is ready without checking its present contents.
+
+Use `Week2_Readiness` as the monitoring source plan only if it has a clear row per external source, its own source decisions, and collection/access fields. If it is an internal data readiness checklist or does not identify external sources, map `Source_Register` into a new `Monitoring_Config`. Keep one editable source-of-truth table; do not create two conflicting source lists.
+
+## Agree the source plan
+
+Prefill a source table from Part 1 and ask the user to confirm unresolved rows and exceptions:
+
+| Field | Purpose |
+| --- | --- |
+| Source ID, name, profile URL | Identifies the source and its target |
+| Evidence class and audience | Separates direct customer feedback from vendor-selected examples, press, and other context |
+| Part 1 treatment and readiness note | Gives the user's prior choice and the remaining question |
+| Collection route | Approved API/feed/export/notification, manual capture, watchlist, deferred, or excluded |
+| Permission evidence URL, checked date, confirmed by | Records how the route was approved and by whom/which role |
+| Profile access and response route | Owned-profile access, public viewing only, or no response route; investigation/handoff can still be separate |
+| Cadence and timezone | Determines when a source is due for a check |
+| ID approach and origin | Platform ID, canonical URL, fingerprint, synthetic, or unknown |
+| Data fields and alert choice | Makes the collection and notification scope explicit |
+| Process-owner role | Role that handles operational follow-up; not an evaluated individual |
+
+Ask for one global cadence, time zone, and digest destination when possible, then identify exceptions by source. A named customer-support or profile owner may be needed for access or response, but do not send an alert to that person's manager or present a measure as their performance.
+
+A visible page is not enough to authorize automated collection. Confirm the source's current permitted route and limits. If the route is unknown, unreliable, or disallowed, keep it manual, on a watchlist, deferred, or excluded. Never bypass login, CAPTCHAs, paywalls, rate limits, or platform controls.
 
 ## Workbook additions
 
-Create only missing structures in the designated Google Sheets working copy.
+Add only what's missing in the Google Sheets working copy. Preserve Part 1 values, formulas, headers, dashboard, and source notes.
 
-### Monitoring_Config
+### Monitoring configuration
 
-One row per source selected for monitoring. Required fields:
+Use the existing row-per-source `Week2_Readiness` as the source of truth only if it is actually shaped for this purpose. Otherwise create `Monitoring_Config` from `Source_Register` and show the field map. Avoid maintaining both as independent editable lists.
 
-- Source ID
-- Source
-- Profile URL
-- Monitoring Decision
-- Collection Method
-- Permission Status
-- Cadence
-- Stable ID Field
-- First-Run Rule
-- Fields Collected
-- Alert Rule
-- Alert Recipient
-- Last Successful Check
-- Source Health
-- Notes
+Suggested fields:
 
-Use controlled statuses such as Automatic, Manual, Watchlist, Deferred, and Excluded. Make cadence editable per source. Do not make a source automatic while its identity, method, permission, or stable ID is unresolved.
+- Source ID, source name, profile URL
+- Evidence class, audience, Part 1 treatment
+- Monitoring decision: Automatic, Manual, Watchlist, Deferred, Excluded
+- Collection route and allowed fields
+- Permission evidence URL, confirmed date, confirmer role
+- Profile access/response route
+- Cadence, timezone, next due date
+- Stable ID field and ID Origin policy
+- Baseline date/rule
+- Source health and last successful check
+- Investigation alert rule and possible-pattern rule
+- Digest destination and process-owner role
+- Notes and review-by date
 
-### Monitor_Run_Log
+Do not enable automatic collection while source identity, access, route, or record matching is unresolved.
 
-One row per source-check execution. Required fields:
+### Manual capture
 
-- Run ID
-- Source ID
-- Started At
-- Completed At
-- Status
-- Records Fetched
-- New Records
-- Updated Records
-- Duplicates Skipped
-- Out-of-Scope Records
-- Alerts Sent
-- Error Summary
-- Next Check
+If a source has no safe automated route, offer a `Manual_Capture` tab or an optional Google Form, plus a recurring reminder. Suggested fields:
 
-Use explicit statuses such as Success, No New Records, Partial, Failed, and Skipped. No New Records is valid only after the source check succeeded.
+- observed/captured date and source;
+- source ID, canonical record URL, platform ID if visible, and ID Origin;
+- review date, audience and evidence class;
+- rating and scale as reported (do not infer a rating);
+- short excerpt and capture person/role;
+- suggested theme or signal type, clearly marked as a suggestion;
+- human-review status and notes.
 
-### Review_Data
+Manual records should enter the same deduplication, baseline, classification, alert, and dashboard pipeline as automatically collected records. Add a due/overdue indicator to source health. A manual reminder is a missed-check notice, not evidence that feedback changed.
 
-Use the existing Step 1 review-data schema where present. Map collected source fields into its existing columns. Preserve the source URL, stable source ID, capture date, record date, source-reported geography, audience, rating and scale, evidence excerpt, source class, classification fields, and notes as available. Do not invent unavailable values.
+### Run log
 
-For stable identifiers:
+Use `Monitor_Run_Log` for one source-check attempt per row:
 
-- Prefer the platform's review or record ID.
-- Otherwise use a canonical record URL if stable.
-- Use a documented fingerprint fallback only when the source exposes no stable ID.
-- Keep Source ID and Stable Source Record ID together; IDs need not be globally unique without the source key.
+- Run ID, Source ID, Started At, Completed At
+- Status: Success, No New Records, Partial, Failed, or Skipped
+- Records fetched, New Records, Updated Records, Duplicates Skipped, Out-of-Scope Records
+- Alerts Sent, concise Error Summary, Next Check
 
-For existing stable IDs, compare captured fields. Skip exact duplicates. If a source edits a record, update the current Review_Data row according to the agreed policy and, if enabled, append a before-and-after row to Review_Change_Log. Do not treat a review disappearing from a limited page as a deletion unless the source explicitly confirms removal.
+“No New Records” is valid only after a successful check. Partial, failed, stale, and skipped checks must remain distinct from customer feedback.
 
-### Review_Change_Log
+### Review data and change history
 
-Optional. Use when edited records or aggregate measures need before-and-after history. Store detected time, Source ID, stable record ID, field changed, old and new values, change type, and alert decision. Avoid copying full review text when a field-level change record is enough.
+Append to the existing Part 1 `Review_Data` table when its schema can represent the records. Otherwise create a monitor-specific data tab and document the mapping; do not silently change Part 1 headers.
 
-## First-run behavior
+Where available, retain source ID, platform record ID, ID Origin, canonical URL, original URL, record date, capture date, source-reported geography, audience, evidence class, rating, scale, excerpt, language, source notes, and classification fields. Do not fill unknown values with guesses. Keep platform-specific rating scales separate.
 
-Ask whether the user wants to:
+An optional `Review_Change_Log` can preserve changes to an existing review or aggregate measure. Store detected time, source ID, stable record ID, field name, old/new values, change type, and alert decision. Avoid duplicating full review text if a short changed field is enough.
 
-1. use the existing Part 1 Review_Data and Baseline_Snapshot as the historical baseline; or
-2. capture the current public source state and start monitoring only from this date.
+## Identity, baseline, and syndication
 
-Default to the existing Part 1 dataset as baseline and suppress historical alerts. Do not silently backfill a larger review history than Part 1 collected. If an authorized API can supply more history, ask before importing it and label its capture window.
+A Part 1 ID may be a true platform ID, a canonical URL, a content fingerprint, or a synthetic placeholder. Add an explicit `ID Origin` field when it is absent. Treat unknown and synthetic IDs as unreliable until reconciled.
 
-Record baseline date, last successful check, and the first new stable ID per source. A source with no stable ID or unreliable pagination may remain manual or watchlist.
+Use a deduplication key built from Source ID + ID Origin + record ID. Do not use URL alone as the identity key. If a source has no reliable ID, keep it manual or capture a dated current-state baseline, then monitor additions after that date. A change in a synthetic placeholder must not create a new customer alert.
 
-## Classification and scores
+For syndicated copies, select one canonical source for counting after a human confirms the relationship. Preserve secondary URLs as provenance, but count the record once and do not route the same event as two independent reports. Never assume two similar excerpts are the same review without evidence.
 
-Ask which level to automate:
+On first run, choose explicitly between:
+1. **Part 1 baseline:** treat Part 1 rows and the stated benchmark date as historical; only items newer than the confirmed date can be new.
+2. **Fresh current-state baseline:** capture what is currently visible and begin alerting from that date.
 
-- **Change measures:** new-record count, per-source rating or volume change, recency, last-check age, and source failure. These are deterministic when inputs are available.
-- **Rule suggestions:** rating bands or user-approved keywords can propose Signal Type, Primary Theme, or Human Review Needed. Keep the suggested label distinct until the user approves it.
-- **Taxonomy classification:** reuse the existing Theme_Taxonomy; do not create new categories without approval. Existing classifications can remain untouched while new records receive proposed labels.
-- **AI classification or summaries:** optional. Process new records only by default, attach confidence, retain traceable excerpts and URLs, and estimate token use before enabling recurring calls.
+In either route, suppress historical matches, including synthetic-ID records after a current-state snapshot. Do not silently import a larger history or replay old records. If a user requests backfill, label its date range and alert behavior separately.
 
-Show source ratings and volumes separately. Do not average or rank platforms with unlike audiences, scales, or collection methods. Do not invent a composite VOC or employee performance score. When practical, show separate dimensions such as frequency, impact, evidence strength, prevalence confidence, and most recent signal.
+If the source edits or removes a record, follow the approved edit policy. A record disappearing from one page or search result is not proof of deletion; only record a removal when the source confirms it.
 
-## Alert guardrails
+## Measures and labels
 
-Use user-approved rules, not a universal threshold.
+Automate transparent measures when inputs support them:
 
-- **Individual signal:** a specific critical customer issue may trigger a prompt to investigate or follow up, even if it is the only record.
-- **Possible trend:** require the user's chosen recurrence or change threshold, the applicable time window, and audience/source context. Label it as a possible pattern until validated.
-- **Temporary incident:** preserve incident dates or release context so a short-lived spike is not presented as a sustained shift.
-- **Positive change:** surface improvements and themes worth protecting alongside negative changes.
-- **Source health:** alert on failed or stale checks separately from customer feedback.
-- **Digest:** group routine items to reduce alert fatigue.
+- distinct new or changed records by source and period;
+- source-specific ratings and rating-scale movement;
+- last successful check, overdue status, failure, and retry state;
+- counts by audience, evidence class, theme, and positive/negative signal;
+- volume and coverage alongside the underlying time window and denominator.
 
-VOC is a learning input for products, services, processes, and organizational conditions. Do not frame an alert as proof that an individual or team failed.
+Keep raw values and calculated values separate. Keep source ratings separate: do not average different platforms, scales, audiences, or collection routes into one company score. Prefer “measure,” “signal,” and “possible change” to language that sounds like a grade. Never rank individual employees.
+
+The monitor exists to help people and organizations find opportunities to improve. It should surface positive as well as negative shifts. A process owner is a role accountable for follow-up, not a person whose performance is being scored.
+
+## Classification choices
+
+Let the user choose the level:
+
+1. **Collection only:** store permitted records and source-health results.
+2. **Deterministic measures:** counts, rating movement within one source, recency, and approved thresholds.
+3. **Rule suggestions:** user-approved keyword or rating rules can suggest a theme/signal, but retain the suggestion and confidence separately until reviewed.
+4. **Optional AI:** classify or summarize new records. Use only new records by default and show that review text leaves Google for the selected provider. State token estimate/cost, key storage, retention/data-use assumptions, and per-run budget before recurring AI runs.
+
+No recurring AI by default. A person may use AI during setup or request a one-off digest. If AI output is used, retain source URL, short evidence excerpt, model/provider, run time, and confidence where appropriate. Do not treat generated labels as verified facts.
+
+## Guardrails for alerts and trends
+
+A single comment is not a trend. It may still be worth investigating when the content, safety, or customer impact warrants a prompt. The alert should say “individual signal—review requested,” preserve evidence and source, and never imply that the statement is representative or proves fault.
+
+Separate the following:
+
+- **Individual incident:** one potentially serious signal that a human may investigate under an explicitly approved rule. Route only to the agreed operational recipient.
+- **Possible pattern:** repeated independent records matching an agreed theme, evidence class, audience, and time window. Label as possible until reviewed.
+- **Sustained change:** a possible pattern persists across more than one monitoring window or another user-confirmed test; record the start/end and the basis for calling it sustained.
+- **Temporary incident/burst:** a short concentration of records that may be linked to an event or release. Preserve the incident window; do not call it systemic without more evidence.
+- **Positive movement:** repeated or notable improvements worth understanding and protecting, using the same source/audience and evidence discipline.
+- **Source health:** failed, stale, blocked, or overdue checks are operational alerts, separate from customer feedback.
+- **Digest:** group routine signals; reserve immediate notices for explicitly approved high-impact items.
+
+Offer a transparent starter rule as a decision aid, not a universal standard. Example for confirmation: “At least 3 independent records with the same reviewed theme, source, and audience inside a rolling 90-day window creates a *possible pattern*; it becomes *sustained* only if it appears in two consecutive review windows.” The user may choose different counts/windows or keep trend alerts off. If volume is below the agreed floor, show counts and records without percentage changes or trend labels.
+
+Do not equate silence with resolution. A theme with no new records should be described as “no new reports in this window.” Say “improved” only when comparable measures support that conclusion, and “fixed” only after a specific resolution has been checked.
+
+Use alerts to prompt inquiry, not punishment. Do not send employee-level comparisons, names, or performance rankings. Avoid email/Chat notification bodies that expose sensitive review text; send a limited summary and link to the access-controlled Sheet where possible.
+
+## Monitoring view
+
+Build a separate `Monitor_Dashboard`; leave the Part 1 `Executive_Dashboard` unchanged because it may be a frozen benchmark or fixed-range display.
+
+Show:
+
+- last successful check, due/overdue state, and errors by source;
+- records collected, new, changed, and deduplicated by source and time window;
+- source, audience, evidence class, and rating scale filters;
+- positive and negative signals, individual incidents, possible patterns, and reviewed sustained changes as separate views;
+- evidence window, denominator, coverage gaps, confidence, and review status;
+- process-owner role and next follow-up where configured.
+
+Check that dashboard totals reconcile to monitor data. Failure or stale status must never appear as zero feedback. Do not claim causality or organization-wide prevalence from a limited, self-selected web sample.
