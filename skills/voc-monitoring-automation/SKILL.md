@@ -34,7 +34,7 @@ Do not publish customer-specific sheet links, IDs, review text, credentials, or 
 
 Read the Markdown benchmark and inspect the workbook tabs, headers, formulas, records, taxonomy, source map, and readiness notes. Confirm that both files refer to the same company and benchmark.
 
-Use the Part 1 workbook validator when available, then report what it found. Treat the workbook contract as a reference, not proof that an individual file conforms. In the reviewed examples, Harri is a legacy workbook that fails the current contract, Nory is closer but still has validator errors, and Toast is missing monitoring-critical tabs. These examples show why every workbook must be inspected before code is generated.
+Use the [Part 1 workbook contract](../voc-benchmark-builder/references/benchmark-output.md) and [workbook validator](../voc-benchmark-builder/scripts/validate_workbook.py) when available, then report what the validator found. Treat the workbook contract as a reference, not proof that an individual file conforms. In the reviewed examples, Harri is a legacy workbook that fails the current contract, Nory is closer but still has validator errors, and Toast is missing monitoring-critical tabs. These examples show why every workbook must be inspected before code is generated.
 
 Preserve existing data, formulas, tab names, and headers. Map field aliases by header name; do not rename or reorder existing columns. Look for headers in the first 20 rows, since some example tabs have title and notes rows above the table. Show the user a short schema map with matches, aliases, missing fields, and unresolved values before creating code.
 
