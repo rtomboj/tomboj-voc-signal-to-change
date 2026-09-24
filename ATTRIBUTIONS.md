@@ -24,7 +24,7 @@ The VOC Benchmark Builder and its VOC Monitoring Automation companion are origin
 | [Google Apps Script and Workspace API documentation](https://developers.google.com/apps-script/) | Apps Script services, Drive conversion, OAuth, triggers, quotas, and Workspace APIs | Consulted for the VOC Monitoring Automation guide and Drive intake example; no code or prose copied |
 | [Google Workspace MCP documentation](https://developers.google.com/workspace/guides/configure-mcp-servers) | OAuth-based AI-client connections to Workspace | Consulted for current connection options and access boundaries; no code or prose copied |
 | [OpenAI API documentation](https://platform.openai.com/docs/api-reference/authentication), [Anthropic API documentation](https://docs.anthropic.com/en/api/getting-started), and [Gemini API documentation](https://ai.google.dev/gemini-api/docs/api-key) | Frontier-model API authentication and key handling | Consulted for the Step 2 integration guide; no credentials, code, or prose copied |
-| Apps Script and Workspace repositories listed in the [field guide](skills/voc-monitoring-automation/references/apps-script-workspace-capabilities.md) | Examples, ecosystem status, and new Workspace/MCP tooling | Descriptions and commit dates checked; linked as prior art only; no code or repository prose copied; licenses must be checked before reuse |
+| Apps Script and Workspace repositories listed in the [field guide](docs/apps-script-workspace-field-guide.md) | Examples, ecosystem status, and new Workspace/MCP tooling | Descriptions and commit dates checked; linked as prior art only; no code or repository prose copied; licenses must be checked before reuse |
 
 The [Benchmark Builder attribution record](skills/voc-benchmark-builder/ATTRIBUTIONS.md) and [Monitoring Automation attribution record](skills/voc-monitoring-automation/ATTRIBUTIONS.md) document the sources consulted for each skill.
 
@@ -48,3 +48,4 @@ When third-party material is added:
 6. Keep Tomboj brand assets outside the reusable content and code licenses unless explicitly stated.
 
 This file documents provenance and does not replace any applicable third-party license.
+
