@@ -17,6 +17,10 @@ var VOC_INTAKE = {
   FOLDER_PROPERTY: 'VOC_AUTOMATION_FOLDER_ID',
   SHEET_MIME_TYPE: 'application/vnd.google-apps.spreadsheet',
   SOURCE_ID_PROPERTY: 'vocSourceFileId',
+  EXCEL_MIME_TYPES: [
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.ms-excel'
+  ],
   VERSION: '1'
 };
 
@@ -43,6 +47,17 @@ function convertVocXlsxToSheets() {
 
   files.forEach(function (source) {
     if (!/\.xlsx?$/i.test(source.name || '')) {
+      return;
+    }
+
+    // Skip Google Sheets, shortcuts, or other files that merely have an Excel name.
+    if (VOC_INTAKE.EXCEL_MIME_TYPES.indexOf(source.mimeType) === -1) {
+      results.push({
+        status: 'skipped-not-excel-file-type',
+        sourceName: source.name,
+        sourceId: source.id,
+        mimeType: source.mimeType
+      });
       return;
     }
 
@@ -223,3 +238,4 @@ function getSheetUrl_(file) {
   return file.webViewLink ||
     'https://docs.google.com/spreadsheets/d/' + file.id + '/edit';
 }
+
