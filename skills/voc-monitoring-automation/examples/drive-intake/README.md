@@ -6,14 +6,14 @@ It leaves each original `.xlsx` or `.xls` file unchanged. It does not collect pu
 
 ## Setup
 
-1. Create a Drive folder named `VOC_Automation` and place the Part 1 Markdown report and Excel workbook in it.
+1. Create a Drive folder named `VOC_Automation` and place the Part 1 Markdown report and Excel workbook in it. Keep both files as the untouched benchmark originals.
 2. Create a standalone Apps Script project at [script.google.com](https://script.google.com/).
 3. Add `DriveIntake.gs` to the project. Enable the Drive API v3 Advanced Google service. The included `appsscript.json` shows the service and OAuth scope used by this example.
 4. In **Project Settings → Script Properties**, add:
    - Property: `VOC_AUTOMATION_FOLDER_ID`
    - Value: the folder ID or the folder URL
 5. Run `convertVocXlsxToSheets` manually and authorize the requested Google Drive access.
-6. Open **Executions** and review the log. For each converted workbook, copy the `sheetUrl` or `sheetId` into the Part 2 setup conversation. The Markdown report remains a Drive file; the workbook gets a Google Sheets copy.
+6. Open **Executions** and review the log. For each converted workbook, copy the `sheetUrl` or `sheetId` into the Part 2 setup conversation. The Markdown report remains a Drive file; the workbook gets a Google Sheets copy. Before editing the converted Sheet, make a dated backup. Excel conversion can change formulas, charts, formatting, or validation, so check the important tabs and formulas against the original before adding the monitor.
 
 The script lists the configured folder's direct children. It does not recursively search subfolders. It handles `.xlsx` and `.xls` filenames and skips other files.
 
