@@ -49,12 +49,12 @@ Prefill a compact source table from Part 1: source, audience/evidence class, inc
 Confirm these global choices once, then ask only source-specific exceptions:
 
 - **Account and response path:** does the user own or manage each profile? For each source, choose owned-profile access, public viewing only, or no response route. Part 2 may surface an item for investigation or handoff; customer response and resolution belong to Part 3.
-- **Collection route:** approved API/feed/export/notification, manual check, watchlist, deferred, or excluded. Capture permission evidence, the date checked, and who confirmed it. A publicly visible page is not automatically permitted for automated collection.
+- **Collection route:** plan a source-specific Apps Script check for each selected public review site. Start with a direct public-page request using `UrlFetchApp` when the site's rules allow it and the response contains usable review entries. Prefer an official API/feed/export/notification when it is available or more reliable. Otherwise choose a manual check, watchlist, deferred, or excluded. Capture permission evidence, the date checked, and who confirmed it. Public visibility alone does not settle whether scheduled retrieval is permitted.
 - **Cadence:** one global default (daily, weekly, biweekly, or manual), with explicit source exceptions. Confirm timezone and a digest recipient if email/chat alerts are selected.
 - **First-run behavior:** use Part 1 rows as history and start new monitoring from an agreed date, or capture the current page as the start point.
 - **Analysis and alerts:** collection only, deterministic measures/rules, and/or optional AI. Confirm separately whether a single serious item warrants an investigation notice and what evidence is required for possible-trend alerts. Offer the starter rules in [monitoring-design.md](references/monitoring-design.md) for the user to confirm or edit; do not treat an operational-impact label such as “Blocker” alone as enough for an individual notice. If no possible-pattern rule is confirmed, keep trend alerts off and show counts only.
 
-Offer manual capture with a reminder when no permitted and reliable automated route is confirmed. Do not imply that a website can be monitored just because it is reachable in a browser. Do not bypass sign-in, CAPTCHAs, paywalls, rate limits, or platform restrictions.
+Offer manual capture with a reminder when a site does not permit or reliably return review entries to an Apps Script check. A site that renders reviews only in the browser, blocks requests, or changes its markup may need another approved route. Log that state as blocked or failed, never as zero new feedback. Do not bypass sign-in, CAPTCHAs, paywalls, rate limits, or platform restrictions.
 
 The default should be deterministic collection, source health, and a quiet digest. A single record may merit a private investigation prompt under a user-approved rule, but it must remain an individual signal. Do not call one record a trend.
 
@@ -95,7 +95,7 @@ If direct Sheet editing is unavailable, deliver an idempotent setup function and
 
 ## Generate and test the monitoring code
 
-Read [apps-script-delivery.md](references/apps-script-delivery.md) and the [VOC Workspace services reference](references/apps-script-workspace-capabilities.md) before selecting Google APIs, OAuth scopes, or an optional LLM connection. Generate complete source-specific Apps Script files from the confirmed schema and permitted collection methods. Do not return pseudocode where runnable code is expected.
+Read [apps-script-delivery.md](references/apps-script-delivery.md) and the [VOC Workspace services reference](references/apps-script-workspace-capabilities.md) before selecting Google APIs, OAuth scopes, or an optional LLM connection. Generate complete source-specific Apps Script files from the confirmed schema and site check routes. For permitted public-page checks, include the fetch, response validation, extraction, pagination or bounded lookback, record mapping, and failure handling for that source. Do not return pseudocode where runnable code is expected.
 
 Deliver all required .gs files and setup instructions. Generate an .html file only if the user chooses a custom sidebar or web interface; a native Sheet dashboard does not require HTML.
 
@@ -114,6 +114,7 @@ Test at least:
 - wrong-entity and out-of-scope records flagged or excluded;
 - manual capture and overdue reminders;
 - failed source, stale source, and partial run are visible and are never shown as “no feedback”;
+- a changed page, empty/malformed response, blocked request, and browser-rendered review list cannot produce a false successful zero-new-record run;
 - test notifications go only to test recipients;
 - concurrent runs cannot write the same records twice;
 - repeated trigger setup by the same maintainer does not create duplicates;
