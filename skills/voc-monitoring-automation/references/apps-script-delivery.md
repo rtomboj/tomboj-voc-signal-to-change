@@ -2,9 +2,9 @@
 
 Use this reference after the source plan is confirmed and before generating a Google Sheets setup.
 
-Before selecting services, OAuth scopes, or an optional model API, consult [apps-script-workspace-capabilities.md](apps-script-workspace-capabilities.md). Prefer built-in services for straightforward operations, an Advanced Google service when its API adds a needed capability, and `UrlFetchApp` for an external endpoint. Google authorization and provider API keys are separate credentials.
+Before selecting services, OAuth scopes, or an optional model API, consult the [VOC Workspace services reference](apps-script-workspace-capabilities.md). Prefer built-in services for straightforward operations, an Advanced Google service when its API adds a needed capability, and `UrlFetchApp` for an external endpoint. Google authorization and provider API keys are separate credentials.
 
-The [Drive intake example](../examples/drive-intake/README.md) handles only the initial Excel-to-Sheets copy. It does not collect reviews or replace the source-specific monitor.
+The optional [Drive intake example](../examples/drive-intake/README.md) handles only the initial Excel-to-Sheets copy. Manual conversion in Drive is the default. The helper does not collect reviews or replace the source-specific monitor.
 
 ## Choose the script design
 
@@ -46,7 +46,7 @@ Include a README or manifest listing files, function names, scopes, configuratio
 
 Deterministic collection, deduplication, measures, and notification do not need an LLM key. AI is optional and has a recurring token/API cost if scheduled. Default to no recurring AI; allow setup-time assistance or a user-requested one-off summary.
 
-If the user opts in, state what text/data will leave Google, the provider, expected per-run volume and cost, retention/data-use assumptions, and the budget/disable path. Keep the provider key out of source control, cells, logs, and alerts. Apps Script `UserProperties` are per user; `ScriptProperties` are available to users of the script and should not be presented as a private secret store. For shared/team credentials, a controlled service such as Google Cloud Secret Manager is an option but adds Cloud project, IAM, and API setup. Use the [Properties Service](https://developers.google.com/apps-script/guides/properties) and appropriate provider documentation to select storage. The scheduled trigger runs as its creator, so user-scoped credentials must belong to the trigger owner.
+If the user opts in, state what text/data will leave Google, the provider, expected per-run volume and cost, retention/data-use assumptions, and the budget/disable path. Keep the provider key out of source control, cells, logs, alerts, and the setup conversation. Apps Script `UserProperties` are per user, but an editor of a bound Sheet may be able to edit its bound script and run code under the trigger owner's account; they are not a security boundary against untrusted editors. Enter a key through an owner-controlled private setup route, never as a literal in source or a log. For shared/team deployments, use a controlled standalone project with limited editors or a service such as Google Cloud Secret Manager (which adds Cloud project, IAM, and API setup). `ScriptProperties` are shared project configuration. The scheduled trigger runs as its creator, so user-scoped credentials must belong to the trigger owner.
 
 ## Test before scheduling
 
@@ -57,11 +57,11 @@ Use fixtures first. Use a permitted live-source check only after the route and a
 1. Part 1 rows and records at/before baseline date do not trigger historical alerts.
 2. Synthetic/unknown IDs are captured in a fresh baseline before monitoring begins.
 3. One new ID appends once; the same ID is skipped on recheck.
-4. Source ID plus ID Origin distinguish records; canonical syndicated copies count once.
+4. Records match within a source on a shared verified platform ID or stable review-specific URL; a manual URL-only row and later ID-only row without a shared identifier await reconciliation. Shared profile URLs never collapse distinct reviews; canonical syndicated copies count once under the approved policy.
 5. Edited records follow the agreed update/change-log rule.
 6. Positive and negative individual signals remain separate from trend counts.
 7. An individual high-impact signal can prompt review without being labeled representative or a trend.
-8. Evidence class and audience filters/counts remain distinct.
+8. Evidence class and audience filters/counts remain distinct; a new vendor story, release note, or public discussion does not send a customer-signal notice.
 9. Wrong-entity/out-of-scope data is held for review or excluded.
 10. Manual capture enters the same pipeline; overdue manual checks are visible.
 11. Failed, partial, and stale checks are visible, preserve the last success, and never look like no feedback.
@@ -70,6 +70,7 @@ Use fixtures first. Use a permitted live-source check only after the route and a
 14. Repeated trigger setup by the same user does not duplicate that user's trigger.
 15. A missing/ambiguous trigger owner is handled as setup-needed, not reported as a healthy schedule.
 16. Quota/time-limit errors are logged and do not erase the last successful state.
+17. Internal Record IDs stay unique across multiple prefix families; unresolved themes remain in a review status rather than creating taxonomy values.
 
 Report each case as passed, failed, partially tested, blocked, or not run. The assistant cannot run a user's live Google Apps Script environment; wait for their test output before claiming the gate passed or writing the dashboard builder.
 
@@ -77,7 +78,7 @@ Report each case as passed, failed, partially tested, blocked, or not run. The a
 
 Show a clear click path: open the converted Sheet → **Extensions → Apps Script** → add the provided files → save → run the documented initialization on the backup/test copy → review and approve the requested scopes → run manual tests.
 
-Explain which account will run the continuing monitor. Installable time-driven triggers execute using the authorization of the account that created them. Have that maintainer run trigger setup after tests pass. Keep the maintainer role and account recorded in the monitor notes/config so ownership can be transferred deliberately.
+Explain which account will run the continuing monitor. Installable time-driven triggers execute using the authorization of the account that created them. Have that maintainer run trigger setup after tests pass. Have the trigger-setup function record the maintainer automatically: write `Session.getEffectiveUser().getEmail()` and the setup date to the monitoring config (this needs the `userinfo.email` scope; if the email is unavailable, ask the user to type it). If a different maintainer is already recorded, stop and ask the user to confirm a deliberate handover before creating a trigger.
 
 Make trigger setup explicit and reversible. It should check for duplicates visible to the current user, create a single trigger for the confirmed cadence, and provide a remove/reset function that does not touch source data. Apps Script only returns project triggers associated with the current user; setup cannot inspect or remove a trigger created by another collaborator. Do not report another account's trigger owner or promise to detect cross-account duplicates. Before changing maintainership, have each current maintainer inspect their own triggers and remove their own obsolete one. Time-driven triggers run within a time window, not necessarily at an exact minute.
 
