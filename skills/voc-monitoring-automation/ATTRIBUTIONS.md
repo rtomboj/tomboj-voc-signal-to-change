@@ -10,6 +10,10 @@ This skill is original instructional work by Rachel Wilde / Tomboj. It uses the 
 | [Google Apps Script installable triggers](https://developers.google.com/apps-script/guides/triggers/installable) | Time-driven triggers, authorization, and trigger ownership | Platform behavior reference only |
 | [Google Apps Script external services](https://developers.google.com/apps-script/guides/services/external) | Calling approved external APIs | Platform behavior reference only |
 | [Google Apps Script authorization](https://developers.google.com/apps-script/guides/services/authorization) | User authorization and scopes | Platform behavior reference only |
+| [Google Apps Script Script service](https://developers.google.com/apps-script/reference/script/script-app) | Trigger visibility for current project and user | Platform behavior reference only |
+| [Google Apps Script LockService](https://developers.google.com/apps-script/reference/lock/lock-service) | Preventing overlapping shared-data writes | Platform behavior reference only |
+| [Google Apps Script Properties service](https://developers.google.com/apps-script/guides/properties) | Per-script and per-user configuration | Platform behavior reference only; scope is not a promise of secret management |
+| [Google Cloud Secret Manager](https://cloud.google.com/secret-manager/docs) | Optional shared secret storage for a team | Platform behavior reference only; requires Cloud project and IAM setup |
 | [Google Apps Script quotas](https://developers.google.com/apps-script/guides/services/quotas) | Service limits | Platform behavior reference only; check current limits before use |
 | [Google Apps Script Advanced Drive service](https://developers.google.com/apps-script/advanced/drive) | Drive API v3 support in Apps Script | Consulted for the Drive intake example; no code copied |
 | [Google Drive upload and conversion guide](https://developers.google.com/workspace/drive/api/guides/manage-uploads) | Converting uploaded Excel/CSV content to Workspace file types | Platform behavior reference only |
