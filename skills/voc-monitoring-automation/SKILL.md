@@ -24,9 +24,9 @@ If not, point the user to the [VOC Benchmark Builder](https://github.com/rtomboj
 If they have both files:
 
 1. Ask them to place them in a Google Drive folder named VOC_Automation.
-2. Keep both Part 1 files as the originals in that folder. Create a Google Sheets copy of the Excel workbook. By default, point the user to the [Drive intake helper](examples/drive-intake/README.md), which converts .xlsx/.xls files in VOC_Automation and outputs the Sheet ID and URL. It must be run and authorized in the user's Apps Script project. If they prefer not to grant its Drive access, use Drive's manual “Open with Google Sheets” and “Save as Google Sheets” flow. Never overwrite the original Excel file.
-3. Ask for the Drive URLs of the Markdown file and Google Sheet. Parse the file IDs from the links when needed.
-4. Check whether an authorized Google Drive or Sheets connection can read the files. Ask before making changes to the user's Sheet. If access is unavailable or not authorized, ask the user to upload both files for assessment. Generate setup code and manual instructions when the Sheet itself cannot be edited directly.
+2. Keep both Part 1 files as the originals in that folder. Create a Google Sheets copy of the Excel workbook with Drive's manual flow: open the workbook with **Open with → Google Sheets**, then choose **File → Save as Google Sheets**. Never overwrite the original Excel file. The optional [Drive intake helper](examples/drive-intake/README.md) can convert several workbooks at once, but it is a separate Apps Script project with broad Drive access; offer it only when the user has several workbooks or repeats this step.
+3. Check whether an authorized Google Drive or Sheets connection can read the files. If it can, ask for the Drive URLs of the Markdown file and Google Sheet and parse the file IDs from the links. If access is unavailable or not authorized, ask the user to upload both files for assessment instead; no URLs are needed on that route.
+4. Ask before making changes to the user's Sheet. Generate setup code and manual instructions when the Sheet itself cannot be edited directly. Ask for the Sheet URL later only if a standalone script or direct edit needs it; a script bound to the Sheet does not.
 
 Do not publish customer-specific sheet links, IDs, review text, credentials, or generated code to this public repository.
 
@@ -34,7 +34,7 @@ Do not publish customer-specific sheet links, IDs, review text, credentials, or 
 
 Read the Markdown benchmark and inspect the workbook tabs, headers, formulas, records, taxonomy, source map, and readiness notes. Confirm that both files refer to the same company and benchmark.
 
-Use the [Part 1 workbook contract](../voc-benchmark-builder/references/benchmark-output.md) and [workbook validator](../voc-benchmark-builder/scripts/validate_workbook.py) when available, then report what the validator found. Treat the workbook contract as a reference, not proof that an individual file conforms. In the reviewed examples, Harri is a legacy workbook that fails the current contract, Nory is closer but still has validator errors, and Toast is missing monitoring-critical tabs. These examples show why every workbook must be inspected before code is generated.
+Use the [Part 1 workbook contract](../voc-benchmark-builder/references/benchmark-output.md) and [workbook validator](../voc-benchmark-builder/scripts/validate_workbook.py) when available, then report what the validator found. Treat the workbook contract as a reference, not proof that an individual file conforms. Real Part 1 workbooks vary: a legacy workbook may predate the current contract and fail most header checks, a newer workbook may be close to the contract but still have validator errors, and another may be missing monitoring-critical tabs. Inspect every workbook before generating code.
 
 Preserve existing data, formulas, tab names, and headers. Map field aliases by header name; do not rename or reorder existing columns. Look for headers in the first 20 rows, since some example tabs have title and notes rows above the table. Show the user a short schema map with matches, aliases, missing fields, and unresolved values before creating code.
 
@@ -52,7 +52,7 @@ Confirm these global choices once, then ask only source-specific exceptions:
 - **Collection route:** approved API/feed/export/notification, manual check, watchlist, deferred, or excluded. Capture permission evidence, the date checked, and who confirmed it. A publicly visible page is not automatically permitted for automated collection.
 - **Cadence:** one global default (daily, weekly, biweekly, or manual), with explicit source exceptions. Confirm timezone and a digest recipient if email/chat alerts are selected.
 - **First-run behavior:** use Part 1 rows as history and start new monitoring from an agreed date, or capture the current page as the start point.
-- **Analysis and alerts:** collection only, deterministic measures/rules, and/or optional AI. Confirm separately whether a single serious item warrants an investigation notice and what evidence is required for possible-trend alerts. If no possible-pattern rule is confirmed, keep trend alerts off and show counts only.
+- **Analysis and alerts:** collection only, deterministic measures/rules, and/or optional AI. Confirm separately whether a single serious item warrants an investigation notice and what evidence is required for possible-trend alerts. Offer the starter rules in [monitoring-design.md](references/monitoring-design.md) for the user to confirm or edit; do not treat an operational-impact label such as “Blocker” alone as enough for an individual notice. If no possible-pattern rule is confirmed, keep trend alerts off and show counts only.
 
 Offer manual capture with a reminder when no permitted and reliable automated route is confirmed. Do not imply that a website can be monitored just because it is reachable in a browser. Do not bypass sign-in, CAPTCHAs, paywalls, rate limits, or platform restrictions.
 
@@ -85,15 +85,17 @@ Define the jobs separately:
 - **Monitoring** compares successful observations with the agreed baseline and prior run, deduplicates, appends new records, records permitted edits, and logs source health.
 - **Classification** applies confirmed labels or measures to the stored records. Suggestions remain marked as suggestions until approved.
 
-Record evidence class and audience separately, so customer reviews, vendor-selected stories, press, and other context do not get mixed into one count. Count syndicated copies once using an agreed canonical source while retaining other URLs as provenance. Add permission evidence URL, confirmation date, and confirmer role to the source plan.
+Record evidence class and audience separately, so customer reviews, vendor-selected stories, press, and other context do not get mixed into one count. Only independent customer feedback (and complaints, if the user opts in) can trigger customer-signal notices; vendor-selected stories, official release notes, and public discussion are logged as context. Count syndicated copies once using an agreed canonical source while retaining other URLs as provenance. Add permission evidence URL, confirmation date, and confirmer role to the source plan.
 
-For identifiers, add an **ID Origin** field where it is missing: platform ID, canonical URL, fingerprint, synthetic, or unknown. Join on Source ID plus record ID and origin; never deduplicate on URL alone when URLs are unstable. For synthetic/unknown IDs, compare the source's current visible state, establish a fresh dated baseline, and begin alerts from that point. Do not replay historical Part 1 rows as new alerts.
+For identifiers, add an **ID Origin** field where it is missing: platform ID, review-specific canonical URL, fingerprint, synthetic, or unknown. Treat it as a quality label, not part of the match key. Within the same Source ID, match a verified platform record ID or a verified stable URL for that individual review. A shared profile URL, unstable URL, or ambiguous match is never an automatic duplicate. A manual URL-only row and later platform-ID-only row need reconciliation when they share no identifier; retain both pending review instead of claiming an automatic match. Store both identifiers when available so future checks can match either. For synthetic/unknown IDs, compare the source's current visible state, establish a fresh dated baseline, and begin alerts from that point. Do not replay historical Part 1 rows as new alerts.
+
+Give new rows unique internal Record IDs that preserve each existing source or evidence-class prefix scheme where clear; advance the counter within that prefix and check uniqueness across the table. If no safe scheme exists, generate a unique ID and document it. Never reuse an ID. Set Collection Coverage to `Sample` unless the user approves another label. Leave an unresolved Primary Theme blank and mark the row `Unclassified – taxonomy review` in its human-review status; do not silently add a new taxonomy theme.
 
 If direct Sheet editing is unavailable, deliver an idempotent setup function and a manual tab/header checklist. The function must create missing structures without clearing existing rows.
 
 ## Generate and test the monitoring code
 
-Read [apps-script-delivery.md](references/apps-script-delivery.md) and [apps-script-workspace-capabilities.md](references/apps-script-workspace-capabilities.md) before selecting Google APIs, OAuth scopes, or an optional LLM connection. Generate complete source-specific Apps Script files from the confirmed schema and permitted collection methods. Do not return pseudocode where runnable code is expected.
+Read [apps-script-delivery.md](references/apps-script-delivery.md) and the [VOC Workspace services reference](references/apps-script-workspace-capabilities.md) before selecting Google APIs, OAuth scopes, or an optional LLM connection. Generate complete source-specific Apps Script files from the confirmed schema and permitted collection methods. Do not return pseudocode where runnable code is expected.
 
 Deliver all required .gs files and setup instructions. Generate an .html file only if the user chooses a custom sidebar or web interface; a native Sheet dashboard does not require HTML.
 
@@ -106,7 +108,8 @@ Give the user a clear click path: open the converted Google Sheet → **Extensio
 Test at least:
 - baseline-date and Part 1 suppression, including text/ambiguous dates and synthetic-ID sources;
 - new ID appended once, duplicate skipped, edited record handled by the agreed policy;
-- source ID and ID Origin disambiguation; syndicated copies counted once;
+- source ID and verified review identifier matching, including a manual row later collected with a shared identifier, an ambiguous URL-only/ID-only pair held for reconciliation, a shared profile URL collision, and syndicated copies counted once under an approved canonical policy;
+- Record ID uniqueness across multiple prefix families and unresolved themes marked for review without changing the approved taxonomy;
 - positive and negative single-item signals, possible-pattern rules, low-volume display, and audience/evidence-class separation;
 - wrong-entity and out-of-scope records flagged or excluded;
 - manual capture and overdue reminders;
