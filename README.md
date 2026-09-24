@@ -7,7 +7,7 @@ An AI-guided system for finding where customers are speaking, establishing a def
 | Step | Question | Outcome | Status |
 | --- | --- | --- | --- |
 | 1. Establish the benchmark | Where are customers speaking, what do they appear to value, and where should attention go? | Confirmed profile and source map, dated platform baseline, review-level insight window, starter taxonomy, visual dashboard, Signal-to-Focus Map, coverage gaps, and monitoring specification | Available |
-| 2. Automate monitoring | How will we detect new feedback and changes? | Scheduled public-source collection, deduplication, classification options, alerts, source health, and a tested dashboard | Draft on review branch |
+| 2. Automate monitoring | How will we detect new feedback and changes? | Manual or permitted scheduled public-source checks, deduplication, classification options, alerts, source health, and a separate tested monitoring dashboard | Draft on review branch |
 | 3. Close the loop | What happens after feedback arrives? | Ownership, response and resolution SLAs, escalation, learning, and systemic change | Planned |
 
 ## Step 1: VOC Benchmark Builder
@@ -76,7 +76,7 @@ Before delivery, the assistant runs the dependency-free [workbook validator](ski
 
 ## Step 2: VOC Monitoring Automation (draft)
 
-The [VOC Monitoring Automation](skills/voc-monitoring-automation/SKILL.md) is the companion workflow for a completed Part 1 benchmark. Its first version uses Google Drive, Google Sheets, and Apps Script to monitor permitted public feedback. It assesses the Markdown and workbook outputs, confirms sources and cadence, prepares the Sheet, generates source-specific code, and tests collection before building the dashboard. Internal company sources remain out of scope for this version.
+The [VOC Monitoring Automation](skills/voc-monitoring-automation/SKILL.md) is the companion workflow for a completed Part 1 benchmark. Its first version uses Google Drive, Google Sheets, and Apps Script to monitor permitted public feedback. It assesses both Part 1 files, confirms source routes and cadence, prepares a preserved Google Sheets working copy, generates source-specific code, and tests collection before building a separate Monitor_Dashboard. Sources without a confirmed automated route remain manual, watchlist, deferred, or excluded. Internal company sources remain out of scope for this version.
 
 The skill is in draft review. It does not provide universal website scraping code: each public source needs a permitted collection method, such as an approved API/feed, export, notification, or manual review.
 
