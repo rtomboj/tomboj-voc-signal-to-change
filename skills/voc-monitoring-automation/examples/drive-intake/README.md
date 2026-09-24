@@ -1,6 +1,6 @@
 # Drive intake helper
 
-This small Apps Script project converts Excel workbooks placed in a Google Drive folder into Google Sheets copies and logs the resulting Sheet URLs and IDs. It is the intake step for VOC Part 2.
+This optional Apps Script project converts Excel workbooks placed in a Google Drive folder into Google Sheets copies and logs the resulting Sheet URLs and IDs. It is an optional intake step for VOC Part 2. For a single workbook, Drive's manual flow is simpler and needs no extra permissions: open the workbook with **Open with → Google Sheets**, then choose **File → Save as Google Sheets**. Use this helper when you have several workbooks or repeat the step.
 
 It leaves each original `.xlsx` or `.xls` file unchanged. It does not collect public reviews, alter workbook tabs, create monitoring triggers, classify feedback, send alerts, or call an LLM. The later monitoring project still needs a source-specific adapter and user-approved cadence.
 
@@ -15,7 +15,7 @@ It leaves each original `.xlsx` or `.xls` file unchanged. It does not collect pu
 5. Run `convertVocXlsxToSheets` manually and authorize the requested Google Drive access.
 6. Open **Executions** and review the log. For each converted workbook, copy the `sheetUrl` or `sheetId` into the Part 2 setup conversation. The Markdown report remains a Drive file; the workbook gets a Google Sheets copy. Before editing the converted Sheet, make a dated backup. Excel conversion can change formulas, charts, formatting, or validation, so check the important tabs and formulas against the original before adding the monitor.
 
-The script lists the configured folder's direct children. It does not recursively search subfolders. It handles `.xlsx` and `.xls` filenames and skips other files.
+The script lists the configured folder's direct children. It does not recursively search subfolders. It handles files whose names end in `.xlsx` or `.xls` and whose Drive file type is an Excel workbook. It skips other files, and reports any file with an Excel-style name but a different file type (such as a Google Sheet or shortcut) as `skipped-not-excel-file-type`.
 
 ## Permissions and behavior
 
