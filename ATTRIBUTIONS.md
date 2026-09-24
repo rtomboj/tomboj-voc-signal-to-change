@@ -26,7 +26,7 @@ The VOC Benchmark Builder and its VOC Monitoring Automation companion are origin
 | [OpenAI API documentation](https://platform.openai.com/docs/api-reference/authentication), [Anthropic API documentation](https://docs.anthropic.com/en/api/getting-started), and [Gemini API documentation](https://ai.google.dev/gemini-api/docs/api-key) | Frontier-model API authentication and key handling | Consulted for the Step 2 integration guide; no credentials, code, or prose copied |
 | Apps Script and Workspace repositories listed in the [field guide](skills/voc-monitoring-automation/references/apps-script-workspace-capabilities.md) | Examples, ecosystem status, and new Workspace/MCP tooling | Descriptions and commit dates checked; linked as prior art only; no code or repository prose copied; licenses must be checked before reuse |
 
-The Step 1 and Step 2 skills each maintain a [skill-level attribution record](skills/voc-benchmark-builder/ATTRIBUTIONS.md) and [Step 2 attribution record](skills/voc-monitoring-automation/ATTRIBUTIONS.md).
+The [Benchmark Builder attribution record](skills/voc-benchmark-builder/ATTRIBUTIONS.md) and [Monitoring Automation attribution record](skills/voc-monitoring-automation/ATTRIBUTIONS.md) document the sources consulted for each skill.
 
 ## Required attribution for this project
 
