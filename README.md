@@ -8,7 +8,10 @@ An AI-guided system for finding where customers are speaking, establishing a def
 | --- | --- | --- | --- |
 | 1. Establish the benchmark | Where are customers speaking, what do they appear to value, and where should attention go? | Confirmed profile and source map, dated platform baseline, review-level insight window, starter taxonomy, visual dashboard, Signal-to-Focus Map, coverage gaps, and monitoring specification | Available |
 | 2. Automate monitoring | How will we detect new feedback and changes? | Manual or permitted scheduled public-source checks, deduplication, classification options, alerts, source health, and a separate tested monitoring dashboard | Available |
-| 3. Close the loop | What happens after feedback arrives? | Ownership, response and resolution SLAs, escalation, learning, and systemic change | Planned |
+| 3. Follow up with customers | Who responds, what happens next, and is the customer's outcome resolved? | Owned cases, response clocks, coaching, action plans, customer updates, and honest closure | Available |
+| 4. Make company changes | What should change across product, policy, process, teams, or the organization? | Evidence-based decisions, accountable delivery, verification, and report-back | Available |
+
+The four steps are portable AI-guided workflows, with templates and validation utilities. “Available” means the skill is included; customer-specific automation, live access, and business outcomes still require implementation and verification. See [the full workflow and handoff contract](docs/four-part-workflow.md).
 
 ## Step 1: VOC Benchmark Builder
 
@@ -78,9 +81,41 @@ Before delivery, the assistant runs the dependency-free [workbook validator](ski
 
 The [VOC Monitoring Automation](skills/voc-monitoring-automation/SKILL.md) is the companion workflow for a completed Part 1 benchmark. Its first version uses Google Drive, Google Sheets, and Apps Script to monitor permitted public feedback. It assesses both Part 1 files, confirms source routes and cadence, prepares a preserved Google Sheets working copy, generates source-specific code, and tests collection before building a separate Monitor_Dashboard. Sources without a confirmed automated route remain manual, watchlist, deferred, or excluded. Internal company sources remain out of scope for this version.
 
-The skill requires a permitted collection method for each public source, such as an approved API/feed, export, notification, or manual review. The user-specific monitoring code and dashboard are generated and tested during the guided workflow.
+The skill starts with a source-specific Apps Script public-page check when permitted and usable, prefers official APIs/feeds/exports/notifications when more reliable, and supports manual review for exceptions. A blocked or changed page is a failed/partial check, not zero feedback. The user-specific monitoring code and dashboard are generated and tested during the guided workflow.
 
 For the Workspace service map, frontier-model connection patterns, and refreshed Apps Script repository references, see the optional [Apps Script and Google Workspace field guide](docs/apps-script-workspace-field-guide.md). The skill itself uses a short [VOC Workspace services reference](skills/voc-monitoring-automation/references/apps-script-workspace-capabilities.md). The repo also includes an optional [Drive intake Apps Script example](skills/voc-monitoring-automation/examples/drive-intake/README.md) for converting several Part 1 Excel workbooks at once; for a single workbook, Drive's manual “Save as Google Sheets” flow is the default.
+
+## Step 3: VOC Customer Follow-Up
+
+The [VOC Customer Follow-Up skill](skills/voc-customer-follow-up/SKILL.md) handles the immediate customer loop: triage, assignment and acceptance, response timing, conversation preparation, training/coaching, action plans, updates, and closure. It supports both authorized company operators and researchers preparing a handoff. Supplied feedback can be handled without waiting for a complete benchmark.
+
+It delivers a follow-up operating plan and three reusable registers: cases, actions, and customer updates. Engagement, delivery, customer outcome, and administrative closure remain separate. Unknown reviewer identities, unaccepted handoffs, unanswered contact attempts, and draft messages never become invented customer resolutions.
+
+> Use $voc-customer-follow-up with my VOC signals to prepare owned follow-up cases, a response and coaching plan, and customer update drafts.
+
+Provide the complete `skills/voc-customer-follow-up/` folder, including its references and assets. Existing approved policy takes precedence over suggested pilot timings. The skill prepares drafts by default; sending requires authorization.
+
+## Step 4: VOC Systemic Change
+
+The [VOC Systemic Change skill](skills/voc-systemic-change/SKILL.md) handles product, process/policy, team, department, and organizational opportunities. It turns evidence into an explicit decision, assigns accountable ownership, plans delivery and adoption, verifies outcomes, and reports back. It also supports positive practices worth expanding and clear deferred or declined decisions.
+
+It delivers a change register, case-to-change links, decision briefs, measurement plans, and report-back drafts. A shipped fix stays under verification until the agreed evidence supports improvement; customer cases retain their own status and update obligations.
+
+> Use $voc-systemic-change with these VOC cases to prioritize company improvements, draft decision briefs, and define how we will verify and report the results.
+
+Provide the complete `skills/voc-systemic-change/` folder. No CRM, product-tool, or employee-system connection is required to prepare a reviewable proposal. Execution requires the relevant authority and environment.
+
+## Try the complete customer-to-company loop
+
+Read the [synthetic walkthrough](examples/closed-loop/walkthrough.md) and its five linked CSV registers. Everything in that example is fictional. Run the local checks from a clone with Python 3.10 or later:
+
+```bash
+python scripts/check_repository.py
+python scripts/validate_loop_registers.py examples/closed-loop/registers
+python -m unittest discover -s tests -v
+```
+
+The [validation guide](docs/validation.md) explains checks, limits, private CSV exports, and live pilot requirements. The repository validator is optional tooling for a full clone; each portable skill includes its own manual acceptance checks. It does not contact customers or change operational systems.
 
 ## Test models and measure cost
 
@@ -89,42 +124,21 @@ Use [Model evaluation and background testing](docs/model-evaluation.md) to compa
 ## Repository structure
 
 ```text
-docs/
-├── apps-script-workspace-field-guide.md
-└── model-evaluation.md
-skills/
-├── voc-benchmark-builder/
-│   ├── SKILL.md
-│   ├── ATTRIBUTIONS.md
-│   ├── agents/
-│   │   └── openai.yaml
-│   ├── scripts/
-│   │   └── validate_workbook.py
-│   └── references/
-│       ├── benchmark-output.md
-│       ├── company-profile.md
-│       ├── insight-analysis.md
-│       ├── source-discovery.md
-│       └── visual-style.md
-└── voc-monitoring-automation/
-    ├── SKILL.md
-    ├── ATTRIBUTIONS.md
-    ├── agents/
-    │   └── openai.yaml
-    ├── examples/
-    │   └── drive-intake/
-    │       ├── DriveIntake.gs
-    │       ├── README.md
-    │       └── appsscript.json
-    └── references/
-        ├── apps-script-delivery.md
-        ├── apps-script-workspace-capabilities.md
-        └── monitoring-design.md
+docs/                                  # Workflow, validation, Workspace, model evaluation
+skills/voc-benchmark-builder/           # Step 1; includes workbook validator
+skills/voc-monitoring-automation/       # Step 2; includes Drive intake example
+skills/voc-customer-follow-up/          # Step 3; references, plan, three CSV templates
+skills/voc-systemic-change/             # Step 4; references, brief, two CSV templates
+examples/closed-loop/                  # Fictional connected walkthrough and registers
+scripts/check_repository.py            # Local links, metadata, template structure
+scripts/validate_loop_registers.py     # CSV relationships and selected evidence gates
+tests/                                # Invalid closure, delivery, and handoff checks
+.github/workflows/validate.yml         # Automated repository checks
 ```
 
 ## Attribution and provenance
 
-The project is original instructional work informed by existing Voice of Customer methods, public skill conventions, and prior-art repositories. See [ATTRIBUTIONS.md](ATTRIBUTIONS.md) for repository-level provenance and the [Benchmark Builder](skills/voc-benchmark-builder/ATTRIBUTIONS.md) and [Monitoring Automation](skills/voc-monitoring-automation/ATTRIBUTIONS.md) attribution records.
+The project is original instructional work informed by existing Voice of Customer methods, public skill conventions, and prior-art repositories. See [ATTRIBUTIONS.md](ATTRIBUTIONS.md) for repository-level provenance and the [Benchmark Builder](skills/voc-benchmark-builder/ATTRIBUTIONS.md), [Monitoring Automation](skills/voc-monitoring-automation/ATTRIBUTIONS.md), [Customer Follow-Up](skills/voc-customer-follow-up/ATTRIBUTIONS.md), and [Systemic Change](skills/voc-systemic-change/ATTRIBUTIONS.md) attribution records. Proposed timings, schemas, and lifecycle gates are operating-design choices, not universal standards or guaranteed financial results.
 
 ## Licensing
 

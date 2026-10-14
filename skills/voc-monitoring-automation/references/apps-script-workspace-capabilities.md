@@ -7,7 +7,7 @@ Use this reference before choosing Apps Script services, OAuth scopes, or an opt
 | Job | Default service | Notes |
 | --- | --- | --- |
 | Read and write the working Sheet | `SpreadsheetApp` in a script bound to the converted Sheet | The bound script reaches its parent Sheet without a copied ID. |
-| Call a confirmed source API or feed | `UrlFetchApp` | Needs the external-request scope. A reachable page is not permission to collect. |
+| Check a permitted public review page, API, or feed | `UrlFetchApp` | Needs the external-request scope. Read and validate each site's response; browser-rendered entries may be absent, and public visibility alone does not establish collection permission. |
 | Scheduled checks | Installable time-driven trigger (`ScriptApp`) | Runs as the account that created it. Created only after tests pass. |
 | Prevent overlapping writes | `LockService.getScriptLock()` | Wrap collection and writes; log a skipped run if the lock is held. |
 | Configuration and state | `PropertiesService` | Non-secret settings in Script Properties; credentials in the trigger owner's User Properties. |

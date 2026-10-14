@@ -6,7 +6,7 @@ Use this reference after inspecting both Part 1 files and before changing the wo
 
 | Job | What it answers | What it does |
 | --- | --- | --- |
-| Collection | What did this source report at this check? | Reads a permitted API, feed, export, notification, or manual capture; records the source and capture time. |
+| Collection | What did this source report at this check? | An Apps Script checker reads permitted public review entries from a site page or an official API/feed/export/notification; manual capture covers exceptions. Records source and capture time. |
 | Monitoring | What changed since the agreed baseline or prior successful check? | Compares IDs and measures, deduplicates, appends new records, handles allowed edits, and records source health. |
 | Classification | What might these records mean? | Applies confirmed categories or measures, marks uncertainty, and routes items for human review. |
 | Follow-up | What should an organization do with the signal? | Investigates, responds, resolves, and learns. This is Part 3, and a signal alone does not prove fault. |
@@ -34,7 +34,7 @@ Prefill a source table from Part 1 and ask the user to confirm unresolved rows a
 | Source ID, name, profile URL | Identifies the source and its target |
 | Evidence class and audience | Separates direct customer feedback from vendor-selected examples, press, and other context |
 | Part 1 treatment and readiness note | Gives the user's prior choice and the remaining question |
-| Collection route | Approved API/feed/export/notification, manual capture, watchlist, deferred, or excluded |
+| Collection route | Apps Script public-page check when permitted and usable, official API/feed/export/notification where appropriate, or manual capture/watchlist/deferred/excluded |
 | Permission evidence URL, checked date, confirmed by | Records how the route was approved and by whom/which role |
 | Profile access and response route | Owned-profile access, public viewing only, or no response route; investigation/handoff can still be separate |
 | Cadence and timezone | Determines when a source is due for a check |
@@ -44,7 +44,7 @@ Prefill a source table from Part 1 and ask the user to confirm unresolved rows a
 
 Ask for one global cadence, time zone, and digest destination when possible, then identify exceptions by source. A named customer-support or profile owner may be needed for access or response, but do not send an alert to that person's manager or present a measure as their performance.
 
-A visible page is not enough to authorize automated collection. Confirm the source's current permitted route and limits. If the route is unknown, unreliable, or disallowed, keep it manual, on a watchlist, deferred, or excluded. Never bypass login, CAPTCHAs, paywalls, rate limits, or platform controls.
+Start by planning an Apps Script checker for each selected public review site. Confirm whether the site permits scheduled requests and actually returns review entries to `UrlFetchApp`; a page visible in a human browser may be rendered with JavaScript or block automated fetches. An official API or feed can be more stable where offered. Record the site's permitted route and limits. If the route is unknown, unreliable, or disallowed, keep it manual, on a watchlist, deferred, or excluded. Never bypass login, CAPTCHAs, paywalls, rate limits, or platform controls.
 
 ## Workbook additions
 

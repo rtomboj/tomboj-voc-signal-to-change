@@ -1,0 +1,3 @@
+Update ID,Case ID,Change ID,Owner,Audience,Channel,Due At,Status,Occurred At,Content Reference,Delivery Evidence,Disposition Reason,Next Update Due At
+UPDATE-001,CASE-001,CHANGE-001,Jamie (synthetic),Verified customer,Private support case,2026-10-15T12:00:00+00:00,Draft,,../walkthrough.md#customer-update,,,
+UPDATE-002,CASE-002,CHANGE-001,Support intake (synthetic),Unverified public reviewer,None available,2026-10-14T12:00:00+00:00,Not possible,,,,No legitimate response route; internal report-back remains with product owner,
