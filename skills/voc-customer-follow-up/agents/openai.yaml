@@ -1,0 +1,4 @@
+interface:
+  display_name: "VOC Customer Follow-Up"
+  short_description: "Own customer follow-up, recovery, and learning"
+  default_prompt: "Use $voc-customer-follow-up to turn my VOC signals into owned follow-up cases, action plans, and customer updates."

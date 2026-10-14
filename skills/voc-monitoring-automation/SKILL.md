@@ -7,7 +7,7 @@ description: Guide users from a completed public VOC benchmark to a tested Googl
 
 Guide the user through Step 2 of Tomboj VOC Signal-to-Change: convert a completed public-source benchmark into a tested monitoring workflow in Google Workspace.
 
-Step 1 establishes the benchmark. Step 2 collects permitted updates, compares them with the saved baseline, and surfaces changes. Step 3 closes the loop through ownership, customer response, resolution, and organizational learning.
+Step 1 establishes the benchmark. Step 2 collects permitted updates, compares them with the saved baseline, and surfaces changes. Step 3 handles customer follow-up, coaching, action plans, and report-back. Step 4 owns systemic company changes and verifies their impact.
 
 Use VOC to help organizations, teams, and people see opportunities to improve. Never frame it as a way to punish people or rank individual employees. Surface both positive and negative change. One comment is not a trend, though one serious customer signal may justify an individual follow-up. Distinguish a temporary incident from a sustained shift.
 
@@ -137,3 +137,5 @@ Test that dashboard counts reconcile to the monitoring data, filters preserve so
 Provide the updated Sheet link only if the user authorized direct editing, or provide exact manual steps otherwise. Include generated Apps Script files, scope explanation, chosen source routes and cadences, confirmed alert rules, limits, test status, and dashboard validation status. State any user-run tests as not run until results are returned.
 
 Keep internal company sources out of this public-source version. Offer them as a later phase once the public-source workflow is working.
+
+For a signal needing action, hand off Source ID + Record ID, evidence reference/class, audience, receipt time, source health, trigger, and confirmed response-route limits to [VOC Customer Follow-Up](https://github.com/rtomboj/tomboj-voc-signal-to-change/blob/main/skills/voc-customer-follow-up/SKILL.md). Preserve the distinction between an individual signal and a possible pattern. Step 3 may then propose a linked [Systemic Change](https://github.com/rtomboj/tomboj-voc-signal-to-change/blob/main/skills/voc-systemic-change/SKILL.md); neither handoff proves acceptance, contact, resolution, or improvement.

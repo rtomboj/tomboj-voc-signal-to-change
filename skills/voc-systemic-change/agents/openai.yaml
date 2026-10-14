@@ -1,0 +1,4 @@
+interface:
+  display_name: "VOC Systemic Change"
+  short_description: "Turn recurring VOC evidence into verified improvements"
+  default_prompt: "Use $voc-systemic-change to prioritize VOC improvement opportunities, assign delivery owners, and verify the results."

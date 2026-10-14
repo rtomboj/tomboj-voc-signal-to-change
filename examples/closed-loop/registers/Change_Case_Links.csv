@@ -1,0 +1,3 @@
+Change ID,Case ID,Customer Communication Owner,Receiving Change Owner,Accepted At,Acceptance Evidence,Next Update Due At,Obligation Status,Disposition Evidence
+CHANGE-001,CASE-001,Jamie (synthetic),Product owner (synthetic),2026-10-13T14:30:00+00:00,Synthetic triage decision,2026-10-15T12:00:00+00:00,Active,
+CHANGE-001,CASE-002,Support intake (synthetic),Product owner (synthetic),,,,Ended,No customer contact route; internal result remains owed by change owner

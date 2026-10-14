@@ -6,7 +6,7 @@ authors:
   - family-names: "Wilde"
     given-names: "Rachel"
 repository-code: "https://github.com/rtomboj/tomboj-voc-signal-to-change"
-abstract: "An AI-guided system for benchmarking public customer feedback, automating monitoring, and closing the Voice of Customer loop."
+abstract: "A four-part AI-guided system for benchmarking public customer feedback, monitoring signals, following up with customers, and verifying systemic company improvements."
 keywords:
   - "voice of customer"
   - "customer success"

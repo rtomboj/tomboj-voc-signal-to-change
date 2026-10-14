@@ -1,0 +1,25 @@
+name: Validate VOC workflow
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check repository links and templates
+        run: python scripts/check_repository.py
+      - name: Validate synthetic registers
+        run: python scripts/validate_loop_registers.py examples/closed-loop/registers
+      - name: Exercise invalid lifecycle and handoff cases
+        run: python -m unittest discover -s tests -v
+      - name: Check whitespace
+        run: git diff --check
