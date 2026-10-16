@@ -1,0 +1,4 @@
+interface:
+  display_name: "VOC Sheet Web App"
+  short_description: "Build a private VOC app with connected or manual routes"
+  default_prompt: "Use $voc-sheet-web-app to inspect my existing VOC system, determine connected or manual routes, and build a private web interface adapted to my Google Sheet."
