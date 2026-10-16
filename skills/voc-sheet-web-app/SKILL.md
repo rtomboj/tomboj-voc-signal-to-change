@@ -1,11 +1,17 @@
 ---
 name: voc-sheet-web-app
-description: Guide users in Claude, ChatGPT, Kimi, or another capable assistant from an existing VOC Google Sheet and Apps Script to a private organization-only web interface. Detect available connections, offer supported connection or manual export/copy-paste routes, inspect the actual workbook and script, generate adapted HTML/GS files, and iterate through installation, testing, and deployment.
+description: Guide users in Claude, ChatGPT, Kimi, or another capable assistant from an existing VOC Google Sheet and Apps Script to a private organization-only web interface. Require design-source intake and a design-to-Sheet data contract before backend work. Detect available connections, offer supported connection or manual export/copy-paste routes, inspect the actual workbook and script, generate adapted HTML/GS files, and iterate through installation, testing, and deployment.
 ---
 
 # VOC Sheet Web App
 
 Guide the optional bonus after the four-part VOC workflow. Treat the user's current Sheet and Apps Script project as the starting system. Adapt the web app to their actual structure; use earlier step contracts as semantic guidance, not a migration command.
+
+## 0. Require and inspect the design source
+
+Before backend work, obtain the design source as a file or link. Reuse a source already supplied; inspect the actual HTML/JS/CSS or bundle and record its version/date, screens, expected data, and visual reference. A rendered page or screenshot can establish appearance but cannot establish hidden field/derivation contracts. If a link is inaccessible or exposes only the rendered view, request the source export through the user's available connection or manual route. Do not invent the missing source contract or start a generic backend while waiting.
+
+If no design exists, help the user create/select a minimal design and record it as the source before continuing. Do not require Claude Design or any particular provider. Read [design contract and conversion](references/design-contract-and-conversion.md) for the required intake and later conversion gates.
 
 ## 1. Discover access and continue the existing work
 
@@ -29,6 +35,8 @@ Do not display secrets, export property values unnecessarily, or publish private
 
 Produce a compact actual-to-app mapping. Record exact tab/header names, header row, stable key, read/write permissions, and gaps. Never rename/reorder tabs or columns, move records, or recreate triggers merely to fit an example schema. Map each tab separately; headers may start on different rows.
 
+Complete the **design data-contract check** in [design contract and conversion](references/design-contract-and-conversion.md) before generating backend files. Output a table comparing every design field, derived metric, join, and action with actual tabs/headers, types, status values, and derivation rules. Resolve ambiguities or mark the affected feature unavailable. A tab inventory alone does not pass this gate.
+
 ## 3. Define the web layer
 
 Keep the Sheet as the source of truth and existing automation as its maintainer. Make the website a new interface to that system, not a second database. Reuse a supplied design where practical, replacing sample data and prototype controls.
@@ -37,18 +45,17 @@ Default the first pilot to viewing, filtering, record details, and draft copying
 
 Preserve independent engagement, delivery, customer outcome, administrative closure, change lifecycle, and continuing report-back obligations. A missing table is unavailable, not zero records. A failed source is not no feedback. Keep real and synthetic records separated before calculating totals.
 
+Default to **server-side business logic**: schema/status normalization, joins, data-class separation, deadlines, authoritative counts, and access/redaction run in GS. The browser renders the returned view model and handles navigation, display formatting, and filtering/sorting of already authorized rows. Label subset counts; request server totals for the full filtered population when paginated. Do not maintain duplicate business formulas in HTML. Record this allocation in the contract; explain any necessary exception before building it.
+
 ## 4. Build files around the existing project
 
-Read [Apps Script integration and access](references/apps-script-and-access.md) before generating code. Deliver complete, adapted files rather than pseudocode:
-- one web entry point, such as `VocWeb.gs`, with `doGet(e)` or an explicit patch to an existing router;
-- a narrowly scoped server data adapter, such as `VocWebData.gs`, and access helpers where needed;
-- `Index.html` plus optional style/script partials as Apps Script HTML files;
-- an exact additive manifest patch if required;
-- configuration steps, changed-file list, tests, deployment instructions, and rollback.
+Read [Apps Script integration and access](references/apps-script-and-access.md), then finish the bundle conversion checklist in [design contract and conversion](references/design-contract-and-conversion.md). Deliver complete, adapted files using the single ordered install path in [installation and reauthorization](references/installation-and-reauthorization.md): `VocWebConfig.gs`, `VocWebData.gs`, `Styles.html`, `App.html`, `Index.html`, then `VocWeb.gs` (or the inspected router patch). Include an additive manifest patch only if needed, configuration steps, tests, and rollback. Record exact names once; do not offer conflicting file layouts midway through installation.
 
-Names are examples; inspect for collisions. Never add a second `doGet` or `onOpen`. Preserve current menus, globals, trigger names, schedules, properties, and business rules. Do not run setup, monitor, notification, or trigger-installation functions just by opening or refreshing the website.
+Inspect for name collisions and record any required filename substitutions before installation. Never add a second `doGet` or `onOpen`. Preserve current menus, globals, trigger names, schedules, properties, and business rules. Do not run setup, monitor, notification, or trigger-installation functions just by opening or refreshing the website.
 
 Use explicit configured workbook IDs for web execution rather than active-spreadsheet methods. Confirm any scope change needed by explicit access. Map fields server-side, serialize dates, return only allowed fields, and escape untrusted content. Use asynchronous `google.script.run` with success/failure handling. Keep keys and OAuth tokens out of browser HTML.
+
+Flag scope changes **before pasting new code**, including automatically inferred scopes and any `@OnlyCurrentDoc` conflict. Projects with triggers need maintainer reauthorization in the editor before unattended operation can be relied on. Preserve the manifest and triggers; follow the owner-by-owner checks in the installation reference and record unavailable checks honestly.
 
 Audit all callable global functions in the existing project, not just the new endpoints. An interface with no edit buttons can still expose existing public mutators. Protect them with appropriate server authorization while preserving trigger execution, or identify a same-project blocker and propose an isolated companion web project. Do not silently switch architecture or weaken access to get a deployment working.
 

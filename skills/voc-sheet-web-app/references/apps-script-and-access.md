@@ -6,6 +6,8 @@ Consult current official documentation when implementing. The links in ATTRIBUTI
 
 Serve the interface through HTML Service and one existing/new doGet entry point. Convert a bundled prototype into maintainable HTML/JS/style partials as needed. Use trusted partial inclusion; do not expose a generic server function that includes arbitrary files requested by the browser.
 
+Use the server-side business-logic default and conversion checklist in [design contract and conversion](design-contract-and-conversion.md). Follow the exact file/paste sequence in [installation and reauthorization](installation-and-reauthorization.md), including font/CDN checks under HTML Service and editor consent for affected trigger owners before relying on unattended execution.
+
 Bound-script active-document methods are not available in web-app execution. Use a fixed, server-configured workbook reference with explicit access and verify it in the deployed context. Store the target ID using the existing server configuration convention or Script Properties. Never accept an arbitrary client workbook ID or a browser-selected cell/range.
 
 The supplied monitor may use spreadsheets.currentonly and @OnlyCurrentDoc. Explicit workbook access may need a different Sheets scope. Confirm the required scope from current documentation and actual test behavior; explain the additive scope change rather than replacing the whole manifest or asserting the old scope is sufficient. Preserve existing dependencies, timezone, runtime, advanced services, and unrelated scopes. Do not request full Drive access merely to read a known Sheet.

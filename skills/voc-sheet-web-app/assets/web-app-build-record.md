@@ -1,5 +1,12 @@
 # Sheet-to-web build record
 
+## Step 0: design source gate
+
+- Design file/link and version/date (keep private when appropriate):
+- Actual source inspected versus rendered appearance only; missing export:
+- Screens, interactions and visual reference:
+- Gate: ready / blocked; reason and next action (no backend before ready):
+
 ## Existing system and inspection
 
 - Workbook/project references (keep private):
@@ -29,6 +36,15 @@
 ## Interface and patch
 
 - Design source and asset provenance:
+- Design data-contract gate: mapped / unavailable / blocked per row; ready for backend:
+
+| Screen / element | Expected key/type/status or derivation | Actual tab / header row / exact headers | Mapping / join / formula / execution location | Null, unavailable and ambiguity handling | Evidence / reconciliation |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | |
+
+- Logic allocation: GS business rules/authorization; browser presentation; justified exceptions:
+- Derivation filters, denominators, timezone/as-of, data-class separation and pagination totals:
+- Conversion checklist results (done / not applicable / blocked, with evidence): bundle; runtime; fonts; CDN/assets; HTML Service; RPC; fixed clock; demo data; prototype controls; export scaffolding; storage; visual parity:
 - Supported views / unavailable views:
 - Approved editing actions, if any:
 - Files to add / exact patches / name-collision treatment:
@@ -37,6 +53,12 @@
 - Demo removal / live error and freshness treatment:
 - Legacy public function authorization / trigger compatibility:
 - Manifest additions and why:
+- Scope report before paste: existing -> required, explicit/inferred scopes, OnlyCurrentDoc conflicts:
+- Trigger creators requiring editor reauthorization; target project; actual consent evidence / limits:
+
+| Paste order | Exact resolved filename/type | Add or inspected-source patch | Version | Generated / supplied / installed-reported / installed-verified | Evidence / next action |
+| --- | --- | --- | --- | --- | --- |
+| | | | | | |
 
 ## Private deployment
 
@@ -52,6 +74,8 @@
 | Check / environment / version | Status | Evidence | Next action and owner |
 | --- | --- | --- | --- |
 | Local/static checks | | | |
+| Design-to-Sheet derivations and representative rows | | | |
+| Hosted visual parity, font/CDN failure and data-class navigation | | | |
 | Actual Sheet reads and reconciliation | | | |
 | Web context without active Sheet | | | |
 | Permitted internal user | | | |
@@ -59,6 +83,7 @@
 | Anonymous user denied | | | |
 | Unauthorized direct RPC / restricted fields | | | |
 | Existing trigger and monitor regression | | | |
+| Scope consent per affected owner/project and scheduled result | | | |
 | Authorized writes, if in scope | | | |
 
 - Installation and scope instructions:
@@ -70,6 +95,7 @@
 
 - Last completed step and evidence:
 - Files generated / supplied / installed-reported / installed-verified:
+- Tested scope/results and deployed version (distinct from file installation):
 - User-run function and expected output:
 - Returned result, diagnosis, and corrected file/version:
 - Connection choices already made (do not ask again):
