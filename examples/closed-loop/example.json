@@ -1,0 +1,24 @@
+{
+  "company": "Northstar Scheduling",
+  "dataClass": "SYNTHETIC",
+  "asOf": "2026-10-14T15:00:00+00:00",
+  "benchmarkStart": "2026-10-01",
+  "benchmarkEnd": "2026-10-12",
+  "captureDate": "2026-10-12",
+  "sources": [
+    {"id": "REV", "name": "Example Review Hub", "url": "https://reviews.northstar.example/scheduling", "audience": "Scheduling administrator", "route": "Manual capture", "status": "Manual only"},
+    {"id": "APP", "name": "Example App Feedback", "url": "https://apps.northstar.example/scheduling", "audience": "Scheduling administrator", "route": "Manual capture", "status": "Manual only"}
+  ],
+  "reviews": [
+    {"id": "R101", "source": "REV", "date": "2026-10-10", "theme": "Large-booking export reliability", "signal": "Negative", "excerpt": "Our weekly schedule export fails for the largest booking.", "impact": "High", "confidence": "Medium"},
+    {"id": "R102", "source": "REV", "date": "2026-10-11", "theme": "Large-booking export reliability", "signal": "Negative", "excerpt": "The export fails when I select a large booking.", "impact": "High", "confidence": "Medium"},
+    {"id": "R103", "source": "APP", "date": "2026-10-12", "theme": "Large-booking export reliability", "signal": "Negative", "excerpt": "Our large schedule will not export. Small schedules still work.", "impact": "High", "confidence": "Medium"},
+    {"id": "R104", "source": "APP", "date": "2026-10-09", "theme": "Schedule visibility", "signal": "Positive", "excerpt": "The shared schedule makes upcoming shifts easy to see.", "impact": "Unknown", "confidence": "Medium"}
+  ],
+  "runs": [
+    {"id": "EX-RUN-01", "at": "2026-10-12T14:00:00+00:00", "source": "REV", "result": "SUCCESS", "records": 2, "new": 0, "detail": "Synthetic baseline capture; historical records are not new alerts."},
+    {"id": "EX-RUN-02", "at": "2026-10-12T14:05:00+00:00", "source": "APP", "result": "SUCCESS", "records": 2, "new": 0, "detail": "Synthetic baseline capture; historical records are not new alerts."},
+    {"id": "EX-RUN-03", "at": "2026-10-14T14:00:00+00:00", "source": "REV", "result": "FAILED", "records": null, "new": null, "detail": "Synthetic check failure; new feedback is unknown, not zero."},
+    {"id": "EX-RUN-04", "at": "2026-10-14T14:05:00+00:00", "source": "APP", "result": "SUCCESS", "records": 0, "new": 0, "detail": "Synthetic successful check; no additional records in this check."}
+  ]
+}

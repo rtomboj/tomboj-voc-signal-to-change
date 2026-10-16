@@ -1,0 +1,3 @@
+Source ID,Source,Route,Status,Permission Status,Data Class
+REV,Example Review Hub,Manual capture,Manual only,No live collection authorized by fixture,SYNTHETIC
+APP,Example App Feedback,Manual capture,Manual only,No live collection authorized by fixture,SYNTHETIC
