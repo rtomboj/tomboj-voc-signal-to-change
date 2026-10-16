@@ -1,0 +1,3 @@
+Source ID,Source,Profile URL,Audience,Inclusion Status,Data Class
+REV,Example Review Hub,https://reviews.northstar.example/scheduling,Scheduling administrator,Synthetic fixture only,SYNTHETIC
+APP,Example App Feedback,https://apps.northstar.example/scheduling,Scheduling administrator,Synthetic fixture only,SYNTHETIC

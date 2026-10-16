@@ -5,6 +5,7 @@ Run from the repository root using Python 3.10 or later. The repository utilitie
 ```bash
 python scripts/check_repository.py
 python scripts/validate_loop_registers.py examples/closed-loop/registers
+python scripts/check_example.py
 python -m unittest discover -s tests -v
 git diff --check
 ```
@@ -44,3 +45,11 @@ During development, an independent skill walkthrough used a fictional export fai
 Choose one team and a small confirmed trigger set. Confirm authority, contacts, staffing clocks, decision rights, and escalation. Run the Step 3 and Step 4 acceptance scenarios with synthetic data first. Then use a small authorized live cohort, review missed updates and premature closures, and adjust the process before expanding. Preserve evidence of results and keep not-run checks visible.
 
 Step 1 keeps its separate workbook validator. Step 2 retains its Apps Script test mode and user-run live test gate. These new checks do not replace either one or claim Google Workspace integration has passed.
+
+## Connected teaching example and visual provenance
+
+The [Northstar example](../examples/closed-loop/walkthrough.md) now includes benchmark and monitoring fixture tables alongside the five case/change registers. Its compact teaching CSVs are not a substitute for a complete Step 1 workbook or a production monitor.
+
+`scripts/build_example.py` uses the Python standard library to rebuild the teaching CSVs and local HTML preview from `example.json` and the existing registers. CI rebuilds those files and fails if they drift from the committed outputs. `scripts/check_example.py` checks qualified evidence joins, theme counts, reserved fictional source domains, synthetic labels, failure-versus-zero semantics, selected status distinctions, and the presence of the three rendered example images.
+
+The three SVG/JPEG illustrations are generated separately by `scripts/render_example_previews.py`, which needs PyMuPDF for rasterization. That optional visual regeneration is not part of the standard-library CI checks. They are rendered documentation previews, not browser screenshots or live Google output. See the [gallery](example-gallery.md) for provenance and reproduction steps.

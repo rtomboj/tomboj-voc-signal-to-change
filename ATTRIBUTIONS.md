@@ -30,6 +30,8 @@ The [Benchmark Builder attribution record](skills/voc-benchmark-builder/ATTRIBUT
 
 The [Sheet Web App attribution record](skills/voc-sheet-web-app/ATTRIBUTIONS.md) lists official Google documentation consulted for adapting existing projects and verifying private deployment. Private user design exports, workbook data, and instance scripts are not distributed with the reusable workflow.
 
+The Northstar documentation example, synthetic source comments, preview HTML, source SVGs, JPEG illustrations, and build/check utilities are original Tomboj work. They do not copy the private Harri instance, the user-supplied design bundle, its embedded records, or third-party assets. All source-reference domains in the authored fixture are reserved `.example` addresses. The illustrations are explicitly labeled rendered synthetic previews.
+
 ## Required attribution for this project
 
 For reuse of the original written material under CC BY 4.0, use a reasonable attribution such as:

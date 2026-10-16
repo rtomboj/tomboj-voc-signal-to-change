@@ -19,6 +19,11 @@ jobs:
         run: python scripts/check_repository.py
       - name: Validate synthetic registers
         run: python scripts/validate_loop_registers.py examples/closed-loop/registers
+      - name: Validate connected example and generated files
+        run: |
+          python scripts/build_example.py
+          git diff --exit-code -- examples/closed-loop
+          python scripts/check_example.py
       - name: Exercise invalid lifecycle and handoff cases
         run: python -m unittest discover -s tests -v
       - name: Check whitespace
