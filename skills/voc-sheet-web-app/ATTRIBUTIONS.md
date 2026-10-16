@@ -10,5 +10,9 @@ Original Tomboj instructional workflow, mapping method, build record, and test p
 | [Web app manifest](https://developers.google.com/apps-script/manifest/web-app-api-executable) | DOMAIN differs from ANYONE and anonymous access; execution settings |
 | [Session](https://developers.google.com/apps-script/reference/base/session) | Active versus effective user and identity availability |
 | [SpreadsheetApp](https://developers.google.com/apps-script/reference/spreadsheet/spreadsheet-app) | Explicit workbook access and authorization requirements |
+| [HTML Service restrictions](https://developers.google.com/apps-script/guides/html/restrictions) | Iframe navigation and HTTPS active assets |
+| [HTML Service best practices](https://developers.google.com/apps-script/guides/html/best-practices) | HTML/CSS/JS partials and asynchronous data loading |
+| [Service authorization](https://developers.google.com/apps-script/guides/services/authorization) | Scope inference, incremental authorization and trigger creator authority |
+| [Troubleshooting authorization](https://developers.google.com/apps-script/guides/support/troubleshooting) | Trigger executions cannot present interactive authorization dialogs |
 
 Checked October 16, 2026. Account/admin policy and actual deployment behavior still require live verification. This skill supplies an adaptive build process, not a preconfigured web app or a claim of compatibility with every existing script.

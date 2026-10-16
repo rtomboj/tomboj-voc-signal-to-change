@@ -8,6 +8,13 @@ Do not create installable triggers on the test copy automatically. Keep its web 
 
 | Scenario | Required evidence |
 | --- | --- |
+| No design source, or inaccessible/render-only design link | Request source/export or help create/select a minimal design; no backend generated before Step 0 is ready |
+| Design expects headers/formulas that differ from Sheet | Field/derivation contract table resolves exact mappings, timezone, nulls and joins before backend generation |
+| Business rules embedded in prototype JS | Port authoritative logic to GS; browser presentation does not duplicate formulas; counts reconcile with actual rows |
+| Packed design bundle and external assets | Conversion checklist records removal/replacement decisions; hosted visual parity and font/CDN failure behavior checked |
+| Fixed now, fake role controls or demo fallback | Live clock/as-of works, selections persist and failures never substitute demo data |
+| Manual file installation | One collision-resolved filename/type/paste-order list, complete code and exact read-only test function; returned output closes the checkpoint |
+| New explicit or inferred scopes in a triggered project | Before-paste scope report; safe editor consent by affected creators in the actual target project; schedules preserved and scheduled results checked when available |
 | No Google integrations exposed | Offer manual inputs and generate a file/paste workflow; do not invent a connector or stop all work |
 | Drive works; Sheets/source editing is absent | Reuse Drive for available files and choose manual routes only for missing jobs |
 | Sheet reads work; Apps Script edits do not | Map the live Sheet, generate full files/patches, guide owner installation, and review returned test output |
@@ -36,7 +43,7 @@ Classify each check passed, failed, blocked, or not run. Provide actual evidence
 
 ## Deployment sequence
 
-1. Finish the inspect/map/build work that does not require missing deployment choices.
+1. Finish design-source intake, the design data-contract check, inspect/map/build, the conversion checklist and the ordered installation/reauthorization path. Missing deployment choices do not block these stages.
 2. Test files locally where feasible and in the Apps Script editor/test environment. A /dev test URL is editor-only and does not prove an organization's viewer access.
 3. Verify the Workspace deployer, intended domain/audience, execution identity, scope changes, and the complete callable-function audit.
 4. When deployment is authorized, use Deploy > New deployment > Web app (or a new version of an existing intended deployment). Select organization/domain-only access; do not broaden it if unavailable.

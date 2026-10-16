@@ -52,6 +52,8 @@ Follow the VOC Sheet Web App bonus instructions:
 https://raw.githubusercontent.com/rtomboj/tomboj-voc-signal-to-change/main/skills/voc-sheet-web-app/SKILL.md
 
 Continue from my existing VOC Google Sheet and Apps Script.
+Inspect my design source file/link first; reuse it if already supplied.
+Before backend code, map its fields and calculations to my actual Sheet.
 Determine the capabilities available in this session. Offer a supported
 connection or manual route for anything missing. Adapt the HTML/GS
 files to the actual Sheet and script. Give me installation steps,
@@ -59,7 +61,7 @@ review the results I return, and continue through testing.
 The intended deployment is private to my Workspace organization.
 ```
 
-The [full bonus prompt](../skills/voc-sheet-web-app/assets/web-app-test-prompt.md) adds optional design and testing details. Organization-only deployment needs an eligible Workspace account/domain and verified deployment settings; if unavailable, the assistant can still prepare files and explain the deployment blocker.
+The [full bonus prompt](../skills/voc-sheet-web-app/assets/web-app-test-prompt.md) includes the required design-source intake, conversion checklist, exact file/paste order and testing details. Supply a design source file/link; if none exists, the assistant helps establish one before backend work. Organization-only deployment needs an eligible Workspace account/domain and verified deployment settings; if unavailable, the assistant can still prepare files and explain the deployment blocker.
 
 ## What the interaction looks like
 
@@ -71,7 +73,7 @@ The assistant will research or inspect, propose a mapping or plan, ask a targete
 | Monitor | Source plan, adapted Apps Script, tests, monitoring view | Confirm collection choices; install/run code if direct editing is unavailable |
 | Follow-up | Cases, actions, update drafts, coaching and closure plan | Confirm authority, owners, commitments, and actual customer outcomes |
 | Company change | Decisions, change records, delivery/verification plans | Make the business decisions and supply delivery/result evidence |
-| Web bonus | Adapted HTML/GS files, access/deployment steps, tests | Paste files or authorize supported edits; return actual installation/access results |
+| Web bonus | Design-to-Sheet contract, adapted HTML/GS files, ordered installation and tests | Supply/reuse design source; paste files or authorize supported edits; return actual results |
 
 Connection and business questions should arise when relevant. You do not need to answer a long setup questionnaire before the assistant inspects work already supplied.
 

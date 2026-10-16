@@ -1,6 +1,6 @@
 # Inspect and adapt the current system
 
-Use this reference before writing the web adapter. Earlier VOC steps define meanings and quality expectations; they do not guarantee the current workbook matches a fixed schema.
+Use this reference after the required Step 0 design-source intake and before writing the web adapter. Earlier VOC steps define meanings and quality expectations; they do not guarantee the current workbook matches a fixed schema. Complete the design data-contract table in [design contract and conversion](design-contract-and-conversion.md); a workbook-only inventory is insufficient.
 
 ## Inspect once, then map
 
@@ -30,7 +30,7 @@ Distinguish a missing table from an empty existing table and an inaccessible exi
 
 ## Design intake
 
-A downloaded design may be a packed HTML bundle with embedded scripts/assets instead of editable source. Inspect/unpack it locally when necessary; do not assume it can be pasted unchanged into an Apps Script HTML file. Inventory third-party assets and licenses before redistributing them.
+A downloaded design may be a packed HTML bundle with embedded scripts/assets instead of editable source. Inspect/unpack it locally when necessary; do not assume it can be pasted unchanged into an Apps Script HTML file. Inventory third-party assets and licenses before redistributing them. Finish the required bundle conversion checklist and record its results before handoff.
 
 Replace embedded customer records, sample-data fallback, fixed dates, simulated outages, fake role controls, and placeholder workbook IDs in live mode. Do not let a failed live read silently fall back to demo records labeled real. Cache only if deliberately designed: keep identity, permissions, company, data class, version, and freshness boundaries, and do not persist sensitive raw rows in shared browser storage by default.
 

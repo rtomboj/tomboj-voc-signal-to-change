@@ -2,6 +2,8 @@
 
 Provide the complete skill folder or current repository. Add existing references or files only if they are not already in the conversation. The assistant discovers the session's actual connections and asks for missing information progressively; no preflight questionnaire is required.
 
+When testing an unmerged update, supply its branch-specific SKILL.md URL and read all linked references from that same branch/revision. Do not silently substitute main. Resume earlier work by refreshing the skill and current source/schema, not by restarting the whole VOC workflow.
+
 ---
 
 Use the VOC Sheet Web App bonus workflow from:
@@ -13,7 +15,9 @@ Continue from the VOC system already created in Google Drive, Google Sheets, and
 
 Existing working Google Sheet: [link or already available reference]
 Existing Apps Script project: [link or access through the Sheet]
-Optional visual design: [attached HTML/design]
+Required design source file/link: [already supplied source, or attach/link HTML/JS/CSS/export]
+
+Step 0: inspect that design source before backend work. Reuse the source already available; if the link exposes only a rendered view, ask for the source export. If I have no design, help create/select a minimal one and record it first. Preserve its visual intent.
 
 First determine what this session can actually access: Drive files, Sheet structure/data, Sheet edits, Apps Script source/edits, triggers, and deployments are separate capabilities. Verify the intended targets where possible. Do not assume a capability because I am using a particular AI provider.
 
@@ -21,7 +25,11 @@ Where access is missing, offer a supported connection/authorization route or a m
 
 Inspect the current Sheet and available script source. Map the actual tabs, header rows, columns, IDs, statuses, and relationships. Adapt the web app to them. Ask only for information you cannot inspect that changes the next step; derive the remaining setup questions from what you find.
 
+Before backend code, output the design data-contract table: every expected field, derived metric, join, queue and action compared with actual tabs/headers/types/statuses and formulas. Resolve ambiguities or mark the feature unavailable. Default business rules, deadlines, joins, data-class separation, totals and authorization to GS; keep rendering and display interactions in the browser. Do not duplicate business formulas.
+
 If you cannot edit Apps Script, generate complete HTML and GS files with exact names/types, paste order, precise patches to existing code, configuration steps, and the function I should run. Review the result I return, fix errors, and continue interactively until the relevant tests pass or a specific blocker remains.
+
+Use the skill's bundle conversion checklist, including fonts/CDNs, fixed clock, demo payloads, fake controls, export scaffolding and asset loading. Deliver the one installation path: VocWebConfig.gs, VocWebData.gs, Styles.html, App.html, Index.html, then VocWeb.gs or the inspected router patch, and an additive manifest patch only if needed. Resolve collisions first. Flag explicit or inferred scope changes before paste and guide affected trigger creators through safe editor reauthorization in the correct project. Preserve generated, installed-reported, tested and deployed as distinct statuses.
 
 Add an Apps Script web interface to this existing workflow. Use the attached design as the visual starting point, replacing embedded sample data, fixed dates, and fake role controls with connections to the current Sheet.
 
@@ -32,9 +40,9 @@ The website must be private to my Google Workspace organization. Verify the inte
 Prepare and test the patch against a copy first. Preserve the existing monitoring logic, trigger handlers/schedules, source routes, formulas, and operational records. Inspect prior test results and ask for only missing checks. Audit all callable server functions, including pre-existing functions with side effects, so a viewer cannot bypass the UI.
 
 Deliver:
-1. An actual capability/route summary and actual-to-web schema map.
+1. Design-source evidence, capability/route summary, actual-to-web schema map and design data-contract table.
 2. Complete adapted HTML/GS files and any additive manifest patch.
-3. A changed-file list, installation steps, and rollback.
+3. Conversion checklist results, one ordered file/paste manifest, scope/reauthorization report and rollback.
 4. Tests covering data reconciliation, unavailable tabs, permissions, direct server calls, and monitoring regression.
 5. An evidence-based status for each test: passed, failed, blocked, or not run.
 

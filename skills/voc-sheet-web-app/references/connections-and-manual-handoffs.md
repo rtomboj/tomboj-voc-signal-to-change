@@ -36,6 +36,7 @@ Offer the choice once for the missing group of jobs, then remember it. The user 
 
 | Checkpoint | Ask only if unresolved |
 | --- | --- |
+| Step 0 design source | Can the user provide the source file/export if the supplied link cannot expose inspectable HTML/JS/CSS? Reuse any source already available; backend work waits. |
 | Locate current work | Which candidate workbook/project is the intended working version? |
 | Read/map | Can the user connect a supported read capability or provide the specific missing structure/code? |
 | Define behavior | Which requested actions need writes or roles beyond already stated requirements? |
@@ -43,11 +44,11 @@ Offer the choice once for the missing group of jobs, then remember it. The user 
 | Deploy | Which eligible Workspace domain/audience and execution identity apply, if not inspectable? |
 | Verify | What actual editor/test/access result is missing? |
 
-Continue independent work while a particular fact is missing. An unverified domain blocks organization deployment, not HTML generation. Missing current server source can block a collision-safe integrated patch, but the assistant can still prepare the UI and identify exactly what source is needed next. Mark partial deliverables honestly rather than inventing the missing contract.
+Continue independent work while a particular fact is missing, respecting the design-source and data-contract gates. An unverified domain blocks organization deployment, not HTML generation. Missing current server source can block a collision-safe integrated patch, but the assistant can still prepare the inspected design's UI and identify exactly what source is needed next. Missing design source blocks backend generation. Mark partial deliverables honestly rather than inventing the missing contract.
 
 ## Manual installation is part of the workflow
 
-For each batch, provide:
+Follow the single path in [installation and reauthorization](installation-and-reauthorization.md); use its exact default names/order, resolving collisions once before delivering the batch. For each batch, provide:
 
 - A file manifest: exact project filename, HTML or Script type, new versus changed, purpose, and paste order.
 - Full code for new files; exact replacement blocks or complete inspected-file replacements for changes. Never overwrite unknown source with a generic replacement.
