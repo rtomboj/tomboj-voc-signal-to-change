@@ -13,6 +13,8 @@ An AI-guided system for finding where customers are speaking, establishing a def
 
 The four steps are portable AI-guided workflows, with templates and validation utilities. “Available” means the skill is included; customer-specific automation, live access, and business outcomes still require implementation and verification. See [the full workflow and handoff contract](docs/four-part-workflow.md).
 
+**Optional bonus:** [Turn the existing VOC Sheet into a private web app](skills/voc-sheet-web-app/SKILL.md). Continue from the Sheet, Apps Script, and triggers already produced; inspect and adapt their actual structure rather than rebuilding to a template.
+
 ## Step 1: VOC Benchmark Builder
 
 The [VOC Benchmark Builder](skills/voc-benchmark-builder/SKILL.md) is a portable set of instructions for an AI assistant with current web-research capability.
@@ -105,6 +107,16 @@ It delivers a change register, case-to-change links, decision briefs, measuremen
 
 Provide the complete `skills/voc-systemic-change/` folder. No CRM, product-tool, or employee-system connection is required to prepare a reviewable proposal. Execution requires the relevant authority and environment.
 
+## Bonus: turn the existing Sheet into a private web app
+
+The [VOC Sheet Web App skill](skills/voc-sheet-web-app/SKILL.md) adds an Apps Script web interface to the system the user already has. It inspects current tabs, header rows, aliases, IDs, status values, script files, and trigger/deployment state; then generates adapted HTML and GS files with a documented schema map and additive patches. An optional design export supplies the visual starting point.
+
+The Sheet remains the source of truth. Existing monitoring, formulas, records, and triggers stay in place. Begin with viewing, filters, details, and draft copying; add editing only when its actions are specified and authorized. Require a verified organization-only Workspace deployment, server-side access controls, and live permission tests. If direct Apps Script tools are unavailable, deliver complete files and precise owner-run installation steps.
+
+Use [this test prompt](skills/voc-sheet-web-app/assets/claude-test-prompt.md) with Claude or another capable assistant. Provide the complete bonus skill folder and the existing Sheet/project references or exports. Keep private instance code, IDs, and operational records outside this public repository.
+
+> Use $voc-sheet-web-app to inspect my existing VOC Sheet and Apps Script project, adapt this design to the actual structure, and prepare a private organization-only web app.
+
 ## Try the complete customer-to-company loop
 
 Read the [synthetic walkthrough](examples/closed-loop/walkthrough.md) and its five linked CSV registers. Everything in that example is fictional. Run the local checks from a clone with Python 3.10 or later:
@@ -129,6 +141,7 @@ skills/voc-benchmark-builder/           # Step 1; includes workbook validator
 skills/voc-monitoring-automation/       # Step 2; includes Drive intake example
 skills/voc-customer-follow-up/          # Step 3; references, plan, three CSV templates
 skills/voc-systemic-change/             # Step 4; references, brief, two CSV templates
+skills/voc-sheet-web-app/               # Bonus; adapt current Sheet/script to a private web UI
 examples/closed-loop/                  # Fictional connected walkthrough and registers
 scripts/check_repository.py            # Local links, metadata, template structure
 scripts/validate_loop_registers.py     # CSV relationships and selected evidence gates

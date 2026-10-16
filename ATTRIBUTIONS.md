@@ -6,7 +6,7 @@ This file records the provenance of material in the Tomboj VOC Signal-to-Change 
 
 Unless otherwise identified, the repository's original methodology, skill instructions, schemas, examples, and future source code were created by Rachel Wilde / Tomboj.
 
-The four VOC skills, their templates, synthetic examples, and validation utilities are original work. No third-party code or prose was copied into the new Customer Follow-Up or Systemic Change content. The skill-creator scaffolding was used during development; generated placeholder prose was replaced, and its helper scripts are not distributed here.
+The four core VOC skills, optional Sheet Web App bonus, templates, synthetic examples, and validation utilities are original work. No third-party code or prose was copied into the new Customer Follow-Up, Systemic Change, or Sheet Web App content. The skill-creator scaffolding was used during development; generated placeholder prose was replaced, and its helper scripts are not distributed here.
 
 ## Prior art consulted
 
@@ -27,6 +27,8 @@ The four VOC skills, their templates, synthetic examples, and validation utiliti
 | Apps Script and Workspace repositories listed in the [field guide](docs/apps-script-workspace-field-guide.md) | Examples, ecosystem status, and new Workspace/MCP tooling | Descriptions and commit dates checked; linked as prior art only; no code or repository prose copied; licenses must be checked before reuse |
 
 The [Benchmark Builder attribution record](skills/voc-benchmark-builder/ATTRIBUTIONS.md), [Monitoring Automation attribution record](skills/voc-monitoring-automation/ATTRIBUTIONS.md), [Customer Follow-Up attribution record](skills/voc-customer-follow-up/ATTRIBUTIONS.md), and [Systemic Change attribution record](skills/voc-systemic-change/ATTRIBUTIONS.md) document the sources consulted for each skill. The new closed-loop content draws on Bain's inner loop, outer loop, and huddle briefs and Qualtrics XM Institute's 2023 closed-loop guide. These sources were consulted only; the operational templates and gates are original design.
+
+The [Sheet Web App attribution record](skills/voc-sheet-web-app/ATTRIBUTIONS.md) lists official Google documentation consulted for adapting existing projects and verifying private deployment. Private user design exports, workbook data, and instance scripts are not distributed with the reusable workflow.
 
 ## Required attribution for this project
 

@@ -11,6 +11,8 @@ The repository provides portable AI-guided skills, templates, and validation uti
 
 Step 3 contains three research workstreams: immediate response mechanics, training/coaching, and internal action planning with customer report-back. Step 4 handles larger product, policy, process, team, department, and organizational changes. These workstreams do not replace Steps 1 and 2.
 
+An optional [Sheet Web App bonus](../skills/voc-sheet-web-app/SKILL.md) follows the four parts. It adds an interface to their current outputs rather than introducing another business stage. The assistant inspects the actual Google Sheet and Apps Script, maps their structure, and adds a private organization-only web layer. The earlier contracts guide meaning; the existing system determines its concrete mapping. A design export is optional. See [the test prompt](../skills/voc-sheet-web-app/assets/claude-test-prompt.md).
+
 ## Preserve the joins and the evidence
 
 Keep Source ID + Record ID as a pair across stages; include the original evidence reference. Never use a display name or profile URL as a unique customer/review identifier. Case IDs identify customer experiences. Change IDs identify company improvements. The Change_Case_Links table provides the many-to-many relationship without collapsing separate customers into one case.
