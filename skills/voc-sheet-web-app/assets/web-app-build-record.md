@@ -9,6 +9,19 @@
 - Trigger handlers / cadence / owners / visibility limits:
 - Existing tests and actual results:
 
+| Job | Observed capability and target permission | Selected route: direct / connect / manual | Missing evidence / next step |
+| --- | --- | --- | --- |
+| Drive discovery/content | | | |
+| Sheet reads | | | |
+| Sheet edits | | | |
+| Apps Script source reads | | | |
+| Apps Script edits | | | |
+| Trigger inventory | | | |
+| Deployment/versioning | | | |
+| Browser and account access tests | | | |
+
+## Workbook mapping
+
 | Logical object | Actual workbook/tab | Header row | Key and relationships | Aliases / status mapping | Data class | Read / write | Gaps |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | | | | | | | | |
@@ -52,3 +65,12 @@
 - Known limitations / not-run checks:
 - Previous code/deployment and rollback steps:
 - Owner accepting maintenance:
+
+## Interactive checkpoint
+
+- Last completed step and evidence:
+- Files generated / supplied / installed-reported / installed-verified:
+- User-run function and expected output:
+- Returned result, diagnosis, and corrected file/version:
+- Connection choices already made (do not ask again):
+- Next unresolved step / targeted question / work that can continue:

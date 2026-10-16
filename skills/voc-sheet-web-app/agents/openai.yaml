@@ -1,4 +1,4 @@
 interface:
   display_name: "VOC Sheet Web App"
-  short_description: "Adapt an existing VOC Sheet into a private web app"
-  default_prompt: "Use $voc-sheet-web-app to inspect my existing VOC Sheet and Apps Script, then add an organization-only web interface adapted to the current structure."
+  short_description: "Build a private VOC app with connected or manual routes"
+  default_prompt: "Use $voc-sheet-web-app to inspect my existing VOC system, determine connected or manual routes, and build a private web interface adapted to my Google Sheet."

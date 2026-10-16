@@ -15,7 +15,7 @@ For this version, monitor public external feedback through Google Workspace. Int
 
 ## Begin with the two Part 1 files
 
-Ask first:
+First reuse earlier conversation context, supplied files, links, and completed setup. Determine which required inputs are already available. Discover the current session's supported Drive/Sheet capabilities without assuming the user has a connection because they use Claude, ChatGPT, Kimi, or another assistant. Ask the following only when file availability is unresolved:
 
 > Do you have both Part 1 files for the company you want to monitor: the Markdown benchmark and the Excel workbook?
 
@@ -23,10 +23,14 @@ If not, point the user to the [VOC Benchmark Builder](https://github.com/rtomboj
 
 If they have both files:
 
+If a working Google Sheet and Apps Script already exist, inspect them and their current test state before repeating any setup. Do not reconvert the workbook, reinstall working triggers, or request a new folder merely because the user resumes the workflow.
+
 1. Ask them to place them in a Google Drive folder named VOC_Automation.
 2. Keep both Part 1 files as the originals in that folder. Create a Google Sheets copy of the Excel workbook with Drive's manual flow: open the workbook with **Open with → Google Sheets**, then choose **File → Save as Google Sheets**. Never overwrite the original Excel file. The optional [Drive intake helper](examples/drive-intake/README.md) can convert several workbooks at once, but it is a separate Apps Script project with broad Drive access; offer it only when the user has several workbooks or repeats this step.
 3. Check whether an authorized Google Drive or Sheets connection can read the files. If it can, ask for the Drive URLs of the Markdown file and Google Sheet and parse the file IDs from the links. If access is unavailable or not authorized, ask the user to upload both files for assessment instead; no URLs are needed on that route.
 4. Ask before making changes to the user's Sheet. Generate setup code and manual instructions when the Sheet itself cannot be edited directly. Ask for the Sheet URL later only if a standalone script or direct edit needs it; a script bound to the Sheet does not.
+
+For each missing capability, offer a supported connection/authorization route or manual files/copy-paste. Drive access does not establish Sheet editing or Apps Script source/edit/deployment access. Remember the user's choice; live Sheet reads with manual script installation are valid. If a host exposes no supported integration, use the manual route without inventing connector instructions. Deliver complete files and owner-run tests, inspect the returned results, correct errors, and continue from the last completed checkpoint. Do not treat code saved in Drive as installed Apps Script or user acknowledgment as a passed test.
 
 Do not publish customer-specific sheet links, IDs, review text, credentials, or generated code to this public repository.
 

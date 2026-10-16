@@ -15,6 +15,14 @@ The four steps are portable AI-guided workflows, with templates and validation u
 
 **Optional bonus:** [Turn the existing VOC Sheet into a private web app](skills/voc-sheet-web-app/SKILL.md). Continue from the Sheet, Apps Script, and triggers already produced; inspect and adapt their actual structure rather than rebuilding to a template.
 
+## Connections and manual routes
+
+Use the same workflow in Claude, ChatGPT, Kimi, or another capable assistant. The Google stack is assumed for monitoring and the web bonus; a particular provider's connections are not. At each stage, inspect the current session's tools and the existing outputs, use authorized connections where available, and ask only for the missing information needed next.
+
+Drive file access, Sheet reads/edits, Apps Script source/edits, trigger inventory, and deployment are distinct capabilities. Offer a supported connection/authorization route or a manual file/export/copy-paste route for missing jobs. A common setup reads the Google Sheet directly while the user pastes generated HTML and GS files into Apps Script. Return test output to the assistant so it can correct errors and continue from that checkpoint.
+
+Step 1 remains public-source and file-based; it does not require a Google connection. See the bonus's [connection and manual-handoff protocol](skills/voc-sheet-web-app/references/connections-and-manual-handoffs.md) for the detailed capability map.
+
 ## Step 1: VOC Benchmark Builder
 
 The [VOC Benchmark Builder](skills/voc-benchmark-builder/SKILL.md) is a portable set of instructions for an AI assistant with current web-research capability.
@@ -113,7 +121,7 @@ The [VOC Sheet Web App skill](skills/voc-sheet-web-app/SKILL.md) adds an Apps Sc
 
 The Sheet remains the source of truth. Existing monitoring, formulas, records, and triggers stay in place. Begin with viewing, filters, details, and draft copying; add editing only when its actions are specified and authorized. Require a verified organization-only Workspace deployment, server-side access controls, and live permission tests. If direct Apps Script tools are unavailable, deliver complete files and precise owner-run installation steps.
 
-Use [this test prompt](skills/voc-sheet-web-app/assets/claude-test-prompt.md) with Claude or another capable assistant. Provide the complete bonus skill folder and the existing Sheet/project references or exports. Keep private instance code, IDs, and operational records outside this public repository.
+Use [this provider-neutral starting prompt](skills/voc-sheet-web-app/assets/web-app-test-prompt.md) in Claude, ChatGPT, Kimi, or another capable assistant. Provide the complete bonus skill folder; reuse existing conversation context and references. The assistant determines the available connections, offers supported connection or manual routes, generates complete files, and continues interactively from returned installation/test results. Keep private instance code, IDs, and operational records outside this public repository.
 
 > Use $voc-sheet-web-app to inspect my existing VOC Sheet and Apps Script project, adapt this design to the actual structure, and prepare a private organization-only web app.
 
