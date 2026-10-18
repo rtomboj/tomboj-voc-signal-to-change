@@ -13,11 +13,15 @@ Use this reference after the required Step 0 design-source intake and before wri
 | Design | Screen list, routes, data adapters, assumed fields, demo data | Visual direction and supported behavior |
 | Deployment | Current versions, access policy, execution identity, maintainer | Existing working deployments until a replacement is tested |
 
+Before declaring a Step 3/4 register absent, search authorized Drive file titles as well as workbook tabs for `Follow_Up_Cases`, `Case_Actions`, `Customer_Updates`, `Change_Register`, and `Change_Case_Links`. Separate spreadsheets may contain both REAL handoffs and SYNTHETIC scenarios. If discovery is unavailable or inconclusive, ask for the file/export; do not conclude the register does not exist. Record each source and reconcile duplicate keys before the agreed import.
+
+Read company name and brand mark from the actual `Company_Profile` fields, and review audience/scope from `Review_Data` and the Step 1 context. Map observed fields rather than adding hand-edited brand config. Do not publish instance values.
+
 Use existing read helpers only after checking their assumptions. A helper that assumes header row 4 for every tab is unsuitable when newer operational tables begin on row 1. Detect required headers in a bounded range such as the first 20 rows, show any ambiguity, and record the selected row per table.
 
 Build a mapping with: logical object, workbook reference, exact tab, header row, stable key, selected fields, aliases, data class, read/write choice, validation result. Store private workbook IDs server-side. Resolve duplicate IDs, duplicate headers, ambiguous aliases, or inconsistent evidence classes before using them for joins or conclusions.
 
-Distinguish a missing table from an empty existing table and an inaccessible existing table. Keep unsupported screens in a clear unavailable state; do not create empty production registers to make the UI look complete. Add a new table only if needed for a user-approved function and document it as an additive change.
+Distinguish a missing table from an empty existing table and an inaccessible existing table. Keep unsupported screens in a clear unavailable state; do not create empty production registers to make the UI look complete. Use [workbook setup and team use](workbook-setup-and-team-use.md) to add the agreed missing registers, Team and Activity_Log; distinguish newly created empty tabs from imported operational data. Existing header rows may be 1 or 4; detect and record each separately.
 
 ## Adapt meanings, not only labels
 

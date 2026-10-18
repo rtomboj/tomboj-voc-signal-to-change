@@ -1,49 +1,31 @@
 # Start the bonus in Claude, ChatGPT, Kimi, or another assistant
 
-Provide the complete skill folder or current repository. Add existing references or files only if they are not already in the conversation. The assistant discovers the session's actual connections and asks for missing information progressively; no preflight questionnaire is required.
+Provide the complete skill folder or current repository. Add existing references or files only if they are not already in the conversation. The assistant discovers the session's actual connections and asks the three early design/account/data-class questions once, then asks only for missing information that changes the next step.
 
 When testing an unmerged update, supply its branch-specific SKILL.md URL and read all linked references from that same branch/revision. Do not silently substitute main. Resume earlier work by refreshing the skill and current source/schema, not by restarting the whole VOC workflow.
 
 ---
 
-Use the VOC Sheet Web App bonus workflow from:
-https://github.com/rtomboj/tomboj-voc-signal-to-change
+```text
+Follow the VOC Sheet Web App bonus instructions:
+https://raw.githubusercontent.com/rtomboj/tomboj-voc-signal-to-change/main/skills/voc-sheet-web-app/SKILL.md
+Read it completely and follow its references.
 
-Read skills/voc-sheet-web-app/SKILL.md completely and follow its references.
+I have completed Steps 1–4 for my company. Continue from my existing Google Sheet and Apps Script; do not restart earlier steps.
 
-Continue from the VOC system already created in Google Drive, Google Sheets, and Apps Script. Reuse the earlier outputs and decisions in this conversation. Inspect which stages are complete and which still need work; do not restart them.
+Before building, ask me (once):
+1. Do I have a design (file, link, or a Claude Design project — I can export it as a zip)? If not, help me pick a minimal one.
+2. Which Google account will run this: Google Workspace (needed for team use) or a personal account ("Only myself" pilot)?
+3. REAL data only, or a REAL/SYNTHETIC toggle?
 
-Existing working Google Sheet: [link or already available reference]
-Existing Apps Script project: [link or access through the Sheet]
-Required design source file/link: [already supplied source, or attach/link HTML/JS/CSS/export]
+Keep it as simple as possible: one workbook (the one my Step 2 script is attached to). If my Step 3–4 registers are in
+separate files, find them and use the setup script to add the tabs and import REAL rows. Add Team and Activity_Log tabs.
 
-Step 0: inspect that design source before backend work. Reuse the source already available; if the link exposes only a rendered view, ask for the source export. If I have no design, help create/select a minimal one and record it first. Preserve its visual intent.
+Map my actual tabs and the design's fields before writing server code. Give me complete files, the exact paste order,
+the one function to run, and what I should see. Keep a build record and a learning log as we go,
+and continue from the results, screenshots or PDFs I send back.
 
-First determine what this session can actually access: Drive files, Sheet structure/data, Sheet edits, Apps Script source/edits, triggers, and deployments are separate capabilities. Verify the intended targets where possible. Do not assume a capability because I am using a particular AI provider.
+Choose application access mode open or team with me once. Start read-only; after setup and read tests, add the standard five edit actions with confirmation, reasons, stale checks and Activity_Log. Never send customer messages. For anyone beyond the owner, use a standalone web project and keep the monitor in the bound project.
+```
 
-Where access is missing, offer a supported connection/authorization route or a manual export/paste route. Remember my choice. Reading my Sheets directly while I copy/paste the generated Apps Script files is a supported route. Do not require me to connect an unsupported tool.
-
-Inspect the current Sheet and available script source. Map the actual tabs, header rows, columns, IDs, statuses, and relationships. Adapt the web app to them. Ask only for information you cannot inspect that changes the next step; derive the remaining setup questions from what you find.
-
-Before backend code, output the design data-contract table: every expected field, derived metric, join, queue and action compared with actual tabs/headers/types/statuses and formulas. Resolve ambiguities or mark the feature unavailable. Default business rules, deadlines, joins, data-class separation, totals and authorization to GS; keep rendering and display interactions in the browser. Do not duplicate business formulas.
-
-If you cannot edit Apps Script, generate complete HTML and GS files with exact names/types, paste order, precise patches to existing code, configuration steps, and the function I should run. Review the result I return, fix errors, and continue interactively until the relevant tests pass or a specific blocker remains.
-
-Use the skill's bundle conversion checklist, including fonts/CDNs, fixed clock, demo payloads, fake controls, export scaffolding and asset loading. Deliver the one installation path: VocWebConfig.gs, VocWebData.gs, Styles.html, App.html, Index.html, then VocWeb.gs or the inspected router patch, and an additive manifest patch only if needed. Resolve collisions first. Flag explicit or inferred scope changes before paste and guide affected trigger creators through safe editor reauthorization in the correct project. Preserve generated, installed-reported, tested and deployed as distinct statuses.
-
-Add an Apps Script web interface to this existing workflow. Use the attached design as the visual starting point, replacing embedded sample data, fixed dates, and fake role controls with connections to the current Sheet.
-
-For the first test, support viewing, filtering, details, source health, follow-up and change status, due updates, and copying drafts where the data supports those views. Keep unsupported screens clearly unavailable. Propose any editing actions separately; do not send customer messages or change triggers from the web interface.
-
-The website must be private to my Google Workspace organization. Verify the intended deploying account/domain, execution identity, and organization-only deployment option. Do not publish it for "any Google account" or anonymous access. If my account cannot provide domain-only access, explain the specific blocker and keep testing private.
-
-Prepare and test the patch against a copy first. Preserve the existing monitoring logic, trigger handlers/schedules, source routes, formulas, and operational records. Inspect prior test results and ask for only missing checks. Audit all callable server functions, including pre-existing functions with side effects, so a viewer cannot bypass the UI.
-
-Deliver:
-1. Design-source evidence, capability/route summary, actual-to-web schema map and design data-contract table.
-2. Complete adapted HTML/GS files and any additive manifest patch.
-3. Conversion checklist results, one ordered file/paste manifest, scope/reauthorization report and rollback.
-4. Tests covering data reconciliation, unavailable tabs, permissions, direct server calls, and monitoring regression.
-5. An evidence-based status for each test: passed, failed, blocked, or not run.
-
-Begin with available context and connections. Keep a build record and continue from each returned result. Resolve missing choices at the relevant checkpoint. Do not claim an edit, deployment, or live test passed without evidence.
+Follow the skill's design contract, conversion checklist, ordered installation and reauthorization path. Record generated, installed-reported, tested and deployed separately; continue from returned editor results and screenshots.

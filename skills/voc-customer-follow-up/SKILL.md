@@ -44,7 +44,7 @@ Sending a message, posting a public reply, or scheduling a call requires authori
 
 ## 3. Record actions and report back
 
-Read [registers and closure](references/registers-and-closure.md) and copy the header-only CSVs in `assets/` into the user's chosen working file. Preserve existing Sheets/CRM field names by mapping them; do not overwrite the Step 1 baseline or Step 2 dashboard. Use a private working copy when operational details are introduced. A CRM can remain the source of truth, with links and a minimal status extract in the VOC workbook.
+Read [registers and closure](references/registers-and-closure.md) and copy the header-only CSVs in `assets/` into the user's chosen working file. Preserve existing Sheets/CRM field names by mapping them; do not overwrite the Step 1 baseline or Step 2 dashboard. When a Step 1–2 working workbook exists, save `Follow_Up_Cases`, `Case_Actions`, and `Customer_Updates` as tabs in it rather than separate files, preserving the `Data Class` column (add it after template fields if absent). Keep REAL and SYNTHETIC rows distinct. Use a private working copy when operational details are introduced. A CRM can remain the source of truth, with links and a minimal status extract in the VOC workbook.
 
 For each commitment, name an action owner, due time, intended outcome, authority/approval, and evidence of completion. The customer communication owner remains responsible while other teams investigate. Record attempted contact separately from a response, and customer agreement separately from an agent's interpretation.
 

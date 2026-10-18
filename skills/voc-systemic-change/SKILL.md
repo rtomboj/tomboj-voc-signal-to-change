@@ -27,7 +27,7 @@ Name one accountable change owner and the decision-maker who can authorize resou
 
 ## 3. Plan and deliver the change
 
-Copy [the change-brief template](assets/change-brief.md) and [Change_Register.csv](assets/Change_Register.csv). Use [registers and verification](references/registers-and-verification.md) for field meanings and lifecycle gates. Keep one authoritative change record; link to an existing product backlog or project system rather than creating a competing editable plan.
+Copy [the change-brief template](assets/change-brief.md) and [Change_Register.csv](assets/Change_Register.csv). Use [registers and verification](references/registers-and-verification.md) for field meanings and lifecycle gates. When a Step 1–2 working workbook exists, save `Change_Register` and `Change_Case_Links` as tabs in it rather than separate files, preserving the `Data Class` column (add it after template fields if absent). Keep REAL and SYNTHETIC rows distinct. Keep one authoritative change record; link to an existing product backlog or project system rather than creating a competing editable plan.
 
 Before delivery, specify the problem, scope, root-cause confidence, intended result, milestones, dependencies, resources, pilot, baseline, measurement window, success criteria, adverse-effect checks, and rollback/stop conditions. Document customer and employee communication owners and next update dates. For knowledge or behavior changes, include practice, adoption support, and an observable check of the new behavior.
 

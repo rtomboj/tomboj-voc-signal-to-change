@@ -50,18 +50,26 @@ Paste this in the conversation with your current Google Drive/Sheet context:
 ```text
 Follow the VOC Sheet Web App bonus instructions:
 https://raw.githubusercontent.com/rtomboj/tomboj-voc-signal-to-change/main/skills/voc-sheet-web-app/SKILL.md
+Read it completely and follow its references.
 
-Continue from my existing VOC Google Sheet and Apps Script.
-Inspect my design source file/link first; reuse it if already supplied.
-Before backend code, map its fields and calculations to my actual Sheet.
-Determine the capabilities available in this session. Offer a supported
-connection or manual route for anything missing. Adapt the HTML/GS
-files to the actual Sheet and script. Give me installation steps,
-review the results I return, and continue through testing.
-The intended deployment is private to my Workspace organization.
+I have completed Steps 1–4 for my company. Continue from my existing Google Sheet and Apps Script; do not restart earlier steps.
+
+Before building, ask me (once):
+1. Do I have a design (file, link, or a Claude Design project — I can export it as a zip)? If not, help me pick a minimal one.
+2. Which Google account will run this: Google Workspace (needed for team use) or a personal account ("Only myself" pilot)?
+3. REAL data only, or a REAL/SYNTHETIC toggle?
+
+Keep it as simple as possible: one workbook (the one my Step 2 script is attached to). If my Step 3–4 registers are in
+separate files, find them and use the setup script to add the tabs and import REAL rows. Add Team and Activity_Log tabs.
+
+Map my actual tabs and the design's fields before writing server code. Give me complete files, the exact paste order,
+the one function to run, and what I should see. Keep a build record and a learning log as we go,
+and continue from the results, screenshots or PDFs I send back.
+
+Choose application access mode open or team with me once. Start read-only; after setup and read tests, add the standard five edit actions with confirmation, reasons, stale checks and Activity_Log. Never send customer messages. For anyone beyond the owner, use a standalone web project and keep the monitor in the bound project.
 ```
 
-The [full bonus prompt](../skills/voc-sheet-web-app/assets/web-app-test-prompt.md) includes the required design-source intake, conversion checklist, exact file/paste order and testing details. Supply a design source file/link; if none exists, the assistant helps establish one before backend work. Organization-only deployment needs an eligible Workspace account/domain and verified deployment settings; if unavailable, the assistant can still prepare files and explain the deployment blocker.
+The [full bonus prompt](../skills/voc-sheet-web-app/assets/web-app-test-prompt.md) includes the required design-source intake, conversion checklist, exact file/paste order and testing details. Supply a design source file/link; if none exists, the assistant helps establish one before backend work. Team deployment needs an eligible Workspace account/domain and verified settings. A personal account starts with an Only myself pilot; a wider open pilot is a separate explicit audience choice with unverified entered names. The app uses one workbook, adds Team and Activity_Log through setup, and keeps non-owner web access in a standalone project.
 
 ## What the interaction looks like
 
