@@ -16,57 +16,70 @@
   }
   const nowLocal = () => toLocal(new Date());
 
-  const opts = (list, cur, blank) => (blank ? `<option value="">${esc(blank)}</option>` : '') + list.map(v => `<option${v === cur ? ' selected' : ''}>${esc(v)}</option>`).join('');
+  const opts = (list, cur, blank, blocked = {}) => (blank ? `<option value="" disabled${!cur ? ' selected' : ''}>${esc(blank)}</option>` : '') + list.map(v => `<option value="${esc(v)}"${v === cur ? ' selected' : ''}${blocked[v] ? ` disabled title="${esc(blocked[v])}"` : ''}>${esc(v)}${blocked[v] ? ` — ${esc(blocked[v])}` : ''}</option>`).join('');
   const field = (label, html, hint) => `<label class="ef"><span class="ef-k">${label}</span>${html}${hint ? `<span class="small faint">${hint}</span>` : ''}</label>`;
   const init = v => ` data-initial="${esc(v == null ? '' : v)}"`;
+  const textInput = (name, value, extra = '') => `<input name="${name}"${init(value)} value="${esc(value || '')}"${extra}>`;
+  const acceptance = (r, label) => `<label class="ef ef-check"><input type="checkbox" name="accepted"${init(!!r['Accepted At'])}${r['Accepted At'] ? ' checked' : ''}> ${label}</label>`;
   const peopleList = () => `<datalist id="s2c-people">${(window.Data.meta().people || []).map(p => `<option value="${esc(p.name)}">${esc([p.email, p.source === 'directory' ? 'directory' : p.source === 'team' ? 'Team tab' : 'used before'].filter(Boolean).join(' · '))}</option>`).join('')}</datalist>`;
   const V = () => window.Data.meta().vocab || {};
 
   const FORMS = {
     decideChange(id, preset, c) {
       const x = c.D.changes(c.db).find(k => k.id === id); if (!x || !x.r) return null;
-      const others = c.D.changes(c.db).filter(k => k.id !== id).map(k => k.id);
       const r = x.r;
+      const mergeReason = 'Needs an obligation-transfer workflow (not in this reference)';
       return { expect: r._v, title: `Record a decision · ${id}`,
         intro: `<p class="small"><b>${esc(r.Title || '')}</b></p><p class="small muted">Current state: ${U.lifecycle(x.state)}${r['Recommended Decision'] ? ` · Recommended: ${esc(r['Recommended Decision'])}` : ''}</p>`,
-        html: field('Decision', `<select name="decision" required>${opts(V().decision || [], preset || r.Decision, 'Choose…')}</select>`, 'Accept → Accepted · Investigate → Investigating · Defer → Deferred · Decline → Declined · Merge → Merged · Stop → Stopped · Reopen → Reopened') +
-          field('Reason for the decision', `<textarea name="rationale" rows="3" required>${esc(r['Decision Rationale'] || '')}</textarea>`, 'Shown on the change and in the activity log.') +
-          field('Merge into (only for Merge)', `<select name="mergeInto">${opts(others, r['Merged Into'], '—')}</select>`) };
+        html: field('Decision', `<select name="decision" required${init(r.Decision)}>${opts(V().decision || [], preset || r.Decision, 'Choose…', { Merge: mergeReason })}</select>`, `Merge disabled: ${mergeReason}`) +
+          field('Reason for the decision', `<textarea name="rationale" rows="3" required${init(r['Decision Rationale'])}>${esc(r['Decision Rationale'] || '')}</textarea>`, 'Shown on the change and in the activity log.') +
+          field('Owner (required for Accept)', textInput('owner', r.Owner, ' list="s2c-people" autocomplete="off"') + peopleList()) +
+          acceptance(r, 'Owner has accepted (required for Accept)') +
+          field('Report Back Disposition (required for Defer, Decline and Stop)', textInput('reportBackDisposition', r['Report Back Disposition']), 'Describe who will receive the decision, how, or why report-back is ended; the register reference defines no fixed value list.') +
+          field(`Review Due At (${esc(TZ)}; for Defer)`, textInput('reviewDueAt', toLocal(r['Review Due At']), ' type="datetime-local"'), 'Defer needs a review due time or a revisit condition.') +
+          field('Revisit Condition (for Defer)', textInput('revisitCondition', r['Revisit Condition'])) };
     },
     setCaseOwner(id, preset, c) {
       const r = (c.db.Follow_Up_Cases || []).find(k => k['Case ID'] === id); if (!r) return null;
       const cur = c.D.isUnknown(r.Owner) ? '' : r.Owner;
       return { expect: r._v, title: `Case owner · ${id}`,
         intro: r['Proposed Owner Role'] ? `<p class="small muted">Proposed role: ${esc(r['Proposed Owner Role'])}</p>` : '',
-        html: field('Owner', `<input name="owner" list="s2c-people" required autocomplete="off" value="${esc(cur)}" placeholder="Type a name or pick from the list">${peopleList()}`, 'Suggestions come from your organisation directory (Workspace), the Team tab, and names already used. You can type any name.') +
-          `<label class="ef ef-check"><input type="checkbox" name="accepted"${r['Accepted At'] ? ' checked' : ''}> The owner has accepted this case</label>` };
+        html: field('Owner', `${textInput('owner', cur, ' list="s2c-people" required autocomplete="off" placeholder="Type a name or pick from the list"')}${peopleList()}`, 'Suggestions come from your organisation directory (Workspace), the Team tab, and names already used. You can type any name.') +
+          acceptance(r, 'The owner has accepted this case') };
     },
     setCaseStatus(id, preset, c) {
       const r = (c.db.Follow_Up_Cases || []).find(k => k['Case ID'] === id); if (!r) return null; const v = V();
+      const facts = (window.Data.meta().caseEditFacts || {})[id] || {};
+      const deliveredReason = facts.canDeliver === true ? '' : (facts.deliveryBlockedReason || 'Done-action evidence has not been verified by the server');
+      const closureReason = 'Closure needs a commitment/transfer review (not in this reference)';
       return { expect: r._v, title: `Case status · ${id}`,
         intro: '<p class="small muted">Four separate fields: a closed case is not a resolved customer.</p>',
-        html: `<div class="ef-grid">${field('Engagement', `<select name="engagement"${init(r.Engagement)}>${opts(v.engagement || [], r.Engagement, '—')}</select>`)}${field('Delivery', `<select name="delivery"${init(r.Delivery)}>${opts(v.delivery || [], r.Delivery, '—')}</select>`)}${field('Customer outcome', `<select name="outcome"${init(r['Customer Outcome'])}>${opts(v.outcome || [], r['Customer Outcome'], '—')}</select>`, '"Resolved confirmed" needs the customer\'s confirmation.')}${field('Administrative state', `<select name="admin"${init(r['Administrative State'])}>${opts(v.admin || [], r['Administrative State'], '—')}</select>`)}</div>` +
+        html: `<div class="ef-grid">${field('Engagement', `<select name="engagement"${init(r.Engagement)}>${opts(v.engagement || [], r.Engagement, '—')}</select>`)}${field('Delivery', `<select name="delivery"${init(r.Delivery)}>${opts(v.delivery || [], r.Delivery, '—', deliveredReason ? { Delivered: deliveredReason } : {})}</select>`, deliveredReason ? `Delivered disabled: ${esc(deliveredReason)}` : 'Delivered is available: the server verified a Done action with completion evidence.')}${field('Customer outcome', `<select name="outcome"${init(r['Customer Outcome'])}>${opts(v.outcome || [], r['Customer Outcome'], '—')}</select>`, '"Resolved confirmed" needs the customer\'s confirmation.')}${field('Administrative state', `<select name="admin"${init(r['Administrative State'])}>${opts(v.admin || [], r['Administrative State'], '—', { Closed: closureReason })}</select>`, closureReason)}</div>` +
+          field('Contact Reference (required for Contacted or Customer replied)', textInput('contactReference', r['Contact Reference'])) +
+          field('Plan Agreement Evidence (required for Plan agreed)', textInput('planAgreementEvidence', r['Plan Agreement Evidence'])) +
+          field('Outcome Evidence (required for Resolved confirmed)', textInput('outcomeEvidence', r['Outcome Evidence'])) +
           field(`Next update due (${esc(TZ)})`, `<input type="datetime-local" name="nextUpdateDueAt"${init(toLocal(r['Next Update Due At']))} value="${toLocal(r['Next Update Due At'])}">`) +
-          field('Closure reason (needed to close)', `<input name="closureReason" value="${esc(r['Closure Reason'] || '')}"${init(r['Closure Reason'] || '')}>`) };
+          '<p class="small faint">Closure review is outside this reference; no closure fields are writable here.</p>' };
     },
     setActionStatus(id, preset, c) {
       const r = (c.db.Case_Actions || []).find(k => k['Action ID'] === id); if (!r) return null;
       return { expect: r._v, title: `Case action · ${r['Case ID']}`,
         intro: `<p class="small"><b>${esc(r.Action || '')}</b></p><p class="small muted">Current status: ${U.status(r.Status)}</p>`,
-        html: field('New status', `<select name="status" required>${opts(V().action || [], preset || r.Status)}</select>`) +
+        html: field('New status', `<select name="status" required${init(r.Status)}>${opts(V().action || [], preset || r.Status)}</select>`) +
           field('Owner (optional)', `<input name="owner" list="s2c-people" autocomplete="off" value="${esc(c.D.isUnknown(r.Owner) ? '' : r.Owner)}"${init(c.D.isUnknown(r.Owner) ? '' : r.Owner)}>${peopleList()}`) +
-          field('Approval basis (for Approved)', `<input name="approvalBasis" placeholder="Who approved it, and where">`) +
-          field('Completion evidence (needed for Done)', `<input name="evidence" value="${esc(r['Completion Evidence'] || '')}">`) +
-          field('Reason (needed for Cancelled)', `<input name="reason">`) };
+          field('Approval basis (required for Approved, In progress and Done)', textInput('approvalBasis', r['Approval Basis'], ' placeholder="Who approved it, and where"')) +
+          field('Completion evidence (needed for Done)', textInput('evidence', r['Completion Evidence'])) +
+          field('Reason (needed for Cancelled)', textInput('reason', r['Disposition Reason'])) };
     },
     logUpdate(id, preset, c) {
       const r = (c.db.Customer_Updates || []).find(k => k['Update ID'] === id); if (!r) return null;
       return { expect: r._v, title: `Log an update · ${id}`,
         intro: `<div class="banner info" style="margin:0">${U.icon('info')}<div>Record something that already happened outside this app. <b>Nothing is sent from here.</b></div></div><p class="small muted">${esc(r.Channel || '')} · ${esc(r['Content Reference'] || '')}</p>`,
-        html: field('What happened', `<select name="status" required>${opts(V().update || [], preset || 'Sent')}</select>`) +
-          field(`When (${esc(TZ)})`, `<input type="datetime-local" name="occurredAt" value="${nowLocal()}">`) +
-          field('Delivery evidence (needed for Sent)', `<input name="evidence" placeholder="Link, ticket or message reference">`) +
-          field('Reason or detail (for the other outcomes)', `<input name="reason">`) };
+        html: field('What happened', `<select name="status" required${init(r.Status)}>${opts(V().update || [], preset || (V().update || []).includes(r.Status) && r.Status || 'Sent')}</select>`) +
+          field(`When (${esc(TZ)})`, textInput('occurredAt', toLocal(r['Occurred At']) || nowLocal(), ' type="datetime-local"')) +
+          field('Content Reference (required for Sent)', textInput('contentReference', r['Content Reference'])) +
+          field('Delivery or attempt evidence (required for Sent, Attempted and Failed)', textInput('evidence', r['Delivery Evidence'], ' placeholder="Link, ticket or message reference"')) +
+          field('Reason or detail (required for Attempted, Failed, Not possible and Cancelled)', textInput('reason', r['Disposition Reason'])) };
     }
   };
 
@@ -86,14 +99,23 @@
     </form>`);
   }
 
+  // A different owner needs a new, explicit acceptance rather than the previous owner's checked box.
+  document.addEventListener('input', e => {
+    if (e.target.name !== 'owner') return;
+    const form = e.target.closest && e.target.closest('form.eform'); if (!form) return;
+    const accepted = form.querySelector('[name=accepted]');
+    if (accepted) { accepted.checked = false; accepted.setAttribute('data-initial', 'false'); }
+  });
+
   document.addEventListener('submit', e => {
     const form = e.target.closest && e.target.closest('form.eform'); if (!form) return;
     e.preventDefault();
     const fields = {}; let note = '', actorName = '';
     form.querySelectorAll('input[name],select[name],textarea[name]').forEach(el => {
+      if (el.disabled) return;
       if (el.name === 'note') { note = el.value.trim(); return; }
       if (el.name === 'actorName') { actorName = el.value.trim(); return; }
-      if (el.type === 'checkbox') { fields[el.name] = el.checked; return; }
+      if (el.type === 'checkbox') { if (!el.hasAttribute('data-initial') || String(el.checked) !== el.getAttribute('data-initial')) fields[el.name] = el.checked; return; }
       if (el.hasAttribute('data-initial') && el.value === el.getAttribute('data-initial')) return;   // unchanged
       fields[el.name] = el.value;
     });
