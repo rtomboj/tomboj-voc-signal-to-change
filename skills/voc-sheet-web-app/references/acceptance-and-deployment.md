@@ -37,6 +37,13 @@ Do not create installable triggers on the test copy automatically. Keep its web 
 | Open/refresh website | No emails, monitoring runs, trigger installation, or data changes |
 | Existing automation | Original handler names, cadence, configuration, and behavior retained |
 | Editing, if authorized | Stable-ID write, transition validation, stale-edit rejection, lock, audit, no unintended formula execution |
+| Setup and import idempotency | Second setup/import produces no new tabs, cells, rows, or audit entries; existing row-1 and row-4 layouts stay intact; only selected data class imports |
+| Internal navigation regression | First reproduce the reported blank-page failure on the shipped old build; then click every internal link on the fix in a cross-origin sandboxed iframe. A file:// page or already-fixed fixture is insufficient |
+| RPC transport regression | Run a null-dropping object mock and a Date-rejecting transport; JSON envelope preserves null, zero, empty and missing-field handling without undefined labels |
+| Long operational text | Privately inspect actual rows at 390 px and 1440 px; no mid-word breaks/overflow, short status chips stay whole, free-text chips wrap at spaces and tables scroll inside cards; public fixtures stay synthetic |
+| Edit flow end to end | Real server code behind a google.script.run stand-in exercises all five forms, confirmation/reason, save/refresh, cancel, stale conflict, transport error and blank-email name prompt; no customer messages |
+| Edit invariants | Missing/forged fingerprint, duplicate key, invalid vocabulary, missing evidence, unauthorized Team capability, lock contention and missing audit tab reject without writes; changed fields only, literal formula text and one audit row per field |
+| Team and open access choices | Open admits only the chosen deployment audience; team denies blank/inactive/unknown identities and forged roles; entered names never grant access; directory failure still allows typed owners |
 | Product shipped / case closed with owed update | Verification and update obligations remain accurate |
 
 Classify each check passed, failed, blocked, or not run. Provide actual evidence and environment/version, not a bare "all passed." Local mocks cannot establish live access, script permissions, trigger behavior, email delivery, or data freshness.
@@ -45,9 +52,9 @@ Classify each check passed, failed, blocked, or not run. Provide actual evidence
 
 1. Finish design-source intake, the design data-contract check, inspect/map/build, the conversion checklist and the ordered installation/reauthorization path. Missing deployment choices do not block these stages.
 2. Test files locally where feasible and in the Apps Script editor/test environment. A /dev test URL is editor-only and does not prove an organization's viewer access.
-3. Verify the Workspace deployer, intended domain/audience, execution identity, scope changes, and the complete callable-function audit.
-4. When deployment is authorized, use Deploy > New deployment > Web app (or a new version of an existing intended deployment). Select organization/domain-only access; do not broaden it if unavailable.
-5. Record the deployed version and settings. Test the /exec URL with the internal, external, and anonymous cases above. Report unavailable account tests as not run, keeping the private-access claim unverified.
+3. Verify the chosen account, intended domain/audience, open/team mode, execution identity, scope changes, and complete callable-function audit. Use a standalone project beyond the owner.
+4. When deployment is authorized, use Deploy > New deployment > Web app (or a new version of an existing intended deployment). Select the agreed access: organization/domain-only for team use, Only myself for a personal owner pilot, or the explicitly authorized wider open-pilot audience. Never broaden an organization-only requirement as a workaround.
+5. Record the deployed version and settings. Test the /exec URL with the internal, external, and anonymous cases above. Report unavailable account tests as not run, keeping the claimed access boundary unverified. For an explicitly wider open pilot, record expected allowed/denied outcomes for that audience rather than falsely asserting external users are denied.
 6. Compare monitoring behavior and trigger inventory to the pre-change state without sending unnecessary digests or recreating working triggers.
 7. Hand over the URL, changed files, configuration/mapping, test results, unresolved limitations, and rollback.
 

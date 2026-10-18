@@ -1,0 +1,119 @@
+<script>
+/* Edit.html - in-app editing (v0.4). Forms open in the side drawer; Save calls vocWebSave on the server, which validates,
+   writes only changed cells, logs each change in Activity_Log and returns the refreshed view. Nothing is ever sent to customers. */
+(function () {
+  const U = window.UI, CFG = window.APP_CONFIG, TZ = CFG.instance.timezone;
+  const NAME_KEY = 's2c.actorName.' + CFG.instance.key;
+  const getName = () => { try { return localStorage.getItem(NAME_KEY) || ''; } catch (e) { return ''; } };
+  const setName = v => { try { localStorage.setItem(NAME_KEY, v); } catch (e) {} };
+  const esc = U.esc;
+
+  /* ISO (any offset) -> 'YYYY-MM-DDTHH:mm' in the configured workbook timezone, for <input type="datetime-local"> */
+  const fLocal = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  function toLocal(v) {
+    const d = v instanceof Date ? v : (v ? window.Derive.toD(v) : null); if (!d || !/T/.test(String(v instanceof Date ? 'T' : v))) return '';
+    const p = {}; fLocal.formatToParts(d).forEach(x => p[x.type] = x.value); return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`;
+  }
+  const nowLocal = () => toLocal(new Date());
+
+  const opts = (list, cur, blank) => (blank ? `<option value="">${esc(blank)}</option>` : '') + list.map(v => `<option${v === cur ? ' selected' : ''}>${esc(v)}</option>`).join('');
+  const field = (label, html, hint) => `<label class="ef"><span class="ef-k">${label}</span>${html}${hint ? `<span class="small faint">${hint}</span>` : ''}</label>`;
+  const init = v => ` data-initial="${esc(v == null ? '' : v)}"`;
+  const peopleList = () => `<datalist id="s2c-people">${(window.Data.meta().people || []).map(p => `<option value="${esc(p.name)}">${esc([p.email, p.source === 'directory' ? 'directory' : p.source === 'team' ? 'Team tab' : 'used before'].filter(Boolean).join(' · '))}</option>`).join('')}</datalist>`;
+  const V = () => window.Data.meta().vocab || {};
+
+  const FORMS = {
+    decideChange(id, preset, c) {
+      const x = c.D.changes(c.db).find(k => k.id === id); if (!x || !x.r) return null;
+      const others = c.D.changes(c.db).filter(k => k.id !== id).map(k => k.id);
+      const r = x.r;
+      return { expect: r._v, title: `Record a decision · ${id}`,
+        intro: `<p class="small"><b>${esc(r.Title || '')}</b></p><p class="small muted">Current state: ${U.lifecycle(x.state)}${r['Recommended Decision'] ? ` · Recommended: ${esc(r['Recommended Decision'])}` : ''}</p>`,
+        html: field('Decision', `<select name="decision" required>${opts(V().decision || [], preset || r.Decision, 'Choose…')}</select>`, 'Accept → Accepted · Investigate → Investigating · Defer → Deferred · Decline → Declined · Merge → Merged · Stop → Stopped · Reopen → Reopened') +
+          field('Reason for the decision', `<textarea name="rationale" rows="3" required>${esc(r['Decision Rationale'] || '')}</textarea>`, 'Shown on the change and in the activity log.') +
+          field('Merge into (only for Merge)', `<select name="mergeInto">${opts(others, r['Merged Into'], '—')}</select>`) };
+    },
+    setCaseOwner(id, preset, c) {
+      const r = (c.db.Follow_Up_Cases || []).find(k => k['Case ID'] === id); if (!r) return null;
+      const cur = c.D.isUnknown(r.Owner) ? '' : r.Owner;
+      return { expect: r._v, title: `Case owner · ${id}`,
+        intro: r['Proposed Owner Role'] ? `<p class="small muted">Proposed role: ${esc(r['Proposed Owner Role'])}</p>` : '',
+        html: field('Owner', `<input name="owner" list="s2c-people" required autocomplete="off" value="${esc(cur)}" placeholder="Type a name or pick from the list">${peopleList()}`, 'Suggestions come from your organisation directory (Workspace), the Team tab, and names already used. You can type any name.') +
+          `<label class="ef ef-check"><input type="checkbox" name="accepted"${r['Accepted At'] ? ' checked' : ''}> The owner has accepted this case</label>` };
+    },
+    setCaseStatus(id, preset, c) {
+      const r = (c.db.Follow_Up_Cases || []).find(k => k['Case ID'] === id); if (!r) return null; const v = V();
+      return { expect: r._v, title: `Case status · ${id}`,
+        intro: '<p class="small muted">Four separate fields: a closed case is not a resolved customer.</p>',
+        html: `<div class="ef-grid">${field('Engagement', `<select name="engagement"${init(r.Engagement)}>${opts(v.engagement || [], r.Engagement, '—')}</select>`)}${field('Delivery', `<select name="delivery"${init(r.Delivery)}>${opts(v.delivery || [], r.Delivery, '—')}</select>`)}${field('Customer outcome', `<select name="outcome"${init(r['Customer Outcome'])}>${opts(v.outcome || [], r['Customer Outcome'], '—')}</select>`, '"Resolved confirmed" needs the customer\'s confirmation.')}${field('Administrative state', `<select name="admin"${init(r['Administrative State'])}>${opts(v.admin || [], r['Administrative State'], '—')}</select>`)}</div>` +
+          field(`Next update due (${esc(TZ)})`, `<input type="datetime-local" name="nextUpdateDueAt"${init(toLocal(r['Next Update Due At']))} value="${toLocal(r['Next Update Due At'])}">`) +
+          field('Closure reason (needed to close)', `<input name="closureReason" value="${esc(r['Closure Reason'] || '')}"${init(r['Closure Reason'] || '')}>`) };
+    },
+    setActionStatus(id, preset, c) {
+      const r = (c.db.Case_Actions || []).find(k => k['Action ID'] === id); if (!r) return null;
+      return { expect: r._v, title: `Case action · ${r['Case ID']}`,
+        intro: `<p class="small"><b>${esc(r.Action || '')}</b></p><p class="small muted">Current status: ${U.status(r.Status)}</p>`,
+        html: field('New status', `<select name="status" required>${opts(V().action || [], preset || r.Status)}</select>`) +
+          field('Owner (optional)', `<input name="owner" list="s2c-people" autocomplete="off" value="${esc(c.D.isUnknown(r.Owner) ? '' : r.Owner)}"${init(c.D.isUnknown(r.Owner) ? '' : r.Owner)}>${peopleList()}`) +
+          field('Approval basis (for Approved)', `<input name="approvalBasis" placeholder="Who approved it, and where">`) +
+          field('Completion evidence (needed for Done)', `<input name="evidence" value="${esc(r['Completion Evidence'] || '')}">`) +
+          field('Reason (needed for Cancelled)', `<input name="reason">`) };
+    },
+    logUpdate(id, preset, c) {
+      const r = (c.db.Customer_Updates || []).find(k => k['Update ID'] === id); if (!r) return null;
+      return { expect: r._v, title: `Log an update · ${id}`,
+        intro: `<div class="banner info" style="margin:0">${U.icon('info')}<div>Record something that already happened outside this app. <b>Nothing is sent from here.</b></div></div><p class="small muted">${esc(r.Channel || '')} · ${esc(r['Content Reference'] || '')}</p>`,
+        html: field('What happened', `<select name="status" required>${opts(V().update || [], preset || 'Sent')}</select>`) +
+          field(`When (${esc(TZ)})`, `<input type="datetime-local" name="occurredAt" value="${nowLocal()}">`) +
+          field('Delivery evidence (needed for Sent)', `<input name="evidence" placeholder="Link, ticket or message reference">`) +
+          field('Reason or detail (for the other outcomes)', `<input name="reason">`) };
+    }
+  };
+
+  function open(kind, id, preset, c) {
+    const m = window.Data.meta();
+    if (!m.canEdit) return U.toast(m.editBlockedReason || 'Editing is not available', 'lock');
+    const f = FORMS[kind] && FORMS[kind](id, preset, c);
+    if (!f) return U.toast('That record could not be found (refresh the page).', 'circle-help');
+    const who = m.viewer ? '' : field('Your name', `<input name="actorName" required value="${esc(getName())}" placeholder="Recorded in the activity log">`, 'Your Google email is not shared with this app, so your name is recorded with the change.');
+    U.drawer.open(`<form class="eform" data-action="${esc(kind)}" data-id="${esc(id)}" data-expect="${esc(f.expect)}" novalidate>
+      <div style="padding-right:40px"><h2 style="margin:0 0 6px">${esc(f.title)}</h2>${f.intro || ''}</div>
+      ${f.html}
+      ${field('Reason for this change', '<textarea name="note" rows="2" required placeholder="Why this record is changing"></textarea>')}
+      ${who}
+      <div class="ef-err" role="alert" hidden></div>
+      <div class="row ef-actions"><button class="btn btn-primary" type="submit">${U.icon('save')}Save</button><button class="btn" type="button" data-drawer-close>Cancel</button><span class="small faint">Saved to the Sheet and recorded in Activity_Log.</span></div>
+    </form>`);
+  }
+
+  document.addEventListener('submit', e => {
+    const form = e.target.closest && e.target.closest('form.eform'); if (!form) return;
+    e.preventDefault();
+    const fields = {}; let note = '', actorName = '';
+    form.querySelectorAll('input[name],select[name],textarea[name]').forEach(el => {
+      if (el.name === 'note') { note = el.value.trim(); return; }
+      if (el.name === 'actorName') { actorName = el.value.trim(); return; }
+      if (el.type === 'checkbox') { fields[el.name] = el.checked; return; }
+      if (el.hasAttribute('data-initial') && el.value === el.getAttribute('data-initial')) return;   // unchanged
+      fields[el.name] = el.value;
+    });
+    const err = form.querySelector('.ef-err'), btn = form.querySelector('button[type=submit]');
+    if (form.querySelector('[name=actorName]') && !actorName) { err.hidden = false; err.textContent = 'Please enter your name.'; return; }
+    if (!note) { err.hidden = false; err.textContent = 'Please add a reason.'; return; }
+    if (!window.confirm('Save this change to the Sheet and Activity_Log?')) return;
+    if (actorName) setName(actorName);
+    btn.disabled = true; btn.lastChild.textContent = 'Saving…'; err.hidden = true;
+    window.Data.save({ action: form.dataset.action, id: form.dataset.id, expect: form.dataset.expect, fields, note, actorName }).then(res => {
+      if (res.ok) { U.drawer.close(true); window.__s2cSetLoaded(res.loaded); U.toast(res.message || 'Saved', 'circle-check'); return; }
+      btn.disabled = false; btn.lastChild.textContent = 'Save'; err.hidden = false;
+      err.innerHTML = esc(res.error.message) + (res.error.kind === 'stale' ? ` <a href="#" data-act-global="retry">Refresh now</a>` : '');
+    }).catch(() => {
+      btn.disabled = false; btn.lastChild.textContent = 'Save'; err.hidden = false;
+      err.textContent = 'The save result could not be confirmed. Refresh and check the record before retrying.';
+    });
+  });
+
+  window.Edit = { open };
+})();
+
+</script>

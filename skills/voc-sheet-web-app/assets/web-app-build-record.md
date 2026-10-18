@@ -63,7 +63,9 @@
 ## Private deployment
 
 - Workspace deploying account/domain (verified or not):
-- Intended audience / additional roles:
+- Intended audience / additional roles; open or team mode; personal Only myself pilot versus Workspace team:
+- One-workbook target, setup/import results and second-run idempotency:
+- REAL-only or toggle policy; brand/scope source fields:
 - Organization-only access option:
 - Execution identity and Sheet permissions:
 - Server identity/redaction policy:
@@ -90,6 +92,20 @@
 - Known limitations / not-run checks:
 - Previous code/deployment and rollback steps:
 - Owner accepting maintenance:
+
+## Learning log
+
+Keep observations separate from adopted rules. Sanitize before proposing a public repository change; do not copy private run records into the repository.
+
+| Learning ID | Observation and evidence | Rule to adopt | Repository change / file | Applied / deferred and why |
+| --- | --- | --- | --- | --- |
+| | | | | |
+
+## Version timeline
+
+| Version / date | Change and reason | Generated / installed / tested / deployed | Evidence and remaining checks |
+| --- | --- | --- | --- |
+| | | | |
 
 ## Interactive checkpoint
 

@@ -40,6 +40,8 @@ Deliver complete user-specific files, not fragments. A small pilot may use one o
 - `MonitorDashboard.gs`: only after the monitoring test gate passes;
 - `Dashboard.html`: only if the user selects a custom interface.
 
+Normalize Date cells to ISO text at the table-reader boundary, before string slicing, freshness comparisons or JSON/RPC. Never use `String(date).slice(0,10)`: it can produce a weekday string instead of an ISO date. Adapt the private [MonitorTableDates.gs helper](../assets/apps-script/MonitorTableDates.gs) in the generated reader; preserve timezone offsets and unknown/invalid dates.
+
 Include a README or manifest listing files, function names, scopes, configuration values, and expected outputs. Do not place secrets in code or Sheet cells.
 
 ### Optional frontier model connection
@@ -71,7 +73,8 @@ Use fixtures first. Use a permitted live-source check only after the route and a
 15. A missing/ambiguous trigger owner is handled as setup-needed, not reported as a healthy schedule.
 16. Quota/time-limit errors are logged and do not erase the last successful state.
 17. Internal Record IDs stay unique across multiple prefix families; unresolved themes remain in a review status rather than creating taxonomy values.
-18. A page response missing its expected review list, blocked request, or changed extraction rule is reported as failure/partial, never a successful zero-new-record check.
+18. A 30-day-old SUCCESS stored as a native Sheet Date reads as stale under a seven-day freshness policy; a fresh success is healthy and a failed read does not reset last success. Include a regression using actual Date values, not only ISO strings.
+19. A page response missing its expected review list, blocked request, or changed extraction rule is reported as failure/partial, never a successful zero-new-record check.
 
 Report each case as passed, failed, partially tested, blocked, or not run. The assistant cannot run a user's live Google Apps Script environment; wait for their test output before claiming the gate passed or writing the dashboard builder.
 
