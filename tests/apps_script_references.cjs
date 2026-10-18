@@ -90,7 +90,160 @@ function fixture() {
   return e;
 }
 
+// Parse controls from the actual reference markup, rather than inventing request fields in the test.
+const decode = value => String(value || '').replaceAll('&quot;', '"').replaceAll('&#39;', "'").replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&amp;', '&');
+function attributes(text) {
+  return Object.fromEntries([...text.matchAll(/([\w:-]+)(?:="([^"]*)")?/g)].map(m => [m[1],decode(m[2] || '')]));
+}
+function parseForm(html) {
+  const controls=[];
+  for (const match of html.matchAll(/<input\b([^>]*)>|<select\b([^>]*)>([\s\S]*?)<\/select>|<textarea\b([^>]*)>([\s\S]*?)<\/textarea>/g)) {
+    const attrs=attributes(match[1] ?? match[2] ?? match[4]);
+    if (!attrs.name) continue;
+    const options=match[2]===undefined ? [] : [...match[3].matchAll(/<option\b([^>]*)>([\s\S]*?)<\/option>/g)].map(m=>{
+      const a=attributes(m[1]); return {value:a.value ?? decode(m[2]),textContent:decode(m[2]),disabled:'disabled' in a,selected:'selected' in a,title:a.title || ''};
+    });
+    const control={name:attrs.name,type:attrs.type || (match[2]!==undefined?'select':'text'),checked:'checked' in attrs,disabled:'disabled' in attrs,options,
+      value:options.length ? (options.find(o=>o.selected) || options.find(o=>!o.disabled) || options[0]).value : match[4]!==undefined ? decode(match[5]) : attrs.value || '',
+      hasAttribute:k=>k in attrs,getAttribute:k=>attrs[k],setAttribute:(k,v)=>{attrs[k]=String(v);}};
+    controls.push(control);
+  }
+  const attrs=attributes(/<form\b([^>]*)>/.exec(html)[1]);
+  const error={hidden:true,textContent:'',innerHTML:''}, button={disabled:false,lastChild:{textContent:'Save'}};
+  const form={controls,html,error,button,dataset:{action:attrs['data-action'],id:attrs['data-id'],expect:attrs['data-expect']},
+    querySelectorAll:()=>controls,querySelector:s=>s==='.ef-err'?error:s==='button[type=submit]'?button:controls.find(c=>s===`[name=${c.name}]`)};
+  controls.forEach(c=>c.closest=()=>form);
+  return form;
+}
+
+function setRow(e, tab, fields) {
+  const headers=e.c.VOC_WEB_SETUP.TABS[tab].headers;
+  for (const [key,value] of Object.entries(fields)) e.sheets[tab].rows[4][headers.indexOf(key)]=value;
+}
+
+function formHarness(e, action) {
+  const listeners={}, storage={}, captured=[]; let form, loaded;
+  const db=Object.fromEntries(['Follow_Up_Cases','Case_Actions','Customer_Updates','Change_Register'].map(n=>[n,e.c.vocWebReadTab_(n).rows]));
+  const D={toD:v=>new Date(v),isUnknown:v=>!v,changes:db=>db.Change_Register.map(r=>({id:r['Change ID'],state:r.State,r}))};
+  const U={esc:v=>String(v??'').replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;'),icon:()=>'',status:()=>'',lifecycle:()=>'',toast:()=>{},drawer:{open:html=>{form=parseForm(html);},close:()=>{}}};
+  const google={script:{run:{withSuccessHandler(success){return {withFailureHandler(failure){return {vocWebSave(json){queueMicrotask(()=>{try{captured.push(JSON.parse(json));success(e.c.vocWebSave(json));}catch(error){failure(error);}});}};}};}}}};
+  const window={UI:U,APP_CONFIG:{instance:{timezone:'UTC',key:'northstar-synthetic'}},Derive:D,confirm:()=>true,
+    Data:{meta:()=>({canEdit:true,viewer:e.state.viewer,vocab:e.c.VW_VOCAB,people:[],caseEditFacts:e.c.vocWebCaseEditFacts_(db.Follow_Up_Cases)}),
+      save:req=>new Promise((resolve,reject)=>google.script.run.withSuccessHandler(json=>{const res=JSON.parse(json);resolve({...res,loaded:res.data});}).withFailureHandler(reject).vocWebSave(JSON.stringify(req)))},__s2cSetLoaded:v=>{loaded=v;}};
+  const browser=vm.createContext({window,document:{addEventListener:(n,f)=>listeners[n]=f},localStorage:{getItem:k=>storage[k],setItem:(k,v)=>{storage[k]=v;}},Date,Intl});
+  vm.runInContext(asset('Edit.html').replace(/^<script>\s*/,'').replace(/<\/script>\s*$/,''),browser);
+  const ids={decideChange:'CHANGE-001',setCaseOwner:'CASE-001',setCaseStatus:'CASE-001',setActionStatus:'ACTION-001',logUpdate:'UPDATE-001'};
+  window.Edit.open(action,ids[action],null,{db,D});
+  return {form,captured,get loaded(){return loaded;},
+    fill(values){for (const [name,value] of Object.entries(values)) {const c=form.controls.find(c=>c.name===name);assert.ok(c,`${action} form is missing ${name}`);if(c.type==='checkbox')c.checked=value;else c.value=value;listeners.input?.({target:c});}},
+    async submit(){listeners.submit({target:{closest:()=>form},preventDefault:()=>{}});await new Promise(resolve=>setImmediate(resolve));},
+  };
+}
+
+async function choiceMatrix(action) {
+  const probe=formHarness(fixture(),action);
+  const selects=probe.form.controls.filter(c=>c.options.length);
+  const choices=selects.flatMap(c=>c.options.filter(o=>o.value && !o.disabled).map(o=>[c.name,o.value]));
+  if (action==='setCaseOwner') choices.push(['accepted',false],['accepted',true]);
+  if (action==='setCaseStatus') choices.push(['delivery','Delivered']); // positive server-evidence variant
+  for (const [name,value] of choices) {
+    const e=fixture();
+    if (action==='decideChange') setRow(e,'Change_Register',{Owner:'','Accepted At':'','Report Back Disposition':'','Review Due At':'','Revisit Condition':''});
+    if (action==='setActionStatus') setRow(e,'Case_Actions',{Status:value==='Proposed'?'Cancelled':'Proposed','Approval Basis':'','Completion Evidence':'','Disposition Reason':''});
+    if (action==='logUpdate') setRow(e,'Customer_Updates',{'Content Reference':'','Delivery Evidence':'','Disposition Reason':''});
+    if (action==='setCaseStatus') {
+      const key={engagement:'Engagement',delivery:'Delivery',outcome:'Customer Outcome',admin:'Administrative State'}[name];
+      const alternative={engagement:value==='Attempted'?'Not started':'Attempted',delivery:value==='Investigating'?'Not assessed':'Investigating',outcome:value==='Unresolved'?'Unknown':'Unresolved',admin:value==='Waiting'?'Open':'Waiting'}[name];
+      setRow(e,'Follow_Up_Cases',{[key]:alternative});
+      if (value==='Delivered') setRow(e,'Case_Actions',{Status:'Done','Completion Evidence':'Synthetic done-action proof'});
+    }
+    const h=formHarness(e,action);
+    const common={note:'Synthetic form-only check'};
+    const values={
+      decideChange:{decision:value,rationale:'Synthetic decision reason',owner:'Synthetic change owner',accepted:true,reportBackDisposition:'Decision retained for internal report-back',reviewDueAt:'2026-11-01T12:00',revisitCondition:''},
+      setCaseOwner:{owner:'Synthetic new owner',accepted:value},
+      setCaseStatus:{contactReference:'Synthetic contact reference',planAgreementEvidence:'Synthetic agreed plan',outcomeEvidence:'Synthetic customer confirmation',[name]:value},
+      setActionStatus:{status:value,approvalBasis:'Synthetic approval',evidence:'Synthetic completion',reason:'Synthetic cancellation'},
+      logUpdate:{status:value,contentReference:'Synthetic content',evidence:'Synthetic delivery or attempt',reason:'Synthetic outcome detail'},
+    }[action];
+    if (name!=='accepted') {const control=h.form.controls.find(c=>c.name===name);assert.ok(control.options.some(o=>o.value===value && !o.disabled),`${name}=${value} must be enabled`);}
+    h.fill({...common,...values});const before=e.sheets.Activity_Log.getLastRow();await h.submit();
+    assert.ok(h.loaded,`${action} ${name}=${value}: ${h.form.error.textContent || h.form.error.innerHTML}`);
+    assert.ok(e.sheets.Activity_Log.getLastRow()>before,`${action} ${value} must log changes`);
+    const sent=h.captured[0].fields;
+    assert.ok(Object.keys(sent).every(k=>h.form.controls.some(c=>c.name===k)), 'Only actual form fields may be submitted');
+    const logs=e.sheets.Activity_Log.rows.slice(before);
+    assert.equal(new Set(logs.map(r=>r[0])).size,logs.length);
+    if (action==='decideChange' && value==='Accept') assert.ok(logs.some(r=>r[6]==='Owner') && logs.some(r=>r[6]==='Accepted At'));
+    if (action==='decideChange' && ['Defer','Decline','Stop'].includes(value)) assert.ok(logs.some(r=>r[6]==='Report Back Disposition'));
+    if (action==='logUpdate' && value==='Sent') assert.ok(logs.some(r=>r[6]==='Content Reference'));
+  }
+  // Defer is also satisfiable with only a revisit condition, without a date.
+  if(action==='decideChange') {const e=fixture(),h=formHarness(e,action);h.fill({decision:'Defer',rationale:'Review condition',reportBackDisposition:'Retain report-back owner',revisitCondition:'After the next pilot',note:'Synthetic condition-only test'});await h.submit();assert.ok(h.loaded);}
+  console.log(`Exercised ${choices.length} enabled choices for ${action}`);
+}
+
 const cases = {
+  gates() {
+    const e=fixture();
+    for(const [action,fields] of [
+      ['decideChange',{decision:'Accept',rationale:'Synthetic accept',owner:'New owner',accepted:false}],
+      ['decideChange',{decision:'Defer',rationale:'Synthetic defer',reportBackDisposition:'Internal report-back',reviewDueAt:'',revisitCondition:''}],
+      ['decideChange',{decision:'Decline',rationale:'Synthetic decline',reportBackDisposition:''}],
+      ['decideChange',{decision:'Stop',rationale:'Synthetic stop',reportBackDisposition:''}],
+      ['setCaseStatus',{engagement:'Contacted',contactReference:''}],
+      ['setCaseStatus',{engagement:'Customer replied',contactReference:''}],
+      ['setCaseStatus',{delivery:'Plan agreed',planAgreementEvidence:''}],
+      ['setCaseStatus',{outcome:'Resolved confirmed',outcomeEvidence:''}],
+      ['setActionStatus',{status:'Approved',approvalBasis:'   '}],
+      ['setActionStatus',{status:'In progress',approvalBasis:''}],
+      ['setActionStatus',{status:'Done',approvalBasis:'',evidence:'Synthetic proof'}],
+      ['logUpdate',{status:'Sent',contentReference:'',evidence:'Synthetic delivery'}],
+      ['logUpdate',{status:'Attempted',evidence:'',reason:'Synthetic detail'}],
+      ['logUpdate',{status:'Failed',evidence:'',reason:'Synthetic detail'}],
+      ['logUpdate',{status:'Cancelled',reason:''}],
+    ]) {const before=e.snapshot(),out=e.save(e.request(action,fields));assert.equal(out.ok,false,`${action} must keep its evidence gate`);assert.equal(out.error.kind,'invalid');assert.equal(e.snapshot(),before);}
+  },
+  choices_decideChange:()=>choiceMatrix('decideChange'),
+  choices_setCaseOwner:()=>choiceMatrix('setCaseOwner'),
+  choices_setCaseStatus:()=>choiceMatrix('setCaseStatus'),
+  choices_setActionStatus:()=>choiceMatrix('setActionStatus'),
+  choices_logUpdate:()=>choiceMatrix('logUpdate'),
+  async disabled() {
+    for (const [action,name,value,reason,fields] of [
+      ['decideChange','decision','Merge','Needs an obligation-transfer workflow (not in this reference)',{decision:'Merge',mergeInto:'CHANGE-002',rationale:'Synthetic merge',reportBackDisposition:'Keep obligations'}],
+      ['setCaseStatus','admin','Closed','Closure needs a commitment/transfer review (not in this reference)',{admin:'Closed',closureReason:'Synthetic closure'}],
+      ['setCaseStatus','delivery','Delivered','Needs a Done action with completion evidence',{delivery:'Delivered'}],
+    ]) {
+      const e=fixture(),h=formHarness(e,action),o=h.form.controls.find(c=>c.name===name).options.find(o=>o.value===value);
+      assert.equal(o.disabled,true);assert.ok(o.textContent.includes(reason));assert.ok(h.form.html.includes(reason));
+      const before=e.snapshot(),out=e.save(e.request(action,fields));assert.equal(out.ok,false);assert.equal(out.error.kind,'invalid');assert.equal(e.snapshot(),before);
+      assert.ok(!h.form.controls.some(c=>c.name==='mergeInto'||c.name==='closureReason'));
+    }
+    // Losing evidence after opening still fails on the server even if the UI once allowed Delivered.
+    const e=fixture();setRow(e,'Case_Actions',{Status:'Done','Completion Evidence':'Synthetic proof'});
+    const h=formHarness(e,'setCaseStatus');h.fill({delivery:'Delivered',note:'Synthetic stale eligibility'});setRow(e,'Case_Actions',{'Completion Evidence':''});await h.submit();assert.ok(!h.loaded);assert.ok(h.form.error.innerHTML.includes('completed action'));
+  },
+  async prefill() {
+    const maps={decideChange:{owner:'Owner',reportBackDisposition:'Report Back Disposition',revisitCondition:'Revisit Condition'},setCaseStatus:{contactReference:'Contact Reference',planAgreementEvidence:'Plan Agreement Evidence',outcomeEvidence:'Outcome Evidence'},setActionStatus:{approvalBasis:'Approval Basis',evidence:'Completion Evidence',reason:'Disposition Reason'},logUpdate:{contentReference:'Content Reference',evidence:'Delivery Evidence',reason:'Disposition Reason'}};
+    for (const [action,map] of Object.entries(maps)) {
+      const e=fixture(),tab=e.c.VW_ACTIONS_[action].tab,values=Object.fromEntries(Object.values(map).map(k=>[k,`Synthetic existing ${k}`]));setRow(e,tab,values);
+      const h=formHarness(e,action);for(const [name,key] of Object.entries(map)){const c=h.form.controls.find(c=>c.name===name);assert.equal(c.value,values[key]);assert.equal(c.getAttribute('data-initial'),values[key]);}
+      const changed=action==='decideChange'?{decision:'Investigate',rationale:'Synthetic review'}:action==='setCaseStatus'?{admin:'Waiting'}:{status:action==='logUpdate'?'Failed':'In progress'};
+      h.fill({note:'Synthetic unchanged fields test',...changed});await h.submit();assert.ok(h.loaded);
+      for(const name of Object.keys(map))assert.ok(!(name in h.captured[0].fields),`Unchanged ${name} should be omitted`);
+    }
+    const e=fixture();setRow(e,'Change_Register',{'Review Due At':'2026-11-01T12:00:00+00:00','Accepted At':'2026-10-01T12:00:00+00:00'});const h=formHarness(e,'decideChange');
+    assert.equal(h.form.controls.find(c=>c.name==='reviewDueAt').value,'2026-11-01T12:00');assert.equal(h.form.controls.find(c=>c.name==='accepted').checked,true);
+    h.fill({owner:'Another synthetic owner'});assert.equal(h.form.controls.find(c=>c.name==='accepted').checked,false);
+  },
+  facts() {
+    const e=fixture();let vm=e.c.vocWebViewForSave_(e.state.viewer,'synthetic');assert.equal(vm.meta.caseEditFacts['CASE-001'].canDeliver,false);
+    setRow(e,'Case_Actions',{Status:'Done','Completion Evidence':'Synthetic completion'});vm=e.c.vocWebViewForSave_(e.state.viewer,'synthetic');assert.equal(vm.meta.caseEditFacts['CASE-001'].canDeliver,true);
+    // Synthetic and unknown-class actions cannot unlock a REAL case.
+    setRow(e,'Case_Actions',{'Data Class':'SYNTHETIC'});assert.equal(e.c.vocWebCaseEditFacts_(vm.cases)['CASE-001'].canDeliver,false);
+    assert.deepEqual(clone(e.c.vocWebCaseEditFacts_([])),{});
+  },
   dates() {
     const e = environment();
     vm.runInContext(fs.readFileSync(path.join(root, 'skills/voc-monitoring-automation/assets/apps-script/MonitorTableDates.gs'), 'utf8'), e.c);

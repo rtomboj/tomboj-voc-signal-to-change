@@ -31,6 +31,33 @@ class AppsScriptReferenceTests(unittest.TestCase):
     def test_json_transport_preserves_null_zero_and_dates(self):
         self.run_case('transport')
 
+    def test_every_enabled_decision_saves_from_its_form(self):
+        self.run_case('choices_decideChange')
+
+    def test_owner_form_acceptance_choices_save(self):
+        self.run_case('choices_setCaseOwner')
+
+    def test_every_enabled_case_status_saves_from_its_form(self):
+        self.run_case('choices_setCaseStatus')
+
+    def test_every_action_status_saves_from_its_form(self):
+        self.run_case('choices_setActionStatus')
+
+    def test_every_update_outcome_saves_from_its_form(self):
+        self.run_case('choices_logUpdate')
+
+    def test_disabled_choices_explain_and_server_refuses(self):
+        self.run_case('disabled')
+
+    def test_prefill_and_only_changed_fields(self):
+        self.run_case('prefill')
+
+    def test_delivery_eligibility_is_server_view_data(self):
+        self.run_case('facts')
+
+    def test_new_fields_do_not_bypass_evidence_gates(self):
+        self.run_case('gates')
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -77,6 +77,7 @@ function vocWebSave(requestJson) {
 
 var VW_ACTIONS_ = {
   decideChange: { tab: 'Change_Register', key: 'Change ID', label: 'Decision recorded', build: function (f, row, x) {
+    f = vwFormValues_(f, row, { decision: 'Decision', rationale: 'Decision Rationale', owner: 'Owner', reportBackDisposition: 'Report Back Disposition', revisitCondition: 'Revisit Condition' });
     if (VW_VOCAB.decision.indexOf(f.decision) < 0) return { error: 'Choose a decision.' };
     var why = String(f.rationale || '').trim(); if (!why) return { error: 'Add the reason for the decision.' };
     var set = { 'Decision': f.decision, 'Decision Maker': x.actor, 'Decision At': x.now, 'Decision Rationale': why, 'State': VW_DECISION_STATE[f.decision] };
@@ -85,13 +86,28 @@ var VW_ACTIONS_ = {
       set['Merged Into'] = into;
     }
     if (f.decision !== 'Merge' && row['Merged Into']) set['Merged Into'] = '';
-    if (f.decision === 'Accept' && (!row.Owner || !row['Accepted At'])) return { error: 'Acceptance needs an owner and recorded owner acceptance.' };
-    if (f.decision === 'Defer' && !(row['Review Due At'] || row['Revisit Condition'])) return { error: 'Deferring needs a review date or revisit condition.' };
-    if (['Defer','Decline','Merge','Stop'].indexOf(f.decision) >= 0 && !row['Report Back Disposition']) return { error: 'Record the report-back disposition first.' };
+    if (f.decision === 'Accept') {
+      var owner = String(f.owner || '').trim().slice(0, 120);
+      var sameOwner = owner === row.Owner;
+      var accepted = f.accepted === undefined ? sameOwner && !!row['Accepted At'] : f.accepted === true;
+      if (!owner || !accepted) return { error: 'Acceptance needs an owner and recorded owner acceptance.' };
+      set.Owner = owner; set['Accepted At'] = sameOwner && row['Accepted At'] ? row['Accepted At'] : x.now;
+    }
+    if (['Defer','Decline','Merge','Stop'].indexOf(f.decision) >= 0) {
+      set['Report Back Disposition'] = String(f.reportBackDisposition || '').trim();
+      if (!set['Report Back Disposition']) return { error: 'Record the report-back disposition first.' };
+    }
+    if (f.decision === 'Defer') {
+      var due = f.reviewDueAt === undefined ? row['Review Due At'] : vwLocalToIso_(f.reviewDueAt);
+      if (f.reviewDueAt && !due) return { error: 'Review due time is not valid.' };
+      set['Review Due At'] = due || ''; set['Revisit Condition'] = String(f.revisitCondition || '').trim();
+      if (!(set['Review Due At'] || set['Revisit Condition'])) return { error: 'Deferring needs a review date or revisit condition.' };
+    }
     if (f.decision === 'Merge') return { error: 'Merge requires a mapped obligation-transfer workflow; this reference keeps it disabled.' };
     return { set: set, reason: why };
   } },
   setCaseOwner: { tab: 'Follow_Up_Cases', key: 'Case ID', label: 'Owner updated', build: function (f, row, x) {
+    f = vwFormValues_(f, row, { owner: 'Owner' });
     var owner = String(f.owner || '').trim().slice(0, 120); if (!owner) return { error: 'Enter or choose an owner.' };
     var set = { 'Owner': owner };
     if (owner !== row.Owner) { set['Assigned At'] = x.now; set['Accepted At'] = ''; }
@@ -102,36 +118,36 @@ var VW_ACTIONS_ = {
     var set = {}, map = { engagement: ['Engagement', VW_VOCAB.engagement], delivery: ['Delivery', VW_VOCAB.delivery], outcome: ['Customer Outcome', VW_VOCAB.outcome], admin: ['Administrative State', VW_VOCAB.admin] };
     for (var k in map) { if (f[k] === undefined || f[k] === '') continue; if (map[k][1].indexOf(f[k]) < 0) return { error: 'Invalid ' + map[k][0] + '.' }; set[map[k][0]] = f[k]; }
     if (f.nextUpdateDueAt !== undefined) { var d = vwLocalToIso_(f.nextUpdateDueAt); if (f.nextUpdateDueAt && !d) return { error: 'Next update time is not valid.' }; set['Next Update Due At'] = d; }
-    if (set['Administrative State'] === 'Closed' && row['Administrative State'] !== 'Closed') {
-      var cr = String(f.closureReason || '').trim(); if (!cr) return { error: 'Closing a case needs a closure reason.' };
-      set['Closure Reason'] = cr; set['Closed At'] = x.now;
-    }
-    if (set['Customer Outcome'] === 'Resolved confirmed' && !row['Outcome Evidence']) return { error: 'Confirmed resolution needs outcome evidence.' };
-    if (set.Delivery === 'Plan agreed' && !row['Plan Agreement Evidence']) return { error: 'Plan agreed needs agreement evidence.' };
+    var evidence = { contactReference: 'Contact Reference', planAgreementEvidence: 'Plan Agreement Evidence', outcomeEvidence: 'Outcome Evidence' };
+    Object.keys(evidence).forEach(function (k) { if (f[k] !== undefined) set[evidence[k]] = String(f[k]).trim(); });
+    var current = Object.assign({}, row, set);
+    if (current['Customer Outcome'] === 'Resolved confirmed' && !current['Outcome Evidence']) return { error: 'Confirmed resolution needs outcome evidence.' };
+    if (current.Delivery === 'Plan agreed' && !current['Plan Agreement Evidence']) return { error: 'Plan agreed needs agreement evidence.' };
     if (set.Delivery === 'Delivered') {
-      var actions = vocWebReadTab_('Case_Actions', {});
-      if (actions.state !== 'ok' || !actions.rows.some(function (a) { return a._class === 'REAL' && a['Case ID'] === row['Case ID'] && a.Status === 'Done' && a['Completion Evidence']; })) return { error: 'Delivered needs a completed action with evidence.' };
+      if (!vwCanDeliver_(row['Case ID'])) return { error: 'Delivered needs a completed action with evidence.' };
     }
-    if (set['Administrative State'] === 'Closed' && row['Administrative State'] !== 'Closed') return { error: 'Closure requires a mapped commitment/transfer review; this reference keeps it disabled.' };
-    if (['Contacted','Customer replied'].indexOf(set.Engagement) >= 0 && !row['Contact Reference']) return { error: 'Contact needs an evidence reference.' };
+    if (set['Administrative State'] === 'Closed') return { error: 'Closure requires a mapped commitment/transfer review; this reference keeps it disabled.' };
+    if (['Contacted','Customer replied'].indexOf(current.Engagement) >= 0 && !current['Contact Reference']) return { error: 'Contact needs an evidence reference.' };
     if (set['Engagement'] === 'Contacted' && !row['First Contact At']) set['First Contact At'] = x.now;
     return { set: set };
   } },
   setActionStatus: { tab: 'Case_Actions', key: 'Action ID', label: 'Action updated', build: function (f, row, x) {
+    f = vwFormValues_(f, row, { status: 'Status', approvalBasis: 'Approval Basis', evidence: 'Completion Evidence', reason: 'Disposition Reason' });
     if (VW_VOCAB.action.indexOf(f.status) < 0) return { error: 'Choose a status.' };
     var set = { 'Status': f.status };
     if (f.owner !== undefined && String(f.owner).trim()) set['Owner'] = String(f.owner).trim().slice(0, 120);
-    if (['Approved','In progress','Done'].indexOf(f.status) >= 0 && !(f.approvalBasis || row['Approval Basis'])) return { error: 'Record the approval basis first.' };
+    if (['Approved','In progress','Done'].indexOf(f.status) >= 0 && !String(f.approvalBasis || '').trim()) return { error: 'Record the approval basis first.' };
     if (f.status === 'Done') { var ev = String(f.evidence || '').trim(); if (!ev) return { error: 'Done needs completion evidence (what shows it was done).' }; set['Completion Evidence'] = ev; set['Completed At'] = x.now; }
     if (f.status === 'Cancelled') { var dr = String(f.reason || '').trim(); if (!dr) return { error: 'Cancelling needs a reason.' }; set['Disposition Reason'] = dr; }
     if (f.approvalBasis) set['Approval Basis'] = String(f.approvalBasis).trim().slice(0, 300);
     return { set: set };
   } },
   logUpdate: { tab: 'Customer_Updates', key: 'Update ID', label: 'Update logged', build: function (f, row, x) {
+    f = vwFormValues_(f, row, { status: 'Status', evidence: 'Delivery Evidence', reason: 'Disposition Reason', contentReference: 'Content Reference' });
     if (VW_VOCAB.update.indexOf(f.status) < 0) return { error: 'Choose what happened.' };
-    var set = { 'Status': f.status, 'Occurred At': vwLocalToIso_(f.occurredAt) || x.now };
+    var set = { 'Status': f.status, 'Occurred At': f.occurredAt === undefined ? row['Occurred At'] || x.now : vwLocalToIso_(f.occurredAt) || x.now };
     if (['Sent','Attempted','Failed'].indexOf(f.status) >= 0 && !String(f.evidence || '').trim()) return { error: 'Record delivery/attempt evidence.' };
-    if (f.status === 'Sent' && !row['Content Reference']) return { error: 'Sent needs a content reference.' };
+    if (f.status === 'Sent') { set['Content Reference'] = String(f.contentReference || '').trim(); if (!set['Content Reference']) return { error: 'Sent needs a content reference.' }; }
     if (['Attempted','Failed'].indexOf(f.status) >= 0) set['Delivery Evidence'] = String(f.evidence).trim();
     if (f.occurredAt && !vwLocalToIso_(f.occurredAt)) return { error: 'Occurrence time is not valid.' };
     if (f.status === 'Sent') { var ev = String(f.evidence || '').trim(); if (!ev) return { error: 'Sent needs delivery evidence (where it was sent, message link or reference).' }; set['Delivery Evidence'] = ev; }
@@ -141,6 +157,26 @@ var VW_ACTIONS_ = {
 };
 
 /* ---------- helpers ---------- */
+/** Resolve omitted unchanged controls against the locked, fresh row; explicit blanks stay blank. */
+function vwFormValues_(fields, row, map) {
+  var out = Object.assign({}, fields);
+  Object.keys(map).forEach(function (k) { if (out[k] === undefined) out[k] = row[map[k]]; });
+  return out;
+}
+function vwCanDeliver_(caseId) {
+  var actions = vocWebReadTab_('Case_Actions', {});
+  return actions.state === 'ok' && actions.rows.some(function (a) { return a._class === 'REAL' && a['Case ID'] === caseId && a.Status === 'Done' && a['Completion Evidence']; });
+}
+/** Call from the initial read view builder with its authorized raw case rows as well as on save refresh. */
+function vocWebCaseEditFacts_(authorizedCases) {
+  var facts = {};
+  authorizedCases.forEach(function (r) {
+    if (r._class !== 'REAL') return;
+    var allowed = !!vwCanDeliver_(r['Case ID']);
+    facts[r['Case ID']] = { canDeliver: allowed, deliveryBlockedReason: allowed ? '' : 'Needs a Done action with completion evidence' };
+  });
+  return facts;
+}
 function vwSaveErr_(kind, message, trace) { return JSON.stringify({ ok: false, error: { kind: kind, message: message, trace: trace } }); }
 function vwLiteral_(v) { return (typeof v === 'string' && /^\s*[=+\-@]/.test(v)) ? "'" + v : v; }
 function vwHeaderRowValues_(sh, headerRow) { return sh.getRange(headerRow, 1, 1, sh.getLastColumn()).getValues()[0].map(function (c) { return String(c).trim(); }); }
@@ -161,5 +197,8 @@ function vwAppendLog_(ss, entries, now) {
   log.getRange(log.getLastRow() + 1, 1, rows.length, 12).setValues(rows);
 }
 function vocWebViewForSave_(viewer, trace) {
-  var vm = vocWebBuildViewModel_(new Date()); vm.meta.viewer = viewer; vm.meta.trace = trace; return vm;
+  var vm = vocWebBuildViewModel_(new Date());
+  // Initial view builders must use the same helper; this reference's raw authorized cases live in vm.cases.
+  vm.meta.caseEditFacts = vocWebCaseEditFacts_(vm.cases || []);
+  vm.meta.viewer = viewer; vm.meta.trace = trace; return vm;
 }
