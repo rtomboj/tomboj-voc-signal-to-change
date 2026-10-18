@@ -30,23 +30,23 @@ All five skills are included. They are portable instructions and supporting temp
 
 ## What the output can look like
 
-These are **rendered documentation previews** of the included Northstar example. All companies, comments, owners, actions, and results are synthetic. The images illustrate the information each view can show; they are not browser screenshots of a live Google Sheet or a deployed private app. Your assistant should adapt the actual output to your data and structure.
+These are the current **rendered web reference previews** of the included Northstar example. All companies, comments, owners, actions, and results are synthetic. The images are captures of the local eight-screen reference, not a live Google Sheet or a deployed private app. Your assistant should adapt the actual output to your data and structure.
 
 ### Benchmark: evidence before conclusions
 
-![Synthetic Northstar benchmark preview showing themes, sample counts, and evidence limits](docs/images/northstar-benchmark.jpg)
+![Current synthetic Northstar benchmark showing themes, sample counts, and traceable evidence](docs/images/northstar-web-benchmark.png)
 
 See what feedback says, how much evidence supports it, and what would confirm or challenge the interpretation. A small accessible sample does not establish customer-wide prevalence.
 
 ### Follow-up: delivery and customer outcome stay separate
 
-![Synthetic Northstar follow-up preview showing a delivered workaround with only partial customer resolution](docs/images/northstar-follow-up.jpg)
+![Current synthetic Northstar follow-up showing a delivered workaround with only partial customer resolution](docs/images/northstar-web-follow-up.png)
 
 A delivered workaround can coexist with an unresolved customer outcome. Ownership, next updates, and longer-running change obligations remain visible.
 
 ### Web interface: one view of the loop
 
-![Synthetic Northstar web overview connecting source health, customer follow-up, and a change awaiting verification](docs/images/northstar-overview.jpg)
+![Current synthetic Northstar home connecting source health, customer follow-up, and changes under verification](docs/images/northstar-web-home.png)
 
 The optional web layer reads the existing system. A failed source check is visible, a shipped change remains under verification, and drafts are not counted as sent messages.
 
