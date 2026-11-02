@@ -1,0 +1,26 @@
+record_id,primary_theme,signal_type,operational_impact,escalate,confidence,notes
+E01,Large-booking export reliability,Negative,High,N,High,PDF export fails for 400-guest booking; smaller bookings work
+E02,Schedule visibility,Positive,Unknown,N,High,Praise for shared weekly shift view
+E03,Mobile app performance,Negative,Medium,N,High,iPhone schedule slow to open on site; workable fallback
+E04,Support responsiveness,Positive,Unknown,N,Medium,Fast chat support and permissions issue fixed; access theme not primary
+E05,Onboarding and setup,Negative,Blocker,N,Medium,CSV staff import rejects file; cannot go live
+E06,Mobile app performance,Mixed,Medium,N,High,Shared schedule praised; mobile crash on week swipe is primary; desktop works
+E07,Large-booking export reliability,Mixed,High,N,High,Onboarding praised; large-event export breaks so schedules printed by hand
+E08,Support responsiveness,Mixed,Medium,N,Medium,Billing praised; four day support reply is the negative issue
+E09,Onboarding and setup,Mixed,Low,N,Medium,Setup a week late but now resolved; shared view praised
+E10,Large-booking export reliability,Request,Low,N,Medium,Small exports work; asks for large booking support without blocking current work
+E11,Billing and invoicing accuracy,Negative,High,Y,High,Charged for 45 seats with 30 active users
+E12,Billing and invoicing accuracy,Negative,High,Y,High,Annual rate shown on monthly plan; incorrect charge
+E13,Billing and invoicing accuracy,Positive,Unknown,N,High,Invoices clean and reconcile easily
+E14,Billing and invoicing accuracy,Question,Low,N,High,Asks whether mobile app is included in price
+E15,Billing and invoicing accuracy,Negative,High,Y,High,Third duplicate charge; refund demanded with cancellation threat
+E16,Out of scope,N/A,Unknown,N,High,Review intended for a different product (fitness tracker)
+E17,Large-booking export reliability,Negative,High,Y,High,Payroll totals wrong after schedule hours export; financial figure wrong due to Northstar output
+E18,Schedule visibility,Question,Low,N,High,Asks how to see who changed a shift (change history)
+E19,Data privacy and security,Negative,High,Y,High,Support sent another company schedule; cross-customer data exposure
+E20,Other,Positive,Unknown,N,High,Generic five star praise with no specific theme
+E21,Large-booking export reliability,Negative,High,Y,High,Export breaks on big events is highest impact; slow app and no support reply also noted; explicit switch threat
+E22,Billing and invoicing accuracy,Negative,High,Y,High,Agreed discount missing from invoice; reminders late also noted
+E23,Onboarding and setup,Mixed,Medium,N,Medium,Onboarding call praised; CSV import drops accented-name staff; manual workaround exists
+E24,Mobile app performance,Negative,Medium,N,High,Frequent logouts on mobile; notification settings hard to find is secondary
+E25,Billing and invoicing accuracy,Mixed,High,Y,High,Large export fix praised; promised refund still owed
