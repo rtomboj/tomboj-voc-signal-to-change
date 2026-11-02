@@ -1,0 +1,26 @@
+record_id,primary_theme,signal_type,operational_impact,escalate,confidence,notes
+E01,Large-booking export reliability,Negative,High,N,High,export fails for large booking
+E02,Schedule visibility,Positive,Unknown,N,High,praise only
+E03,Mobile app performance,Negative,Medium,N,High,slow open; usable
+E04,Support responsiveness,Positive,Unknown,N,High,praise only; issue fixed
+E05,Onboarding and setup,Negative,Blocker,N,High,cannot go live
+E06,Mobile app performance,Mixed,Medium,N,High,crash; desktop fallback
+E07,Large-booking export reliability,Mixed,Medium,N,Medium,export breaks; manual fallback
+E08,Support responsiveness,Mixed,Medium,N,High,slow support; billing praised
+E09,Onboarding and setup,Mixed,Low,N,Medium,setup delay; resolved
+E10,Large-booking export reliability,Request,Low,N,Medium,wants big booking export
+E11,Billing and invoicing accuracy,Negative,High,Y,High,seat overcharge
+E12,Billing and invoicing accuracy,Negative,High,Y,High,wrong rate on invoice
+E13,Billing and invoicing accuracy,Positive,Unknown,N,High,praise only
+E14,Billing and invoicing accuracy,Question,Low,N,High,pricing question
+E15,Billing and invoicing accuracy,Negative,High,Y,High,duplicate charge; cancel threat
+E16,Out of scope,N/A,Unknown,N,High,different product
+E17,Large-booking export reliability,Negative,High,Y,High,payroll totals wrong from export
+E18,Schedule visibility,Question,Low,N,High,change history question
+E19,Data privacy and security,Negative,High,Y,High,other company data sent
+E20,Other,Positive,Unknown,N,High,generic praise
+E21,Large-booking export reliability,Negative,High,Y,Medium,multiple issues; switch threat
+E22,Billing and invoicing accuracy,Negative,High,Y,High,missing discount; late reminders secondary
+E23,Onboarding and setup,Mixed,Medium,N,Medium,import drops names; manual workaround
+E24,Mobile app performance,Negative,Medium,N,Medium,logouts; notification settings secondary
+E25,Billing and invoicing accuracy,Mixed,High,Y,High,refund owed; export fixed

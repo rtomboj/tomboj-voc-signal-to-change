@@ -1,0 +1,26 @@
+record_id,key_version,cohort,primary_theme,signal_type,operational_impact,escalate,rationale
+E01,1.0,Clear-cut,Large-booking export reliability,Negative,High,N,Export fails for large bookings; small ones still work
+E02,1.0,Clear-cut,Schedule visibility,Positive,Unknown,N,Praise only; no problem described
+E03,1.0,Clear-cut,Mobile app performance,Negative,Medium,N,Slow but usable
+E04,1.0,Clear-cut,Support responsiveness,Positive,Unknown,N,Praise only
+E05,1.0,Clear-cut,Onboarding and setup,Negative,Blocker,N,Cannot go live at all
+E06,1.0,Mixed,Mobile app performance,Mixed,Medium,N,Mixed record: theme is the negative issue; desktop fallback makes it Medium
+E07,1.0,Mixed,Large-booking export reliability,Mixed,High,N,Export fails; manual printing is a costly workaround
+E08,1.0,Mixed,Support responsiveness,Mixed,Medium,N,Billing praised; slow support is the negative issue
+E09,1.0,Mixed,Onboarding and setup,Mixed,Low,N,Delay is resolved
+E10,1.0,Mixed,Large-booking export reliability,Request,Low,N,Asks for capability; current work not blocked
+E11,1.0,Money,Billing and invoicing accuracy,Negative,High,Y,Incorrect seat charge
+E12,1.0,Money,Billing and invoicing accuracy,Negative,High,Y,Wrong rate on invoice
+E13,1.0,Money,Billing and invoicing accuracy,Positive,Unknown,N,Praise only
+E14,1.0,Money,Billing and invoicing accuracy,Question,Low,N,Pricing question; nothing incorrect
+E15,1.0,Money,Billing and invoicing accuracy,Negative,High,Y,Duplicate charge plus cancellation threat; money wrong is High not Blocker
+E16,1.0,Edge,Out of scope,N/A,Unknown,N,Different product
+E17,1.0,Edge,Large-booking export reliability,Negative,High,Y,Export output; escalate because payroll figures are wrong
+E18,1.0,Edge,Schedule visibility,Question,Low,N,Question about change history
+E19,1.0,Edge,Data privacy and security,Negative,High,Y,Another customer's data exposed
+E20,1.0,Edge,Other,Positive,Unknown,N,Generic praise with no theme
+E21,1.0,Multi-issue,Large-booking export reliability,Negative,High,Y,Highest-impact issue is export; switch threat escalates
+E22,1.0,Multi-issue,Billing and invoicing accuracy,Negative,High,Y,Late reminders and missing discount both High; tie-break puts Billing first
+E23,1.0,Multi-issue,Onboarding and setup,Mixed,Medium,N,Import drops staff; manual add is a workable fallback
+E24,1.0,Multi-issue,Mobile app performance,Negative,Medium,N,Logouts are Medium; settings findability is Low
+E25,1.0,Multi-issue,Billing and invoicing accuracy,Mixed,High,Y,Fix praised; owed refund is the negative issue and is escalated
