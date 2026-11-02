@@ -82,6 +82,20 @@ python -m unittest discover -s tests -v
 
 These are maintainer/example checks; users can begin with the prompts without installing Python.
 
+## Try the classification evaluation
+
+The [classification answer key and scorer](evals/classification/README.md) let you check model predictions against a versioned taxonomy using 25 synthetic Northstar feedback records. This tests the classification step of the Benchmark Builder; it does not test the whole workflow or establish production readiness.
+
+From the repository folder, with Python 3.10+ installed, reproduce the included results:
+
+```bash
+python evals/classification/score.py evals/classification/runs/2026-11-02_haiku_rubric-v1.0.csv evals/classification/runs/2026-11-02_sonnet_rubric-v1.0.csv
+```
+
+Use `python3` or `py -3` instead of `python` if that is your Python 3 command. Explicit filenames also work in Windows PowerShell. The included runs score Haiku 25/25 and Sonnet 24/25 against key v1.0; both catch all 8 expected escalations. Sonnet's only mismatch is E07's operational impact, where the rubric overlaps on failed output and workable fallbacks. These results describe the saved runs, not a general ranking of the models.
+
+To try another model, follow the [run instructions and limits](evals/classification/README.md): give it the rubric and record IDs/excerpts, keep the answer key hidden, save its predictions, then score them. Review the printed mismatches even when the scorer exits successfully.
+
 ## Documentation and source files
 
 | Need | Read |
@@ -93,6 +107,7 @@ These are maintainer/example checks; users can begin with the prompts without in
 | Checks, limitations, and live pilot requirements | [Validation guide](docs/validation.md) |
 | Google Workspace services and Apps Script | [Workspace field guide](docs/apps-script-workspace-field-guide.md) |
 | Provider/model evaluation method | [Model evaluation](docs/model-evaluation.md) |
+| Reproduce classification scores or evaluate a new run | [Classification answer key and scorer](evals/classification/README.md) |
 
 Core instructions live in `skills/`; human guides in `docs/`; the fictional example in `examples/closed-loop/`; read-only validation utilities in `scripts/`.
 
