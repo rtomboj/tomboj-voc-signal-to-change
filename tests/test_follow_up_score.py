@@ -40,5 +40,28 @@ class DeliveryOverclaimTests(unittest.TestCase):
                 self.assertEqual(score.overclaims("Status", key, status(delivery=claimed)), [])
 
 
+CHANGE_KEY = {"fix_type": "Product/technology", "state": "Proposed", "independent_reports": "1"}
+
+
+def change(**changes):
+    return {**CHANGE_KEY, **changes}
+
+
+class DecisionStateOverclaimTests(unittest.TestCase):
+    def test_decision_state_over_proposed_is_overclaim(self):
+        # AUDIT-1 pattern: a Defer decision without its evidence still only supports Proposed.
+        for claimed in ("Deferred", "Declined", "Merged"):
+            with self.subTest(claimed=claimed):
+                reasons = score.overclaims("Change", CHANGE_KEY, change(state=claimed))
+                self.assertIn(f"state overstated ({claimed} vs Proposed)", reasons)
+
+    def test_supported_decision_state_is_not_overclaim(self):
+        for state in ("Deferred", "Declined", "Merged"):
+            with self.subTest(state=state):
+                key = change(state=state)
+                self.assertEqual(score.overclaims("Change", key, key), [])
+        self.assertEqual(score.overclaims("Change", CHANGE_KEY, CHANGE_KEY), [])
+
+
 if __name__ == "__main__":
     unittest.main()

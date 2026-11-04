@@ -89,6 +89,8 @@ def overclaims(track, k, p):
             out.append(f"state overstated ({ps} vs {ks})")
         elif ps == "Sustained" and ks != "Sustained":
             out.append(f"state overstated ({ps} vs {ks})")
+        elif ks == "Proposed" and ps in {"Deferred", "Declined", "Merged"}:
+            out.append(f"state overstated ({ps} vs {ks})")
         kr, pr = k["independent_reports"], p.get("independent_reports", "")
         if pr.isdigit() and kr.isdigit() and int(pr) > int(kr):
             out.append(f"independent reports overcounted ({pr} vs {kr})")
