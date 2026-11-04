@@ -26,5 +26,15 @@ jobs:
           python scripts/check_example.py
       - name: Exercise invalid lifecycle and handoff cases
         run: python -m unittest discover -s tests -v
+      - name: Score the follow-up and change answer key against itself
+        run: |
+          python evals/follow-up-and-change/score.py evals/follow-up-and-change/answer_key.csv --json "$RUNNER_TEMP/follow-up-key.json"
+          python - "$RUNNER_TEMP/follow-up-key.json" <<'PY'
+          import json, sys
+          run = json.load(open(sys.argv[1]))["runs"]["answer_key"]
+          if run["passed"] != run["records"] or run["overclaims"] or run["blank_values"]:
+              sys.exit(f"Answer key does not score cleanly against itself: {run['passed']}/{run['records']} passed")
+          print(f"Answer key self-check: {run['passed']}/{run['records']} passed, no overclaims or blanks")
+          PY
       - name: Check whitespace
         run: git diff --check
