@@ -32,7 +32,7 @@ TRACK_FIELDS = {
     "Change": ["fix_type", "state", "independent_reports"],
 }
 ALLOWED = {
-    "route": {"New case", "Link to existing case", "Monitoring repair", "Research only"},
+    "route": {"New case", "Link to existing case", "Monitoring repair", "Research only", "Hold for review"},
     "mode": {"Operator", "Research handoff", "N/A"},
     "tier": {"Critical", "High", "Standard", "Learning", "N/A"},
     "specialist_route": {"Y", "N"},
