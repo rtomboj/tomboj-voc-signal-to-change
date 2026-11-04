@@ -72,8 +72,11 @@ def overclaims(track, k, p):
             out.append(f"engagement overstated ({pe} vs {ke})")
         if pe in {"Contacted", "Customer replied"} and ke in {"Not contactable", "No contact requested"}:
             out.append(f"engagement overstated ({pe} vs {ke})")
-        if p.get("delivery") == "Delivered" and k["delivery"] != "Delivered":
+        kd, pd = k["delivery"], p.get("delivery", "")
+        if pd == "Delivered" and kd != "Delivered":
             out.append("delivery overstated")
+        elif kd == "Not assessed" and pd in {"Investigating", "Plan agreed", "In progress"}:
+            out.append(f"delivery overstated ({pd} vs {kd})")
         if p.get("customer_outcome") == "Resolved confirmed" and k["customer_outcome"] != "Resolved confirmed":
             out.append("unconfirmed resolution")
         if p.get("customer_outcome") == "Not applicable" and k["customer_outcome"] in {"Unknown", "Unresolved"}:
