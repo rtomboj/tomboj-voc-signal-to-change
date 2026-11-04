@@ -5,7 +5,7 @@ A versioned answer key for the Step 3 (`voc-customer-follow-up`) and Step 4 (`vo
 | File | What it is |
 |---|---|
 | `RUBRIC.md` | Grading rules for three tracks. It is the only instruction a model run receives. Every rule cites the skill reference it comes from. |
-| `inputs.csv` | 30 scenarios: 10 Triage, 10 Status, 10 Change, each split into Clear-cut and Edge cohorts |
+| `inputs.csv` | 36 scenarios: 16 Triage, 10 Status, 10 Change. The original 30 are split into Clear-cut and Edge cohorts; the six `SEC-T` Triage scenarios form the Security cohort (added in v1.1) |
 | `answer_key.csv` | Expected values for each scenario's track fields, with a one-line rationale and the key version |
 | `score.py` | Scores one or more runs against the key |
 | `runs/` | Prediction files, named `<date>_<model>_rubric-<version>.csv` |
@@ -80,3 +80,8 @@ The scorer was self-tested three ways:
 - One author wrote the labels. Before treating the key as authoritative, have a second human reviewer label it and record the agreement rate.
 - Timing tiers, gates and status rules are Tomboj operating design (see the skill references). They are not universal standards.
 - To change a label, publish a new key version. Never edit rows in place.
+
+## Key versions
+
+- **1.1 (2026-11-04):** Added six Security-cohort Triage scenarios (`SEC-T01` to `SEC-T06`) for rubric v1.1's `Hold for review` route and tie-breaks. The 30 v1.0 rows were re-issued at 1.1 with no label changes, because the scorer requires a single key version.
+- **1.0 (2026-11-02):** First key, 30 scenarios.
