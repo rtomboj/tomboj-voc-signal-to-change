@@ -63,5 +63,24 @@ class DecisionStateOverclaimTests(unittest.TestCase):
         self.assertEqual(score.overclaims("Change", CHANGE_KEY, CHANGE_KEY), [])
 
 
+class BlankOutputTests(unittest.TestCase):
+    def test_null_run_fails_every_field(self):
+        # NULL-1 pattern: the run closed with every output blank.
+        key, _ = score.load(ROOT / "evals/follow-up-and-change/answer_key.csv")
+        blank_run = {rid: {"record_id": rid} for rid in key}
+        result = score.score(key, blank_run, [])
+        self.assertEqual(result["passed"], 0)
+        self.assertTrue(all(acc == 0 for acc in result["field_accuracy"].values()))
+        expected_blanks = sum(len(score.TRACK_FIELDS[k["track"]]) for k in key.values())
+        self.assertEqual(len(result["blank_values"]), expected_blanks)
+        self.assertIn("BLANK values", score.report("null", "1.1", result))
+
+    def test_answered_fields_are_not_listed_as_blank(self):
+        key, _ = score.load(ROOT / "evals/follow-up-and-change/answer_key.csv")
+        result = score.score(key, dict(key), [])
+        self.assertEqual(result["blank_values"], [])
+        self.assertEqual(result["passed"], len(key))
+
+
 if __name__ == "__main__":
     unittest.main()

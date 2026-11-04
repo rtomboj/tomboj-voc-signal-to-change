@@ -14,6 +14,9 @@ without authority, duplicate outreach, a draft counted as contact, an
 unconfirmed resolution, a premature closure, or a change marked further
 along than its evidence. This is this eval's release-blocking failure.
 
+A blank output field is a failure, never a pending result: a closed run is
+scored as it stands, and blank fields are listed in the report.
+
 A run also fails (exit 2) if its file is malformed: missing, duplicate or
 unexpected record IDs, or values outside the rubric.
 """
@@ -108,7 +111,7 @@ def score(key, preds, duplicates):
     rows, field_hits, field_totals = [], Counter(), Counter()
     by_track = defaultdict(lambda: [0, 0])
     by_cohort = defaultdict(lambda: [0, 0])
-    invalid, blocking = [], []
+    invalid, blocking, blank = [], [], []
     for rid, k in key.items():
         track = k["track"]
         p = preds.get(rid, {})
@@ -116,6 +119,8 @@ def score(key, preds, duplicates):
         for f in TRACK_FIELDS[track]:
             val = p.get(f, "")
             field_totals[f] += 1
+            if not val and rid in preds:
+                blank.append(f"{rid}.{f}")
             if val and not valid(f, val):
                 invalid.append(f"{rid}.{f}={val!r}")
             if val == k[f]:
@@ -146,6 +151,7 @@ def score(key, preds, duplicates):
         "unexpected_records": sorted(set(preds) - set(key)),
         "duplicate_records": duplicates,
         "invalid_values": invalid,
+        "blank_values": blank,
         "rows": rows,
     }
 
@@ -170,7 +176,8 @@ def report(name, kv, s):
             diffs = "; ".join(f"{f}: expected {r['expected'][f]!r} got {r['got'][f]!r}" for f in r["missed_fields"])
             out.append(f"  {r['record_id']} [{r['track']}/{r['cohort']}] {diffs}")
     for label, key in (("MISSING", "missing_records"), ("UNEXPECTED", "unexpected_records"),
-                       ("DUPLICATE", "duplicate_records"), ("INVALID values", "invalid_values")):
+                       ("DUPLICATE", "duplicate_records"), ("INVALID values", "invalid_values"),
+                       ("BLANK values (scored as failures)", "blank_values")):
         if s[key]:
             out.append(f"{label}: {', '.join(s[key])}")
     return "\n".join(out)
