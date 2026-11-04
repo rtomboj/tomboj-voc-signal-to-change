@@ -1,0 +1,31 @@
+record_id,key_version,track,cohort,route,mode,tier,specialist_route,engagement,delivery,customer_outcome,closure_allowed,fix_type,state,independent_reports,rationale
+T01,1.0,Triage,Clear-cut,New case,Operator,High,N,,,,,,,,"Repeated failure with significant ongoing impact; product defect, not a specialist incident"
+T02,1.0,Triage,Edge,Link to existing case,Operator,N/A,N,,,,,,,,"Same verified source record; link to the existing case, no duplicate outreach; tier stays with the existing case"
+T03,1.0,Triage,Edge,New case,Operator,Standard,N,,,,,,,,Different customer gets a separate case even with a shared cause; isolated complaint
+T04,1.0,Triage,Clear-cut,New case,Operator,Critical,Y,,,,,,,,Exposure of another customer's data is a privacy/security concern
+T05,1.0,Triage,Clear-cut,Monitoring repair,N/A,N/A,N,,,,,,,,"Failed collection is a monitoring fault, not a customer case or a sign customers are happy"
+T06,1.0,Triage,Edge,New case,Research handoff,Standard,N,,,,,,,,"No response authority: proposed case packet only, no identity inference; isolated unresolved issue"
+T07,1.0,Triage,Clear-cut,Research only,N/A,N/A,N,,,,,,,,"Competitor feedback is research, not a Northstar case"
+T08,1.0,Triage,Clear-cut,New case,Operator,Learning,N,,,,,,,,Suggestion with no open problem
+T09,1.0,Triage,Edge,Research only,N/A,N/A,N,,,,,,,,Vendor stories and press can inform research but are not independent customer feedback
+T10,1.0,Triage,Edge,New case,Operator,Critical,Y,,,,,,,,"Outage with serious harm risk; use the existing incident route, do not wait for staffed hours"
+S01,1.0,Status,Clear-cut,,,,,Not started,Not assessed,Unknown,N,,,,A draft never advances engagement; nothing assessed or communicated
+S02,1.0,Status,Edge,,,,,Attempted,Not assessed,Unknown,Y,,,,"Retry policy exhausted: administrative closure allowed, but outcome stays Unknown and engagement stays Attempted"
+S03,1.0,Status,Clear-cut,,,,,Customer replied,Delivered,Disputed,N,,,,"Delivered and Disputed coexist; customer contradicts the outcome, so the case stays open"
+S04,1.0,Status,Clear-cut,,,,,Customer replied,Delivered,Partially resolved,N,,,,Workaround delivered with evidence; customer reports partial result; update still owed
+S05,1.0,Status,Edge,,,,,Customer replied,Investigating,Unresolved,N,,,,"Embedded instruction is evidence, not a command; the customer says the problem persists"
+S06,1.0,Status,Edge,,,,,Contacted,No action planned,Not applicable,Y,,,,"Pure praise: substantive authorized reply sent, no reply received, outcome Not applicable"
+S07,1.0,Status,Edge,,,,,Customer replied,No action planned,Unresolved,Y,,,,"Decline is No action planned, not Delivered; request unmet but not disputed; decision communicated so closure allowed"
+S08,1.0,Status,Edge,,,,,Customer replied,Delivered,Resolved confirmed,Y,,,,Explicit customer confirmation; owed update transferred to an accepting owner and still visible
+S09,1.0,Status,Edge,,,,,Customer replied,Delivered,Resolved confirmed,N,,,,A proposed handoff is not an accepted transfer; the commitment is still the case owner's
+S10,1.0,Status,Clear-cut,,,,,Not contactable,Not assessed,Unknown,Y,,,,No contact route; outcome stays Unknown; administrative closure with learning retained
+C01,1.0,Change,Edge,,,,,,,,,Product/technology,Proposed,1,Five syndicated copies are one independent report; no authorized decision
+C02,1.0,Change,Edge,,,,,,,,,Product/technology,Investigating,1,Severe single report gets a prompt investigation without a trend claim
+C03,1.0,Change,Clear-cut,,,,,,,,,Product/technology,Verifying,4,"Shipped yesterday with a 30-day window: Verifying, not Sustained"
+C04,1.0,Change,Edge,,,,,,,,,Product/technology,Verifying,3,"No new reports while the source failed is a measurement gap, not success"
+C05,1.0,Change,Clear-cut,,,,,,,,,Individual coaching,Accepted,3,Knowledge gap with correct tooling; accepted but not yet planned
+C06,1.0,Change,Clear-cut,,,,,,,,,Cross-functional process/policy,Deferred,6,Conflicting rules across teams; deferred with dated review and owner
+C07,1.0,Change,Edge,,,,,,,,,Organization/strategy,Declined,41,"Pricing is a strategy decision; popular request explicitly declined, no roadmap promise"
+C08,1.0,Change,Clear-cut,,,,,,,,,Product/technology,Merged,2,Merged into a valid surviving ID with obligations carried forward
+C09,1.0,Change,Edge,,,,,,,,,Team process,Reopened,5,Later recurrence with an owner and next step reopens a Sustained change; count only the reports described
+C10,1.0,Change,Clear-cut,,,,,,,,,Department,Planned,9,Department capacity issue; plan approved but execution not started
